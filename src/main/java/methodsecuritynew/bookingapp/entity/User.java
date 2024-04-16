@@ -24,14 +24,16 @@ public class User {
 
     String name;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", unique = true)
     String email;
 
     String password;
+
+    @Column(name = "avatar" )
     String avatar;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     UserRole role;
 
     LocalDate birthDay;
@@ -49,7 +51,6 @@ public class User {
     LocalDate createdAt;
 
     LocalDate updateAt;
-
 
 
 

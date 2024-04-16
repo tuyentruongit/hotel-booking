@@ -28,5 +28,9 @@ public class PayCard {
 
     String cardHolderName;
 
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    User user;
+
 
 }

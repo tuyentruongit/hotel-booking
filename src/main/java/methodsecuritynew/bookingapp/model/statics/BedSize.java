@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Gender {
-    MALE("male"),
-    FEMALE("female");
+public enum BedSize {
+    MEDIUM("Vừa"),
+    SMALL("Nhỏ");
+
     private final String value;
 }
