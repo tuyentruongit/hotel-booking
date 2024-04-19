@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum BedSize {
     MEDIUM("Vừa"),
-    SMALL("Nhỏ");
+    KING("Lớn");
 
     private final String value;
 }

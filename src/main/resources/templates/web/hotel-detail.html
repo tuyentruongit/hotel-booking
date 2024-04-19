@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
+<head>
+
+
+    <title>Chi Tiết khách sạn</title>
+    <th:block id="css">
+        <link rel="stylesheet" href="/web/assets/css/style-hotel-detail.css">
+    </th:block>
+</head>
+<body>
+
+
+<div id="main-content">
+    <section class="search p-3">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-4">
+                    <div class="inputdata-search d-flex align-items-center p-1">
+                        <i style="font-size: 20px;" class="fa-solid fa-location-dot"></i>
+                        <input type="text" class=" w-100 p-2  " placeholder="Tìm địa điểm, khách sạn, v.v.">
+
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="inputdata-search d-flex align-items-center p-1">
+                        <i style="font-size: 20px;" class="fa-solid fa-calendar-days"></i>
+                        <input id="date-range" type="text" class=" w-100 p-2  "
+                               placeholder="Tìm địa điểm, khách sạn, v.v.">
+
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="inputdata-search d-flex align-items-center p-1">
+                        <i style="font-size: 20px;" class="fa-solid fa-user-group"></i>
+                        <input type="text" class=" w-100 p-2  " placeholder="Tìm địa điểm, khách sạn, v.v.">
+
+                    </div>
+                </div>
+                <div class="col-1">
+                    <button type="submit" class="btn-search w-100 h-100 py-2"><i class="fa-solid fa-magnifying-glass"
+                                                                                 style="color: #f7f9fc; font-size: 20px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="list-image-hotel">
+        <div class="container">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <div class="back p-3  d-flex justify-content-between align-items-center">
+                        <a href=""> <i class="fa-solid fa-arrow-left "></i> Xem tất cả nơi lưu chú</a>
+                        <button class="btn-list-favorite">
+                            <i style="font-size: 15px;" class="fa-regular fa-heart"></i>
+                            <span class="mx-2">Lưu</span>
+                        </button>
+                    </div>
+                    <button class="image-grid w-100 ">
+                        <img class="image-grid-col-2 image-grid-row-2" src="/web/assets/image/uudai.jpg"
+                             alt="architecture">
+                        <img src="/web/assets/image/uudai.jpg"
+                             alt="architecture">
+                        <img src="/web/assets/image/uudai.jpg"
+                             alt="architecture">
+                        <img src="/web/assets/image/uudai.jpg"
+                             alt="architecture">
+                        <img src="/web/assets/image/uudai.jpg"
+                             alt="architecture">
+                    </button>
+                    <div class="nav-bar w-50 d-flex p-1">
+
+                        <div class="nav-item">
+                            <button class="nav-link">
+                                Tổng quan
+                            </button>
+                        </div>
+                        <div class="nav-item">
+                            <button class="nav-link">
+                                Tiện ích, dịch vụ
+                            </button>
+                        </div>
+                        <div class="nav-item">
+                            <button class="nav-link">
+                                Giá
+                            </button>
+                        </div>
+                        <div class="nav-item">
+                            <button class="nav-link">
+                                Chính sách
+                            </button>
+                        </div>
+                        <div class="nav-item">
+                            <button class="nav-link">
+                                Đánh giá
+                            </button>
+                        </div>
+                    </div>
+                    <hr class="p-0 m-0">
+
+
+                </div>
+                <div class="col-1"></div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="table-infor-hotel">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <div class="d-flex justify-content-between">
+                        <div class="content-hotel px-3">
+                            <h1 th:text="${hotel.name}"></h1>
+                            <ul class="start-hotel d-flex list-unstyled">
+                                <li class="item-star" th:each="star : ${#numbers.sequence(0,hotel.star)}">
+                                    <i class="fa-solid fa-star"></i>
+                                </li>
+
+                            </ul>
+                            <span class="desciption-hotel" th:text="${hotel.description}"></span>
+                            <h4>Tiện nghi và dịch vụ nổi bật</h4>
+                            <div class="amenity-grid" th:each="num : ${#numbers.sequence(0,5)}">
+                                <div class="grid-item">
+                                    <th:block th:utext="${hotel.getAmenityHotelList().get(num).getIcon()}"></th:block>
+                                    <th:block th:text="${hotel.getAmenityHotelList().get(num).getName()}"></th:block>
+                                </div>
+                            </div>
+                            <a class="d-flex align-items-center justify-content-start text-decoration-none" href="">
+                                <span>Xem tất cả</span>
+                                <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                            </a>
+
+
+                        </div>
+
+
+                        <div class="map-review-hotel">
+
+                            <div class="map border">
+                                <a class="link-map w-100 text-reset text-decoration-none" href="">
+                                    <img class="image-map" src="/web/assets/image/bkg-map-entry.svg" alt="">
+                                    <div class="d-flex justify-content-center my-2 align-items-center">
+
+                                        <span class="p-1"> <i style="font-size: 20px;"
+                                                              class="fa-solid fa-location-dot"></i> Xuân Khê, Lý Nhân, Hà Nam</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="ratting-hotel d-flex ">
+                                <div class="age-rating">9,6</div>
+                                <div class="infor-rating-hotel">
+                                    <h6 class="p-0 m-0">Tuyệt vời</h6>
+                                    <span class="quantity">450 bài đánh giá</span>
+                                </div>
+                            </div>
+                            <div class="deatail-review">
+                                <a class="d-flex align-items-center justify-content-start text-decoration-none" href="">
+                                    <span>Xem tất cả đánh giá</span>
+                                    <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                </a>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <div class="col-1"></div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="room-list mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <h3>Chọn phòng</h3>
+
+                    <div class="wrapper-room mr-1">
+              <span class="select-number-bed">
+                <button class="btn-select">Tất cả phòng</button>
+                <button class="btn-select"> 1 giường</button>
+                <button class="btn-select"> 2 gường</button>
+              </span>
+                        <div class="row mb-4">
+                            <div class="col-4">
+                                <div class="card-room w-100">
+                                    <img class="w-100" src="./accset/image/amanoi-resort-beach-club-1400x600.jpg"
+                                         alt="">
+                                    <button class="btn-show-image-room">
+
+                                        <i class="fa-regular fa-images"></i>
+                                        <span>8</span>
+                                    </button>
+
+                                    <div class="px-2 pt-1 pb-2">
+                                        <h5>Phòng 2 giường đơn Deluxe, quang cảnh thành phố</h5>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-wifi"></i>
+                                            <span class="mx-2">Wifi miễn phí</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-chart-area"></i>
+                                            <span class="mx-2">36 mét vuông</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-user-group"></i>
+                                            <span class="mx-2">4 khách</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-bed"></i>
+                                            <span class="mx-2">2 Giường cỡ Lớn</span>
+                                        </div>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none mt-1"
+                                           href="">
+                                            <span class="">Xem tất cả</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <hr>
+                                        <button class="discount" type="button">
+                                            Giảm 25%
+                                        </button>
+                                        <div class="d-flex align-items-center">
+                                            <h4 class="price-room p-0 m-0">1.224.000 đ </h4>
+                                            <span class="mx-2 original-price"><del>1.530.00 đ</del></span>
+                                        </div>
+                                        <span class="description-price">Giá mỗi đêm chưa gồm thuế và phí</span>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none "
+                                           href="">
+                                            <span>Chi tiết giá</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <button class="btn-booking">
+                                            Đặt
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="card-room w-100">
+                                    <img class="w-100" src="./accset/image/amanoi-resort-beach-club-1400x600.jpg"
+                                         alt="">
+                                    <button class="btn-show-image-room">
+
+                                        <i class="fa-regular fa-images"></i>
+                                        <span>8</span>
+                                    </button>
+
+                                    <div class="px-2 pt-1 pb-2">
+                                        <h5>Phòng 2 giường đơn Deluxe, quang cảnh thành phố</h5>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-wifi"></i>
+                                            <span class="mx-2">Wifi miễn phí</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-chart-area"></i>
+                                            <span class="mx-2">36 mét vuông</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-user-group"></i>
+                                            <span class="mx-2">4 khách</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-bed"></i>
+                                            <span class="mx-2">2 Giường cỡ Lớn</span>
+                                        </div>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none mt-1"
+                                           href="">
+                                            <span class="">Xem tất cả</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <hr>
+                                        <button class="discount" type="button">
+                                            Giảm 25%
+                                        </button>
+                                        <div class="d-flex align-items-center">
+                                            <h4 class="price-room p-0 m-0">1.224.000 đ </h4>
+                                            <span class="mx-2 original-price"><del>1.530.00 đ</del></span>
+                                        </div>
+                                        <span class="description-price">Giá mỗi đêm chưa gồm thuế và phí</span>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none "
+                                           href="">
+                                            <span>Chi tiết giá</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <button class="btn-booking">
+                                            Đặt
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="card-room w-100">
+                                    <img class="w-100" src="./accset/image/amanoi-resort-beach-club-1400x600.jpg"
+                                         alt="">
+                                    <button class="btn-show-image-room">
+
+                                        <i class="fa-regular fa-images"></i>
+                                        <span>8</span>
+                                    </button>
+
+                                    <div class="px-2 pt-1 pb-2">
+                                        <h5>Phòng 2 giường đơn Deluxe, quang cảnh thành phố</h5>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-wifi"></i>
+                                            <span class="mx-2">Wifi miễn phí</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-chart-area"></i>
+                                            <span class="mx-2">36 mét vuông</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-user-group"></i>
+                                            <span class="mx-2">4 khách</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-bed"></i>
+                                            <span class="mx-2">2 Giường cỡ Lớn</span>
+                                        </div>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none mt-1"
+                                           href="">
+                                            <span class="">Xem tất cả</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <hr>
+                                        <button class="discount" type="button">
+                                            Giảm 25%
+                                        </button>
+                                        <div class="d-flex align-items-center">
+                                            <h4 class="price-room p-0 m-0">1.224.000 đ </h4>
+                                            <span class="mx-2 original-price"><del>1.530.00 đ</del></span>
+                                        </div>
+                                        <span class="description-price">Giá mỗi đêm chưa gồm thuế và phí</span>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none "
+                                           href="">
+                                            <span>Chi tiết giá</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <button class="btn-booking">
+                                            Đặt
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="card-room w-100">
+                                    <img class="w-100" src="./accset/image/amanoi-resort-beach-club-1400x600.jpg"
+                                         alt="">
+                                    <button class="btn-show-image-room">
+
+                                        <i class="fa-regular fa-images"></i>
+                                        <span>8</span>
+                                    </button>
+
+                                    <div class="px-2 pt-1 pb-2">
+                                        <h5>Phòng 2 giường đơn Deluxe, quang cảnh thành phố</h5>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-wifi"></i>
+                                            <span class="mx-2">Wifi miễn phí</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-chart-area"></i>
+                                            <span class="mx-2">36 mét vuông</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-user-group"></i>
+                                            <span class="mx-2">4 khách</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-bed"></i>
+                                            <span class="mx-2">2 Giường cỡ Lớn</span>
+                                        </div>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none mt-1"
+                                           href="">
+                                            <span class="">Xem tất cả</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <hr>
+                                        <button class="discount" type="button">
+                                            Giảm 25%
+                                        </button>
+                                        <div class="d-flex align-items-center">
+                                            <h4 class="price-room p-0 m-0">1.224.000 đ </h4>
+                                            <span class="mx-2 original-price"><del>1.530.00 đ</del></span>
+                                        </div>
+                                        <span class="description-price">Giá mỗi đêm chưa gồm thuế và phí</span>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none "
+                                           href="">
+                                            <span>Chi tiết giá</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <button class="btn-booking">
+                                            Đặt
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="card-room w-100">
+                                    <img class="w-100" src="./accset/image/amanoi-resort-beach-club-1400x600.jpg"
+                                         alt="">
+                                    <button class="btn-show-image-room">
+
+                                        <i class="fa-regular fa-images"></i>
+                                        <span>8</span>
+                                    </button>
+
+                                    <div class="px-2 pt-1 pb-2">
+                                        <h5>Phòng 2 giường đơn Deluxe, quang cảnh thành phố</h5>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-wifi"></i>
+                                            <span class="mx-2">Wifi miễn phí</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-chart-area"></i>
+                                            <span class="mx-2">36 mét vuông</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-user-group"></i>
+                                            <span class="mx-2">4 khách</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-bed"></i>
+                                            <span class="mx-2">2 Giường cỡ Lớn</span>
+                                        </div>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none mt-1"
+                                           href="">
+                                            <span class="">Xem tất cả</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <hr>
+                                        <button class="discount" type="button">
+                                            Giảm 25%
+                                        </button>
+                                        <div class="d-flex align-items-center">
+                                            <h4 class="price-room p-0 m-0">1.224.000 đ </h4>
+                                            <span class="mx-2 original-price"><del>1.530.00 đ</del></span>
+                                        </div>
+                                        <span class="description-price">Giá mỗi đêm chưa gồm thuế và phí</span>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none "
+                                           href="">
+                                            <span>Chi tiết giá</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <button class="btn-booking">
+                                            Đặt
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="card-room w-100">
+                                    <img class="w-100" src="./accset/image/amanoi-resort-beach-club-1400x600.jpg"
+                                         alt="">
+                                    <button class="btn-show-image-room">
+
+                                        <i class="fa-regular fa-images"></i>
+                                        <span>8</span>
+                                    </button>
+
+                                    <div class="px-2 pt-1 pb-2">
+                                        <h5>Phòng 2 giường đơn Deluxe, quang cảnh thành phố</h5>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-wifi"></i>
+                                            <span class="mx-2">Wifi miễn phí</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-chart-area"></i>
+                                            <span class="mx-2">36 mét vuông</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-user-group"></i>
+                                            <span class="mx-2">4 khách</span>
+                                        </div>
+                                        <div class="amenity-room p-1">
+                                            <i class="fa-solid fa-bed"></i>
+                                            <span class="mx-2">2 Giường cỡ Lớn</span>
+                                        </div>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none mt-1"
+                                           href="">
+                                            <span class="">Xem tất cả</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <hr>
+                                        <button class="discount" type="button">
+                                            Giảm 25%
+                                        </button>
+                                        <div class="d-flex align-items-center">
+                                            <h4 class="price-room p-0 m-0">1.224.000 đ </h4>
+                                            <span class="mx-2 original-price"><del>1.530.00 đ</del></span>
+                                        </div>
+                                        <span class="description-price">Giá mỗi đêm chưa gồm thuế và phí</span>
+                                        <a class="d-flex align-items-center justify-content-start text-decoration-none "
+                                           href="">
+                                            <span>Chi tiết giá</span>
+                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
+                                        </a>
+                                        <button class="btn-booking">
+                                            Đặt
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <hr>
+
+
+                    </div>
+
+
+                </div>
+                <div class="col-1"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="mb-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <h4>Chính sách của khách sạn</h4>
+                    <div class="policy-hotel p-3 w-100">
+                        <div class="pb-2">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="d-flex justify-content-end">Nhận Phòng</h5>
+                                </div>
+                                <div class="col-8">
+                      <span>
+                          Bắt đầu nhận phòng: 14:00; kết thúc nhận phòng: nửa đêm
+                          Việc đáp ứng yêu cầu nhận phòng muộn tùy tình hình thực tế
+
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pb-2">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="d-flex justify-content-end">Trả Phòng</h5>
+                                </div>
+                                <div class="col-8">
+                      <span>
+                         Trả phòng trước 12:00
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pb-2">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="d-flex justify-content-end">Dịch vụ của khách sạn</h5>
+                                </div>
+                                <div class="col-8">
+                      <span>
+                        Dịch vụ xe đưa đón sân bay: 499999 VND mỗi xe (một chiều, số khách tối đa 7)
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pb-2">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="d-flex justify-content-end">Hướng dẫn nhận phòng</h5>
+                                </div>
+                                <div class="col-8">
+                      <span>
+                        Nơi lưu trú này có dịch vụ đưa đón từ sân bay (có thể áp dụng phụ phí). Khách phải liên hệ với nơi lưu trú để thông báo chi tiết thời gian đến trước khi khởi hành bằng thông tin liên hệ trong xác nhận đặt phòng
+                        Nhân viên tiếp tân sẽ đón tiếp khách tại nơi lưu trú
+                        Khách có thể chọn tự dọn dẹp nơi lưu trú trước khi trả phòng hoặc thanh toán phí vệ sinh bổ sung khi trả phòng (khoản tiền thực tế có thể khác nhau)
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pb-2">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="d-flex justify-content-end">Vật nuôi</h5>
+                                </div>
+                                <div class="col-8">
+                      <span>
+                        Không được mang theo thú cưng lẫn vật nuôi
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pb-2">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="d-flex justify-content-end">Độ tuổi</h5>
+                                </div>
+                                <div class="col-8">
+                      <span>
+                        Người từ 16 tuổi trở lên
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pb-2">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="d-flex justify-content-end">Chính sách hủy</h5>
+                                </div>
+                                <div class="col-8">
+                      <span>
+                        Người từ 16 tuổi trở lên
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pb-2">
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="d-flex justify-content-end">Lưu ý khác</h5>
+                                </div>
+                                <div class="col-8">
+                      <span>
+                        Có thể thu phí thêm người với mức phí khác nhau, tùy chính sách riêng
+                        Có thể cần giấy tờ tùy thân hợp pháp có ảnh và cần đặt cọc bằng thẻ tín dụng, thẻ ghi nợ hoặc tiền mặt (cho các chi phí phát sinh - nếu có) khi làm thủ tục nhận phòng
+                        Tùy thuộc vào tình hình thực tế khi nhận phòng mà các yêu cầu đặc biệt có được đáp ứng hay không và có thể thu phụ phí. Không đảm bảo đáp ứng mọi yêu cầu đặc biệt
+                        Nơi lưu trú này nhận thanh toán bằng thẻ tín dụng và tiền mặt
+                        Chấp nhận giao dịch không dùng tiền mặt
+                      </span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div>
+
+
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="infor-review-detail">
+        <div class="container">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <h4>Đánh giá khách sạn Abogo Champa Villa Beach Đà Nẵng từ khách hàng</h4>
+                    <div class="wrapper-review">
+
+                        <div class="px-5">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="ratting-hotel-detail py-5 d-flex ">
+                                        <div class="age-rating-detail">9,6</div>
+                                        <div class="infor-rating-hotel-detail">
+                                            <h4 class="p-0 m-0">Tuyệt vời</h4>
+                                            <span class="quantity-detail">450 bài đánh giá</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <div class="review-detail my-3">
+                                        <h4 class="age-user-review">
+                                            10/10 - Xuất xắc
+
+                                        </h4>
+                                        <h6 class="name-user-review">Trương Văn Tuyên</h6>
+                                        <div>
+                                            Thích : Sạch Sẽ, Phục vụ tuyệt vời
+                                        </div>
+                                        <div class="creatAt-review">
+                                            23/10/2024
+                                        </div>
+                                        <span class="content-review">
+                        Nội thất rất sang trọng. Chúng tôi chắc chắn rằng chúng tôi đang ở phòng cưới cho đến khi nhận ra tất cả các phòng khác cũng được trang trí tinh tế như vậy. Khách sạn có vẻ khá mới và chúng tôi rất ấn tượng với nó.
+                      </span>
+
+
+                                    </div>
+                                    <div class="review-detail my-3">
+                                        <h4 class="age-user-review">
+                                            10/10 - Xuất xắc
+
+                                        </h4>
+                                        <h6 class="name-user-review">Trương Văn Tuyên</h6>
+                                        <div>
+                                            Thích : Sạch Sẽ, Phục vụ tuyệt vời
+                                        </div>
+                                        <div class="creatAt-review">
+                                            23/10/2024
+                                        </div>
+                                        <span class="content-review">
+                        Nội thất rất sang trọng. Chúng tôi chắc chắn rằng chúng tôi đang ở phòng cưới cho đến khi nhận ra tất cả các phòng khác cũng được trang trí tinh tế như vậy. Khách sạn có vẻ khá mới và chúng tôi rất ấn tượng với nó.
+                      </span>
+
+
+                                    </div>
+                                    <div class="review-detail my-3">
+                                        <h4 class="age-user-review">
+                                            10/10 - Xuất xắc
+
+                                        </h4>
+                                        <h6 class="name-user-review">Trương Văn Tuyên</h6>
+                                        <div>
+                                            Thích : Sạch Sẽ, Phục vụ tuyệt vời
+                                        </div>
+                                        <div class="creatAt-review">
+                                            23/10/2024
+                                        </div>
+                                        <span class="content-review">
+                                             Nội thất rất sang trọng. Chúng tôi chắc chắn rằng chúng tôi đang ở phòng cưới cho đến khi nhận ra tất cả các phòng khác cũng được trang trí tinh tế như vậy. Khách sạn có vẻ khá mới và chúng tôi rất ấn tượng với nó.
+                                        </span>
+
+
+                                    </div>
+                                    <div class="review-detail my-3">
+                                        <h4 class="age-user-review">
+                                            10/10 - Xuất xắc
+
+                                        </h4>
+                                        <h6 class="name-user-review">Trương Văn Tuyên</h6>
+                                        <div class="creatAt-review">
+                                            23/10/2024
+                                        </div>
+                                        <span class="content-review">
+                        Nội thất rất sang trọng. Chúng tôi chắc chắn rằng chúng tôi đang ở phòng cưới cho đến khi nhận ra tất cả các phòng khác cũng được trang trí tinh tế như vậy. Khách sạn có vẻ khá mới và chúng tôi rất ấn tượng với nó.
+                      </span>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <div class="pr my-5">
+        <div class="container">
+            <div class="row">
+                <div class="wrap-pr d-flex">
+                    <div class="col-4">
+                        <img class="w-100 image-pr" src="/web/assets/image/uudai.jpg" alt="">
+                    </div>
+                    <div class="col-6 px-3">
+                        <div class="title-pr mt-2 ">
+                            <h3>Hưởng nhiều quyền lợi hơn với app STAYEASE</h3>
+                        </div>
+                        <div class="content-pr pt-2">
+                            <p>Tiết kiệm tại một số khách sạn . Với ưu đãi trên app của chúng tôi, bạn có thể tiết kiệm
+                                để
+                                đi được nhiều hơn và quản lý mọi thứ trong khi đang di chuyển</p>
+                        </div>
+                        <div class="btn-pr">
+                            <a href="">Xem chi tiết</a>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block id="js">
+    <script src="/web/assets/js/hotel-detail.js"></script>
+</th:block>
+
+
+</body>
+</html>

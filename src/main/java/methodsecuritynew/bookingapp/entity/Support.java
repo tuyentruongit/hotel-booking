@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import methodsecuritynew.bookingapp.model.statics.SupportType;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @ToString
@@ -13,6 +15,7 @@ import methodsecuritynew.bookingapp.model.statics.SupportType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "support")
+@Builder
 public class Support {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +24,10 @@ public class Support {
     @Column(name = "title")
     String title;
 
-    @Column(name = "content")
-    String content;
-
-    @Column(name = "description")
+    @Column(columnDefinition = "TEXT")
     String description;
+    @Column(columnDefinition = "TEXT")
+    String content;
 
     @Column(name = "slug")
     String slug;
@@ -34,18 +36,15 @@ public class Support {
     Boolean status;
 
     @Column(name = "created_at")
-    String createdAt;
+    LocalDate createdAt;
 
     @Column(name = "updated_at")
-    String updatedAt;
+    LocalDate updatedAt;
 
     @Column(name = "published_at")
-    String publishedAt;
+    LocalDate publishedAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "support_type")
     SupportType supportType;
-
-
-
 }

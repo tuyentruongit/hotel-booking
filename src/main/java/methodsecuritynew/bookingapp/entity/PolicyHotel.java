@@ -20,15 +20,19 @@ public class PolicyHotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-
+    @Column(columnDefinition = "TEXT")
     String checkIn;
+    @Column(columnDefinition = "TEXT")
     String checkOut;
-
+    @Column(columnDefinition = "TEXT")
     String service;
+    @Column(columnDefinition = "TEXT")
     String cancelPolicy;
-
+    @Column(columnDefinition = "TEXT")
     String animal;
+    @Column(columnDefinition = "TEXT")
     String ageLimit;
+    @Column(columnDefinition = "TEXT")
     String note;
 
     LocalDate createdAt;

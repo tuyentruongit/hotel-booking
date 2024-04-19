@@ -23,29 +23,8 @@ public abstract class Amenity {
 
     String name;
 
-    String icon;
-
-    @Enumerated(EnumType.STRING)
-    AmenityRoomType amenityType;
-
-    @Enumerated(EnumType.STRING)
-    AmenityHotelType objectAmenity;
-
-
     LocalDate createdAt;
     LocalDate updateAt;
 
-    @PrePersist
-    void prePersist() {
-        this.createdAt = LocalDate.now();
-    }
 
-
-
-    //name  String
-    // icon  String
-    // amenityType  amenityType  // phòng tắm , ăn uống ,  internet n
-    // amenityOf amenityOf   // room hotel
-    // createAt  localdate
-    // updateAt localdate
 }

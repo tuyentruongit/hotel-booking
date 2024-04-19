@@ -20,13 +20,6 @@ public class AmenityRoom extends Amenity {
 
     @Enumerated(EnumType.STRING)
     AmenityRoomType amenityRoomType;
-    @ManyToMany
-    @JoinTable(
-            name = "amenity_room",
-            joinColumns = @JoinColumn(name = "id_amenity"),
-            inverseJoinColumns = @JoinColumn(name = "id_room")
 
-    )
-    List<Room> roomList ;
 
 }

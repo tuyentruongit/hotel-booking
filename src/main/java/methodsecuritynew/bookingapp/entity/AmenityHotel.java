@@ -23,12 +23,4 @@ public class AmenityHotel extends Amenity {
 
     String icon;
 
-    @ManyToMany
-    @JoinTable(
-            name = "amenity_hotel",
-            joinColumns = @JoinColumn(name = "id_amenity"),
-            inverseJoinColumns = @JoinColumn(name = "id_hotel")
-
-    )
-    List<Hotel> hotelList;
 }

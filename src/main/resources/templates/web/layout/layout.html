@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(title,css,content,js)"
+>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/web/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Thư viện Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+  <th:block th:replace="${css}"></th:block>
+
+</head>
+<body>
+<th:block th:replace="~{web/fragment/nav-bar :: nav-bar}"></th:block>
+<th:block th:replace="${content}"></th:block>
+
+<th:block th:replace="~{web/fragment/footer :: footer}"></th:block>
+
+
+
+
+
+
+
+
+
+<script src="/web/lib/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="/web/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Thư viện Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<th:block th:replace="${js}" ></th:block>
+
+</body>
+</html>

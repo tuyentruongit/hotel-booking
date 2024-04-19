@@ -22,21 +22,22 @@ public class Bed {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
+    Integer numberBed;
 
+
+    @Column(columnDefinition = "TEXT")
     @Enumerated(EnumType.STRING)
     BedType bedType;
 
+    @Column(columnDefinition = "TEXT")
     @Enumerated(EnumType.STRING)
     BedSize bedSize;
 
     LocalDate createAt;
     LocalDate updateAt;
 
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    Room room;
 
-    // id int [pk, increment]
-    //  BedType   BedType // enum
-    //  size  BedSize // enum
-    //  style  BedStyle   // enum
-    //  createAt  localdate
-    //  updateAt localdate
 }

@@ -24,13 +24,12 @@ public class PayCard {
 
     String expiryDate;
 
-    String cvv;
 
     String cardHolderName;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
 
 
 }

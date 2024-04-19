@@ -8,14 +8,16 @@ import methodsecuritynew.bookingapp.model.statics.RentalType;
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
-@Setter
+
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "hotels")
+@Getter
+@Setter
 public class Hotel {
 
     @Id
@@ -28,12 +30,15 @@ public class Hotel {
     @Column(name = "email" , unique = true)
     String email;
 
+    @Column(columnDefinition = "TEXT")
     String description;
 
     String address;
+
     @ManyToOne
-    @JoinColumn(name = "city_id" )
-    City City ;
+    @JoinColumn(name = "city_id")
+    City city;
+
 
     @OneToOne
     @JoinColumn(name = "policyHotel_id" )
@@ -45,6 +50,16 @@ public class Hotel {
 
     @Enumerated(EnumType.STRING)
     RentalType rentalType;
+    @ManyToMany
+    @JoinTable(
+            name = "amenity_hotel",
+            joinColumns = @JoinColumn(name = "id_hotel"),
+            inverseJoinColumns = @JoinColumn(name = "id_amenity")
+
+    )
+    List<AmenityHotel> amenityHotelList;
+
+
 
     LocalDate createdAt;
     LocalDate updatedAt;
