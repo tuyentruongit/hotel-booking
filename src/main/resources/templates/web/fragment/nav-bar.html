@@ -8,9 +8,9 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm" th:fragment="nav-bar">
 <div class="container">
-  <div class="collapse navbar-collapse justify-content-between " id="navbarNavAltMarkup">
-    <a class="text-reset text-decoration-none nav-link active" aria-current="page" href="#">
-      <h3>STAYEASE</h3>
+  <div class="collapse navbar-collapse justify-content-between p-0 m-0" id="navbarNavAltMarkup">
+    <a class="text-reset text-decoration-none nav-link active" aria-current="page" th:href="@{/}">
+      <img class="img-logo" src="/web/assets/image/stayEase.png" alt="Ảnh Logo">
     </a>
     <div class="d-flex">
       <a target="_blank" class="nav-link text-decoration-none text-reset login" >
@@ -21,7 +21,7 @@
       <a target="_blank" class="nav-link text-decoration-none text-reset login" >
         Chuyến đi
       </a>
-      <a target="_blank" class="nav-link text-decoration-none text-reset login" >
+      <a target="_blank" class="nav-link text-decoration-none text-reset login" th:href="@{/support}">
         Hỗ trợ
       </a>
       <a target="_blank" class="nav-link text-decoration-none text-reset login" >

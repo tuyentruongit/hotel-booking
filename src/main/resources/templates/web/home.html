@@ -15,7 +15,7 @@
 
 
 <th:block id="main-content">
-    <header class="section__container header__container container">
+    <header class="section__container header__container container mt-3">
         <div class="header__image__container">
             <div class="header__content">
                 <h1>Tận hưởng kỳ nghỉ mơ ước của bạn</h1>
@@ -54,7 +54,7 @@
                                 <div class="col-6">
                                     <div class="search-country d-flex align-items-center  border shadow p-2">
                                         <i style="font-size: 20px;" class="fas fa-calendar-alt"></i>
-                                        <input ctype="text" id="date-range" class=" form-control w-100 ps-3 " placeholder="Ngập ngày đến và đi của bạn">
+                                        <input type="text" id="date-range" class=" form-control w-100 ps-3 " placeholder="Ngập ngày đến và đi của bạn">
                                     </div>
                                 </div>
                                 <div class="col-3">
@@ -93,8 +93,8 @@
                 <div class="row">
                     <div class="col-5"></div>
                     <div class="col-2">
-                        <div id="btn-search" class="btn-search py-2">
-                            <button type="submit" class="border py-2 w-100 h-100">Tìm kiếm</button>
+                        <div class="btn-search py-2">
+                            <button  id="btn-search" type="submit" class="border py-2 w-100 h-100">Tìm kiếm</button>
                         </div>
                     </div>
                     <div class="col-5"></div>
@@ -112,12 +112,16 @@
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-10">
-                    <div class="slider-main owl-carousel owl-theme">
-                        <div class="slider-item border outstanding-city " th:each="city : ${cityFavourite}">
-                            <img src="/web/assets/image/song-nho-que-du-lich-ha-giang-kynghidongduong-071.jpg" alt="">
-                            <div class="country-city p-2 d-flex justify-content-center">
-                                <h5 th:text="${city.name}"></h5>
+                    <div   class="slider-main owl-carousel owl-theme " >
+                        <div class="slider-item outstanding-city text-reset text-decoration-none "   th:each="city : ${cityFavourite}">
+
+                            <div  class="slider-item outstanding-city text-reset text-decoration-none  border-none" th:data-name="${city.name}" th:onclick="navigation(this.getAttribute('data-name'))">
+                                <img src="/web/assets/image/song-nho-que-du-lich-ha-giang-kynghidongduong-071.jpg" alt="">
+                                <div class="country-city p-2 d-flex justify-content-center"  >
+                                    <h5 class="name-city" th:value="${city.name}" th:text="${city.getName()}"></h5>
+                                </div>
                             </div>
+
                         </div>
 
                     </div>
@@ -139,119 +143,22 @@
             </div>
             <div class="row">
                 <div class="city-outstanding-hotel d-flex justify-content-center py-4">
-                    <a  type="button" class="px-3 text-decoration-none text-reset">Hà Nội</a>
-                    <button type="button" class="px-3">Hồ Chí Minh</button>
-                    <button type="button" class="px-3">Đà Nẵng</button>
-                    <button type="button" class="px-3">Vũng Tàu</button>
-                    <button type="button" class="px-3">Quảng Ninh</button>
+                    <button type="button" class="px-3 btn-name-city">Hà Nội</button>
+                    <button type="button" class="px-3 btn-name-city">Hồ Chí Minh</button>
+                    <button type="button" class="px-3 btn-name-city">Đà Nẵng</button>
+                    <button type="button" class="px-3 btn-name-city">Vũng Tàu</button>
+                    <button type="button" class="px-3 btn-name-city">Quảng Ninh</button>
                 </div>
             </div>
             <div class="list-card">
-                <div class="row">
-                    <div class="col-3">
-                        <div class="card mb-5">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
-                            <div>
-                                <h6>Căn hộ LuxHomes Saigon – Vinhomes Central Park (LuxHomes Saigon - Vinhomes Central
-                                    Park)</h6>
-                                <p>Hồ Chí Minh</p>
-                                <p>2.310.2001 VND</p>
-                                <span>9/10 điểm đánh giá </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card mb-5">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
-                            <div>
-                                <h6>Căn hộ LuxHomes Saigon – Vinhomes Central Park (LuxHomes Saigon - Vinhomes Central
-                                    Park)</h6>
-                                <p>Hồ Chí Minh</p>
-                                <p>2.310.2001 VND</p>
-                                <span>9/10 điểm đánh giá </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card mb-5">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
-                            <div>
-                                <h6>Căn hộ LuxHomes Saigon – Vinhomes Central Park (LuxHomes Saigon - Vinhomes Central
-                                    Park)</h6>
-                                <p>Hồ Chí Minh</p>
-                                <p>2.310.2001 VND</p>
-                                <span>9/10 điểm đánh giá </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card mb-5">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
-                            <div>
-                                <h6>Căn hộ LuxHomes Saigon – Vinhomes Central Park (LuxHomes Saigon - Vinhomes Central
-                                    Park)</h6>
-                                <p>Hồ Chí Minh</p>
-                                <p>2.310.2001 VND</p>
-                                <span>9/10 điểm đánh giá </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card mb-5">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
-                            <div>
-                                <h6>Căn hộ LuxHomes Saigon – Vinhomes Central Park (LuxHomes Saigon - Vinhomes Central
-                                    Park)</h6>
-                                <p>Hồ Chí Minh</p>
-                                <p>2.310.2001 VND</p>
-                                <span>9/10 điểm đánh giá </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card mb-5">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
-                            <div>
-                                <h6>Căn hộ LuxHomes Saigon – Vinhomes Central Park (LuxHomes Saigon - Vinhomes Central
-                                    Park)</h6>
-                                <p>Hồ Chí Minh</p>
-                                <p>2.310.2001 VND</p>
-                                <span>9/10 điểm đánh giá </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card mb-5">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
-                            <div>
-                                <h6>Căn hộ LuxHomes Saigon – Vinhomes Central Park (LuxHomes Saigon - Vinhomes Central
-                                    Park)</h6>
-                                <p>Hồ Chí Minh</p>
-                                <p>2.310.2001 VND</p>
-                                <span>9/10 điểm đánh giá </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
-                        <div class="card mb-5">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
-                            <div>
-                                <h6>Căn hộ LuxHomes Saigon – Vinhomes Central Park (LuxHomes Saigon - Vinhomes Central
-                                    Park)</h6>
-                                <p>Hồ Chí Minh</p>
-                                <p>2.310.2001 VND</p>
-                                <span>9/10 điểm đánh giá </span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="row p-3" id="list-card">
                 </div>
             </div>
 
 
             <div class="row">
                 <div class="btn-next d-flex justify-content-center">
-                    <button class="p-3" type="button ">
-                        <a class="text-reset text-decoration-none" href="">Xem thêm các khách sạn của (Hà Nội)</a>
+                    <button id="show-hotel-city" class="p-3 " type="button ">
                     </button>
                 </div>
             </div>
@@ -294,17 +201,7 @@
     <script src="/web/lib/OwlCarousel/dist/owl.carousel.min.js"></script>
     <script src="/web/assets/js/home.js"></script>
     <script th:inline="javascript">
-        // let outstandingHotelHa = [[${outstandingHotelHa}]];
-        // let outstandingHotelDa = [[${outstandingHotelDa}]];
-        // let outstandingHotelHg = [[${outstandingHotelHg}]];
-        // let outstandingHotelVu = [[${outstandingHotelVu}]];
-        // let outstandingHotelHo = [[${outstandingHotelHo}]];
-        //
-        // console.log(outstandingHotelHo);
-        // console.log(outstandingHotelHa);
-        // console.log(outstandingHotelHg);
-        // console.log(outstandingHotelVu);
-        // console.log(outstandingHotelDa);
+
 
     </script>
 </th:block>

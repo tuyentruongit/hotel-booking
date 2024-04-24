@@ -27,7 +27,7 @@ public class Review {
     User user;
 
     @ManyToOne
-    @JoinColumn(name = "id_hotel")
+    @JoinColumn(name = "id_hotel" , nullable = false)
     Hotel hotel;
 
     String comment;
@@ -47,11 +47,25 @@ public class Review {
     )
     List<HotelLikes> reviews;
 
-    //id int [pk, increment]
-    //  id_user  int [ref: > user.id]
-    //  id_hotel  int [ref: > hotel.id]
-    //  comment  varchar
-    //  rating  int
-    //  createAt  localdate
-    //  updateAt localdate
+    public String getRatingText() {
+        if (rating == null) {
+            return "Chưa có đánh giá";
+        }
+
+        // switch rating from 1 to 10
+        return switch (rating) {
+            case 1 -> "Quá Tệ";
+            case 2 -> "Tệ";
+            case 3 -> "Quá Kém";
+            case 4 -> "Kém";
+            case 5 -> "Chấp nhận được";
+            case 6 -> "Tốt";
+            case 7 -> "Rất tốt";
+            case 8 -> "Tuyệt vời";
+            case 9 -> "Trên cả tuyệt vời";
+            case 10 -> "Xuất sắc";
+            default -> "Chưa có đánh giá";
+        };
+    }
+
 }

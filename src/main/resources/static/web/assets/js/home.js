@@ -1,4 +1,3 @@
-let startDate, endDate;
 
 // thư viện để sử dụng trình chọn ngày
 flatpickr("#date-range", {
@@ -38,17 +37,15 @@ $('.owl-carousel').owlCarousel({
 
 
 
-
-
-// chọn sô lượng người và phòng
-
-const minusGuest = document.querySelector(".minus-guest");
-let numberGuest = document.querySelector(".num-guest")
-const plusGuest = document.querySelector(".plus-guest")
+// tùy chọn quantity cho room và  guest
+const minusGuest = document.querySelector(".minus-guest");// nút tăng số lượng khách hàng
+let numberGuest = document.querySelector(".num-guest"); // quantity guest
+const plusGuest = document.querySelector(".plus-guest");//nút giảm số lượng khách hàng
 let countGuest = 1;
+
 minusGuest.addEventListener('click',()=>{
     if(countGuest<=1){
-      return
+        return
     }
 
     countGuest--;
@@ -58,15 +55,12 @@ minusGuest.addEventListener('click',()=>{
 
 plusGuest.addEventListener('click',()=>{
     if(countGuest>=20){
-       return
+        return
     }
     countGuest++;
     countGuest=(countGuest<10)?'0'+countGuest : countGuest;
     numberGuest.innerText = countGuest;
 })
-
-
-
 const minusRoom = document.querySelector(".minus-room");
 let numberRoom = document.querySelector(".num-room")
 const plusRoom = document.querySelector(".plus-room")
@@ -93,15 +87,43 @@ plusRoom.addEventListener('click',()=>{
 
 
 
-
-// logic tìm kiếm
-
+// xử lý input data cho tìm kiếm
 const btnSearch = document.getElementById('btn-search');
+const inputNameCity = document.getElementById('input-name-city'); // input dữ liệu thành phố người dùng nhập vào
 
+const showHotelCity = document.getElementById("show-hotel-city");// btn chuyển hướng từ gợi ý khách sạn theo thanh phố
 
-
+// chuyển hướng tới trang sanh sách khi người dùng click vào ô tìm kiếm
 btnSearch.addEventListener('click' ,()=>{
-    const inputNameCity = document.getElementById('input-name-city').value;
+    let nameCity = inputNameCity.value;
+    navigation(nameCity);
+
+});
+
+// click vào các khách sạn sẽ chuyển hướng tới trang danh sách khách sạn theo thành phố người dùng đã chọn
+showHotelCity.addEventListener('click' , (inputNameCity)=>{
+    let nameCity= showHotelCity.getAttribute('value');
+    console.log(nameCity);
+    navigation(nameCity);
+})
+
+
+const sliderCity = document.querySelectorAll('.outstanding-city');
+sliderCity.forEach(city =>{
+
+})
+const  choiceOutstandingCity = () =>{
+    let nameCity= showHotelCity.getAttribute('value');
+    console.log(nameCity);
+    navigation(nameCity);
+
+
+}
+
+
+// chuyển hướng tới trang danh sách
+const navigation = (inputNameCity) =>{
+    console.log(inputNameCity)
     const date = document.getElementById('date-range');
     const dateString = date.value;
 
@@ -117,6 +139,113 @@ btnSearch.addEventListener('click' ,()=>{
     window.location.href="/danh-sach-khach-san?" +
         "nameCity=" + inputNameCity + "&checkIn=" + dateStartString +
         "&checkOut=" + dateEndString + "&numberGuest=" + numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
+}
+
+
+
+const btnList = document.querySelectorAll('.btn-name-city');
+const listCardHotel = document.getElementById('list-card')
+
+
+
+
+
+// dữ liệu mặc định
+let defaultValue = btnList[0];
+// khi vào trang thì gọi render dữ liệu mặc định cho recommend hotel
+window.addEventListener('load', () => {
+    defaultValue.classList.add('active-city')
+    // Gọi API để lấy dữ liệu cho thành phố mặc định và render khách sạn
+    renderCityData(defaultValue.textContent);
+    showHotelCity.innerHTML = `<span>Xem tất cả khách sạn ${defaultValue.textContent}</span>`
+    showHotelCity.setAttribute('value', defaultValue.textContent);
 });
+
+
+
+
+// lấy value của các tham sô tìm kiếm
+btnList.forEach((btn)=>{
+    btn.addEventListener('click' , (qualifiedName, value)=>{
+        btnList.forEach((btns) =>{
+            btns.classList.remove('active-city');
+        })
+
+        btn.classList.add("active-city")
+        let city = btn.textContent;
+        // showHotelCity.innerText = 'Xem thêm khách sạn của ' + city;
+        showHotelCity.innerHTML = `<span>Xem tất khách sạn ${city}</span>`
+        showHotelCity.setAttribute('value',city);
+        renderCityData(city);
+
+
+    })
+})
+
+
+
+// gọi api để render dữ liệu
+const renderCityData = (value) => {
+    axios.get('/api/search/' + value)
+        .then((res) => {
+            let data = res.data;
+            renderHotel(data);
+        })
+        .catch((err) => {
+            console.log("Error");
+        });
+};
+
+
+
+// render khách sạn recommend
+
+const renderHotel = (data) =>{
+    let html = '';
+    let count = 1 ;
+    data.forEach((hotel)=>{
+        if (count>8){
+            return
+        }
+        html +=`
+                    <div class="col-3 h-100">
+                        <a class="card mb-5 text-reset text-decoration-none  h-100" href="/chi-tiet-khach-san/${hotel.id}">
+                            <img class="image-hotel" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
+                            <div class="p-2 h-100">
+                                <div class="d-flex justify-content-start align-content-center h-100">
+                                    <span class="p-1 m-0 score-rating h-100">${hotel.rating.toFixed(1)}</span>
+                                    <span class="p-1 m-0 h-100" >${hotel.ratingText}</span>
+                                    <span class="p-1 m-0 h-100" >(${hotel.reviews.length}nhận xét)</span>
+                                </div>
+                            
+                                <h5 class="p-0 m-0 h-100" >${hotel.name}</h5>
+                                <p class="p-0 m-0 d address-hotel h-100" > <i class="fa-solid fa-location-dot"></i> ${hotel.address}</p>
+                                <div class="price list-unstyledp-0 m-0">
+                                           
+
+                                            <div class="p-0 wrapper w-100 d-flex">
+                                                <span class="original-price "><del>1.300.500 ₫</del></span>
+                                            </div>
+                                            <h4 class="p-0 current-price w-100 d-flex">1.150.000₫</h4>
+                                            <p class="description-price w-100 pb-1 m-0">Giá mỗi đêm chưa bao gồm thuế & phí</p>
+                                            <span class="discount mt-3"> Giảm 15%</span>
+
+
+                                   </div>
+                            </div>
+                        </a>
+                    </div>
+                    `
+        count++;
+
+    })
+    listCardHotel.innerHTML=html;
+
+
+}
+
+
+
+
 
 

@@ -32,6 +32,9 @@ public class Room {
 
     Integer capacity;
 
+    Integer basePrice;
+
+
     Integer area;
     @ManyToMany
     @JoinTable(
@@ -41,6 +44,11 @@ public class Room {
 
     )
     List<AmenityRoom> amenityRoomList ;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<Bed> bedList;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<PriceRoom> priceRoomList;
 
     Boolean status;
     LocalDate createdAt;

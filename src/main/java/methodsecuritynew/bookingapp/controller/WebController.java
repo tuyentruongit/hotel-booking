@@ -1,12 +1,9 @@
 package methodsecuritynew.bookingapp.controller;
 
 import lombok.RequiredArgsConstructor;
-import methodsecuritynew.bookingapp.entity.AmenityHotel;
-import methodsecuritynew.bookingapp.entity.City;
-import methodsecuritynew.bookingapp.entity.Hotel;
-import methodsecuritynew.bookingapp.service.AmenityHotelService;
-import methodsecuritynew.bookingapp.service.CityService;
-import methodsecuritynew.bookingapp.service.HotelService;
+import methodsecuritynew.bookingapp.entity.*;
+import methodsecuritynew.bookingapp.model.statics.SupportType;
+import methodsecuritynew.bookingapp.service.*;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,26 +20,14 @@ import java.util.Optional;
 public class WebController {
     private final CityService cityService;
     private final HotelService hotelService;
-    private final AmenityHotelService amenityHotelService;
+    private final RoomService roomService;
+    private final SupportService supportService;
+
 
     @GetMapping("/")
     public String getHome(Model model) {
         List<City> cityList = cityService.findCityFavourite();
-
-//        List<Hotel> outstandingHotelHa = hotelService.findOutstandingHotel("Hà Nội");
-//        List<Hotel> outstandingHotelDa= hotelService.findOutstandingHotel("Đà Nẵng");
-//        List<Hotel> outstandingHotelHo = hotelService.findOutstandingHotel("Hồ Chí Minh");
-//        List<Hotel> outstandingHotelVu = hotelService.findOutstandingHotel("Vũng Tàu");
-//        List<Hotel> outstandingHotelHg = hotelService.findOutstandingHotel("Hà Giang");
-
-
         model.addAttribute("cityFavourite", cityList);
-//        model.addAttribute("outstandingHotelHa", outstandingHotelHa);
-//        model.addAttribute("outstandingHotelDa", outstandingHotelDa);
-//        model.addAttribute("outstandingHotelHg", outstandingHotelHg);
-//        model.addAttribute("outstandingHotelVu", outstandingHotelVu);
-//        model.addAttribute("outstandingHotelHo", outstandingHotelHo);
-
         return "web/home";
     }
 
@@ -56,8 +41,12 @@ public class WebController {
 
        List<Hotel> hotelList = hotelService.getHotelBySearch(nameCity,checkIn,checkOut,numberGuest,numberRoom);
 
-       model.addAttribute("nameCity" , nameCity);
 
+       model.addAttribute("nameCity" , nameCity);
+       model.addAttribute("checkIn" , checkIn);
+       model.addAttribute("checkOut" , checkOut);
+       model.addAttribute("numberGuest" , numberGuest);
+       model.addAttribute("numberRoom" , numberRoom);
        model.addAttribute("hotelList",hotelList);
 
         return "web/hotel-list";
@@ -66,13 +55,22 @@ public class WebController {
 
     @GetMapping("/chi-tiet-khach-san/{id}")
     public String getHotelDetail(@PathVariable Integer id, Model model) {
-
         Hotel hotel = hotelService.getHotelById(id);
+        List<Room> roomList = roomService.getRoomByIdHotel(id);
         model.addAttribute("hotel" , hotel);
-
-
-
-
+        model.addAttribute("roomList" , roomList);
         return "web/hotel-detail";
     }
+
+
+    @GetMapping("/support")
+    public String getSupport(Model model) {
+       List<SupportType> supportTypes = List.of(SupportType.values());
+
+       List<Support> supportList = supportService.getAllSupport();
+        model.addAttribute("supportTypes" , supportTypes);
+        model.addAttribute("supportList" , supportList);
+        return "web/support";
+    }
+
 }

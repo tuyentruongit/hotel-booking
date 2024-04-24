@@ -59,6 +59,45 @@ public class Hotel {
     )
     List<AmenityHotel> amenityHotelList;
 
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
+//    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+//    private List<Image> images;
+
+
+
+    public String getRatingText() {
+        if (rating == null) {
+            return "Chưa có đánh giá";
+        }
+
+        // switch rating from 1 to 10
+        if (rating <= 2.0f) {
+            return "Quá Tệ";
+        } else if (rating <= 3.0f) {
+            return "Tệ";
+        } else if (rating <= 4.0f) {
+            return "Kém";
+        } else if (rating <= 5.0f) {
+            return "Chấp nhận được";
+        } else if (rating <= 6.0f) {
+            return "Tốt";
+        } else if (rating <= 7.0f) {
+            return "Rất tốt";
+        } else if (rating <= 8.0f) {
+            return "Tuyệt vời";
+        } else if (rating <= 9.0f) {
+            return "Trên cả tuyệt vời";
+        } else if (rating <= 10.0f) {
+            return  "Xuất sắc";
+        } else {
+           return  "Chưa có đánh giá";
+        }
+    }
+
+
+
 
 
     LocalDate createdAt;

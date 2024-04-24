@@ -7,6 +7,17 @@
     --white: #ffffff;
     --max-width: 1200px;
 }
+.navbar-expand-lg{
+    background-color: #FFFFFF !important;
+}
+
+.img-logo{
+    width: 200px;
+    height: 50px;
+    object-fit: cover;
+    background-color: #F8F9FA;
+
+}
 
 
 /* style thanh tìm kiếm */
@@ -17,7 +28,7 @@
 .inputdata-search{
     border: none;
     border-radius: 10px;
-    background-color: aliceblue;
+    background-color: #E9ECEF
 }
 
 
@@ -25,12 +36,12 @@
 
     border: none;
     border-radius: 10px;
-    background-color: aliceblue;
+    background-color: #E9ECEF
 
 }
 .inputdata-search input:focus{
     border: none;
-    background-color: aliceblue;
+    background-color: #E9ECEF;
     box-shadow: none;
     outline: none;
 
@@ -48,6 +59,59 @@
     border: none;
 
 
+}
+.button-guest-number {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #E9ECEF;
+
+    border-radius: 10px;
+
+}
+.button-guest-number label{
+    font-size: 12px;
+}
+.button-guest-number .minus-guest{
+    border: 1px solid var(--text-light);
+    border-radius: 50%;
+    cursor: pointer;
+
+}
+.button-guest-number .plus-guest{
+    border: 1px solid var(--text-light);
+    border-radius: 50%;
+    cursor: pointer;
+}
+.button-guest-number .num-guest{
+
+    pointer-events: none;
+}
+
+
+.button-room-number {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #E9ECEF;
+
+    border-radius: 10px;
+}
+.button-room-number label{
+    font-size: 12px;
+}
+.button-room-number .minus-room{
+    border: 1px solid var(--text-light);
+    border-radius: 50%;
+    cursor: pointer;
+}
+.button-room-number .plus-room{
+    border: 1px solid var(--text-light);
+    border-radius: 50%;
+
+}
+.button-room-number .num-room{
+    pointer-events: none;
 }
 
 /* style image hotel */

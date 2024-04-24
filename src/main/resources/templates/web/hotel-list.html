@@ -23,27 +23,45 @@
                  <div class="col-4">
                     <div class="inputdata-search d-flex align-items-center p-1">
                         <i style="font-size: 20px;" class="fa-solid fa-location-dot"></i>
-                        <input type="text" class=" w-100 p-2  " placeholder="Tìm địa điểm, khách sạn, v.v.">
-
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="inputdata-search d-flex align-items-center p-1">
-                        <i style="font-size: 20px;" class="fa-solid fa-calendar-days"></i>
-                        <input id="date-range" type="text" class=" w-100 p-2  " placeholder="Tìm địa điểm, khách sạn, v.v.">
+                        <input id="input-name-city" type="text" class=" w-100 p-2  " placeholder="Tìm địa điểm, khách sạn, v.v.">
 
                     </div>
                 </div>
                 <div class="col-3">
                     <div class="inputdata-search d-flex align-items-center p-1">
-                        <i style="font-size: 20px;" class="fa-solid fa-user-group"></i>
-                        <input type="text" class=" w-100 p-2  " placeholder="Tìm địa điểm, khách sạn, v.v.">
+                        <i style="font-size: 15px;" class="fa-solid fa-calendar-days"></i>
+                        <input id="date-range" type="text" class=" w-100 p-2  " placeholder="Chọn ngày đến và đi của bạn">
+
+                    </div>
+                </div>
+               <div class="col-2">
+                   <div class="button-guest-number w-100 h-100 border shadow d-flex justify-content-between align-items-center" >
+                       <i style="font-size: 20px;"  class="fa-solid fa-user-check"></i>
+                       <label class="">Số người</label>
+                       <div class="w-50 d-flex justify-content-between">
+                           <button id="minus-guest" class="minus-guest"><i class="fa-solid fa-minus"></i></button>
+                           <span id="num-guest" class="num-guest">01</span>
+                           <button id="plus-guest" class="plus-guest"><i class="fa-solid fa-plus"></i></button>
+                       </div>
+
+                   </div>
+
+               </div>
+                <div class="col-2" >
+                    <div class="button-room-number w-100 h-100 border shadow d-flex justify-content-between align-items-center">
+                        <i style="font-size: 15px;" class="fa-solid fa-house"></i>
+                        <label class="label">Số phòng</label>
+                        <div class="w-50 d-flex justify-content-between ">
+                            <button id=".minus-room" class="minus-room"><i class="fa-solid fa-minus"></i></button>
+                            <span id=".num-room" class="num-room">01</span>
+                            <button id=".plus-room" class="plus-room"><i class="fa-solid fa-plus"></i></button>
+                        </div>
 
                     </div>
                 </div>
                 <div class="col-1">
-                    <button type="submit" class="btn-search w-100 h-100 py-2"><i class="fa-solid fa-magnifying-glass"
-                                                                                 style="color: #f7f9fc; font-size: 20px;"></i>
+                    <button type="submit" id="btn-search" class="btn-search w-100 h-100 py-2">
+                        <i class="fa-solid fa-magnifying-glass"style="color: #f7f9fc; font-size: 20px;"></i>
                     </button>
                 </div>
             </div>
@@ -80,7 +98,7 @@
                             <div class="field ">
                                 <span class="m-0 p-0">Tối thiểu</span>
                                 <div class="d-flex justify-content-between px-2">
-                                    <input type="number" class="input-min m-0 p-0" value="2500"/>
+                                    <input type="number" class="input-min" value="0"/>
                                     <span>đ</span>
                                 </div>
                             </div>
@@ -88,7 +106,7 @@
                             <div class="field">
                                 <span class="mt-4">Tối đa</span>
                                 <div class="d-flex justify-content-between px-2">
-                                    <input type="number" class="input-max m-0 p-0" value="7500"/>
+                                    <input type="number" class="input-max" value="1000000"/>
                                     <span>đ</span>
                                 </div>
                             </div>
@@ -97,9 +115,9 @@
                             <div class="progress"></div>
                         </div>
                         <div class="range-input">
-                            <input type="range" class="range-min" min="0" max="10000" value="2500" step="100">
-                            <input type="range" class="range-max" min="0" max="10000"
-                                   value="7500" step="100">
+                            <input type="range" class="range-min" min="0" max="1000000" value="0" step="100">
+                            <input type="range" class="range-max" min="0" max="1000000"
+                                   value="1000000" step="100">
                         </div>
                     </div>
                     <h4>Lọc theo</h4>
@@ -107,35 +125,66 @@
                         <h6>Loại hình lưu trú :</h6>
                         <ul class="list-unstyled ps-3">
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Khách sạn</label>
+                                <input id="check-box1" class=" m-2 custom-checkbox" type="checkbox">
+                                <label for="check-box1">Khách sạn</label>
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Nhà Nghỉ tư nhân</label>
+                                <input id="check-box2" class=" m-2 custom-checkbox" type="checkbox">
+                                <label for="check-box2">Nhà Nghỉ tư nhân</label>
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Resort</label>
+                                <input id="check-box3" class=" m-2 custom-checkbox" type="checkbox">
+                                <label for="check-box3">Resort</label>
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Khách sạn căn hộ</label>
+                                <input id="check-box4" class=" m-2 custom-checkbox" type="checkbox">
+                                <label for="check-box4">Khách sạn căn hộ</label>
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Villa</label>
+                                <input id="check-box5" class=" m-2 custom-checkbox" type="checkbox">
+                                <label for="check-box5">Villa</label>
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Khu nghỉ dưỡng</label>
+                                <input id="check-box6" class=" m-2 custom-checkbox" type="checkbox">
+                                <label for="check-box6">Khu nghỉ dưỡng</label>
                             </li>
                             <a href="#">Xem thêm</a>
                         </ul>
 
                     </form>
                     <form class="sort-by-rental-type">
-                        <h6>Tiện ích, dịch vụ</h6>
+                        <h6>Tiện ích khách sạn</h6>
+                        <ul class="list-unstyled ps-3">
+                            <li>
+                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                <label>Wifi</label>
+                            </li>
+                            <li>
+                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                <label >Spa</label>
+                            </li>
+                            <li>
+                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                <label>Gym</label>
+                            </li>
+                            <li>
+                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                <label>Bãi đậu xe</label>
+                            </li>
+                            <li>
+                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                <label>Nhà hàng</label>
+                            </li>
+                            <li>
+                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                <label>Trạm sạc xe điện</label>
+                            </li>
+                            <a href="">Xem thêm</a>
+                        </ul>
+
+                    </form>
+                     <form class="sort-by-rental-type">
+                        <h6>Tiện ích phòng</h6>
                         <ul class="list-unstyled ps-3">
                             <li>
                                 <input class=" m-2 custom-checkbox" type="checkbox">
@@ -168,35 +217,46 @@
 
                     <form class="sort-by-rental-type w-100">
                         <h6>Xếp hạng sao</h6>
-                        <ul class="list-unstyled ps-3 d-flex w-100">
+                        <ul class="list-unstyled ps-3 w-100">
                             <li>
-                                <button class="number-star border">
-                                    1<i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
-                                </button>
+                                 <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+
 
                             </li>
                             <li>
-                                <button class="number-star border">
-                                    2<i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
-                                </button>
+                                 <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+
 
                             </li>
                             <li>
-                                <button class="number-star border">
-                                    3<i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
-                                </button>
+                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+
 
                             </li>
                             <li>
-                                <button class="number-star border">
-                                    4<i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
-                                </button>
+                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+
+
 
                             </li>
                             <li>
-                                <button class="number-star border">
-                                    5<i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
-                                </button>
+                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
+
 
                             </li>
 
@@ -248,134 +308,76 @@
                     </form>
 
 
-                    <form class="sort-by-rental-type">
-                        <h6>Số lượng phòng ngủ</h6>
-                        <ul class="list-unstyled ps-3">
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Studio</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>1 Phòng ngủ</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>2 Phòng ngủ</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>3 Phòng ngủ</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>4+ Phòng ngủ</label>
-                            </li>
-                        </ul>
+<!--                    <form class="sort-by-rental-type">-->
+<!--                        <h6>Số lượng phòng ngủ</h6>-->
+<!--                        <ul class="list-unstyled ps-3">-->
+<!--                            <li>-->
+<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
+<!--                                <label>Studio</label>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
+<!--                                <label>1 Phòng ngủ</label>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
+<!--                                <label>2 Phòng ngủ</label>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
+<!--                                <label>3 Phòng ngủ</label>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
+<!--                                <label>4+ Phòng ngủ</label>-->
+<!--                            </li>-->
+<!--                        </ul>-->
 
-                    </form>
+<!--                    </form>-->
 
 
                 </div>
                 <div class="col-9">
-                    <div class="result  p-1" >
+                    <div class="result  p-1 " th:if="${hotelList.size()>0}">
                         <h4><th:block th:text="${nameCity}"></th:block> tìm thấy <th:block th:text="${hotelList.size()}"></th:block> chỗ nghỉ</h4>
                     </div>
-                    <div class="sort-by border shadow  d-flex justify-content-center align-items-center">
+                    <div id="sort-by" class="sort-by border shadow  d-flex justify-content-center align-items-center">
                         <div class=" col-1  d-flex justify-content-center align-items-center">
                            <span>
                             Sắp xếp
                            </span>
                         </div>
                         <div class="col-2 ">
-                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit">Phù hợp
+                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit" th:onclick="dataDefault()">Phù hợp
                                 nhất
                             </button>
 
                         </div>
 
                         <div class="col-2 ">
-                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit">Giá
+                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit" th:onclick="sortPriceAsc()">Giá
                                 Thấp đến cao
                             </button>
                         </div>
                         <div class="col-2 ">
-                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit">Giá
+                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit" th:onclick="sortPriceDesc()">Giá
                                 Thấp đến cao
                             </button>
                         </div>
                         <div class="col-3 ">
-                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit">Được
-                                đánh giá nhiều nhất
+                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit" th:onclick="sortHeightRating()">Được
+                                đánh giá cao
                             </button>
                         </div>
                         <div class="col-2">
-                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit">Xếp
+                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit" th:onclick="sortHeightStar()">Xếp
                                 hạng sao
                             </button>
-
-
                         </div>
-
-
                     </div>
-
-
-
                     <div class=" mt-4 ">
-
-                        <h6 th:if="${hotelList.size()==0}">Rất tiếc, Không có nơi lưu chú nào phù hợp vớp bạn </h6>
-
-                        <div th:if="${hotelList.size()>0}" class="row " th:each="hotel : ${hotelList}">
-
-                            <a class="card-hotel text-reset text-decoration-none d-flex my-3"th:href="@{/chi-tiet-khach-san/{id} (id = ${hotel.id})}">
-
-                                <div class="course w-100 border">
-                                    <div class="image-btn">
-                                        <img class="course-preview " src="/web/assets/image/uudai.jpg">
-                                        <button class="btn-favourite p-0 m-0">
-                                            <i class="fa-regular fa-heart"></i>
-                                        </button>
-
-                                    </div>
-                                    <div class="course-info">
-                                        <h5 class="p-0">
-                                            <th:block th:text="${hotel.name}"></th:block>
-                                        </h5>
-                                        <span ><i class="fa-solid fa-star" style="color: #CF2061;"th:each="star : ${#numbers.sequence(0,hotel.star)}" ></i></span>
-                                        <p class="m-0"><i class="fa-solid fa-location-dot"></i> <th:block th:text="${hotel.address}"></th:block> </p>
-                                        <div class="w-50 list-amenity" >
-                                            <span th:each="num : ${#numbers.sequence(0,2)}"  class="w-50 mb-5">
-                                            <th:block th:utext="${hotel.getAmenityHotelList().get(num).getIcon()}"> </th:block>
-                                            <th:block th:text="${hotel.getAmenityHotelList().get(num).getName()}"> </th:block>
-                                            </span>
-                                        </div>
-
-                                        <div class="total-review d-flex ">
-                                            <div class="age-rating">9,6</div>
-                                            <div class="infor-rating-hotel">
-                                                <h6 class="p-0 m-0">Tuyệt vời</h6>
-                                                <span class="quantity">450 nhận xét</span>
-                                            </div>
-                                        </div>
-                                        <ul class="price list-unstyled justify-content-center p-0 m-0">
-                                            <span class="description-price">Giá mỗi đêm chưa bao gồm thuế & phí</span>
-
-                                            <li class="p-0 wrapper w-100 d-flex justify-content-end">
-                                                <span class="original-price "><del>1.300.500 ₫</del></span>
-                                                <span class="discount px-2"> Giảm 15%</span>
-
-                                            </li>
-                                            <h4 class="p-0 current-price w-100 d-flex justify-content-end">1.150.000₫</h4>
-
-
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </a>
-                        </div>
-
+                        <h5 class="d-flex justify-content-center" th:if="${hotelList.size()==0}">Chúng tôi không thể tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng thử tìm lại.</h5>
+                        <div class="container-parent"></div>
                     </div>
                 </div>
             </div>
@@ -414,7 +416,20 @@
     </div>
 </span>
 <th:block id="js">
+
+    <script th:inline="javascript">
+        let nameCity = [[${nameCity}]];
+        let checkIn = [[${checkIn}]];
+        let checkOut =[[${checkOut}]];
+        let valueNumberGuest = [[${numberGuest}]];
+        let valueNumberRoom = [[${numberRoom}]];
+        let hotelList = [[${hotelList}]];
+
+    </script>
+
     <script src="/web/assets/js/hotel-list.js"></script>
+
+
 </th:block>
 
 </body>

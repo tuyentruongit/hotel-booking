@@ -8,6 +8,19 @@
     --max-width: 1200px;
 }
 
+
+.navbar-expand-lg{
+    background-color: #FFFFFF !important;
+}
+
+.img-logo{
+    width: 200px;
+    height: 50px;
+    object-fit: cover;
+    background-color: #F8F9FA;
+
+}
+
 /* style tìm kiếm khach sạn */
 
 .title-search {
@@ -177,6 +190,10 @@
 .outstanding-hotel {
     position: relative;
 }
+.active-city{
+    border-bottom: 2px solid #5392F9 !important;
+    font-weight: 500;
+}
 
 .outstanding-hotel .fa-heart {
     position: absolute;
@@ -195,21 +212,41 @@
     color: salmon;
 }
 
-
-.list-card .card {
-    /* background-color: papayawhip; */
-}
-
 .city-outstanding-hotel button {
     border: none;
     /* background-color: papayawhip; */
     background-color: white;
     padding: 5px 5px;
 }
+.card{
+    border-radius: 10px ;
+    height: 100%;
+    border: none !important;
+
+}
 
 .card img {
-    height: 200px;
+    height: 230px;
+   border-radius: 10px;
+}
+.price-hotel{
+    font-weight: 700;
+    font-size: 18px;
+}
+.address-hotel{
+    color: #5392F9;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.score-rating{
+    font-weight: 700;
+    color: black;
+
+    padding: 5px 5px;
     border-radius: 10px;
+
 }
 
 
@@ -239,13 +276,27 @@
     color: white;
 }
 
-/* .search {
-   position: absolute;
-   top: 70%;
-   left: 50%;
-   transform: translate(-50%, -30%);
+.description-price {
+    color: var(--text-light);
+    font-size: 12px;
+}
 
-} */
+.discount{
+    letter-spacing: 0.5px; /* Điều chỉnh khoảng cách giữa các ký tự */
+    border-radius: 5px;
+    background-color:#227950;
+    margin-top: 5px !important;
+    padding: 5px 5px;
+    width: 20px;
+
+    font-size: 15px;
+    color: var(--extra-light);
+}
+.original-price{
+    margin: 2px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
 
 
 .pr {

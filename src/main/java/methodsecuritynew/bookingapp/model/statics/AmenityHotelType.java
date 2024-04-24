@@ -15,6 +15,6 @@ public enum AmenityHotelType {
 
     OTHER("Khác"); // Khác
 
-    private final String value;
+    public final String value;
 
 }

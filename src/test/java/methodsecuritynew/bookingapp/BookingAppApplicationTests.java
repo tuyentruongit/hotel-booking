@@ -44,6 +44,10 @@ class BookingAppApplicationTests {
     @Test
     void contextLoads() {
         Faker faker = new Faker();
+        hotelRepository.findAll().forEach(hotel -> {
+            hotel.setRating((float) faker.number().randomDouble(1, 6, 10));
+            hotelRepository.save(hotel);
+        });
 
     }
     @Test
@@ -127,7 +131,7 @@ class BookingAppApplicationTests {
                     .policyHotel(policyRepository.findAll().get(280+i))
                     .star(faker.number().numberBetween(1, 5))
                     .hotline(faker.phoneNumber().phoneNumber())
-                    .rating((float) faker.number().randomDouble(1, 1, 5))
+                    .rating((float) faker.number().randomDouble(1, 6, 10))
                     .rentalType(RentalType.values()[random.nextInt(RentalType.values().length)])
                     .amenityHotelList(amenityHotels1)
                     .createdAt(LocalDate.now())
@@ -239,10 +243,11 @@ class BookingAppApplicationTests {
 
         Slugify slugify = Slugify.builder().build();
 
-        String title = faker.lorem().sentence();
+
 
         Random random = new Random();
-        for (int i = 0; i < 50 ; i++) {
+        for (int i = 0; i < 10 ; i++) {
+            String title = faker.lorem().word();
 
             Support support =  Support.builder()
                     .title(title) // Tiêu đề ngẫu nhiên

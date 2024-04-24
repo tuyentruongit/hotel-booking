@@ -7,6 +7,7 @@ import methodsecuritynew.bookingapp.model.statics.Gender;
 import methodsecuritynew.bookingapp.model.statics.UserRole;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,6 +46,12 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL)
     PayCard payCard;
+
+//    @ManyToMany
+//            @JoinTable(name = "hotel_favourite",
+//            joinColumns =@JoinColumn (name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "hotel_id" ) )
+//    List<Hotel> hotelList;
 
     Boolean enabled;
 
