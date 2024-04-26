@@ -2,6 +2,7 @@ package methodsecuritynew.bookingapp.controller;
 
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.*;
+import methodsecuritynew.bookingapp.model.statics.RentalType;
 import methodsecuritynew.bookingapp.model.statics.SupportType;
 import methodsecuritynew.bookingapp.service.*;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,8 +42,6 @@ public class WebController {
                                Model model) {
 
        List<Hotel> hotelList = hotelService.getHotelBySearch(nameCity,checkIn,checkOut,numberGuest,numberRoom);
-
-
        model.addAttribute("nameCity" , nameCity);
        model.addAttribute("checkIn" , checkIn);
        model.addAttribute("checkOut" , checkOut);
@@ -72,5 +72,9 @@ public class WebController {
         model.addAttribute("supportList" , supportList);
         return "web/support";
     }
+     @GetMapping("/profile")
+        public String getProfile(Model model) {
+            return "web/profile-user";
+        }
 
 }

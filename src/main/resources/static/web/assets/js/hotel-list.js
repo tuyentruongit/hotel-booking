@@ -10,8 +10,8 @@ $("#date-range").flatpickr({
 
 // tùy chỉnh giá tiền
 const rangeInput = document.querySelectorAll(".range-input input"),
-      priceInput = document.querySelectorAll(".price-input input"),
-      range = document.querySelector(".slider .progress");
+    priceInput = document.querySelectorAll(".price-input input"),
+    range = document.querySelector(".slider .progress");
 
 let priceGap = 1000;
 
@@ -132,14 +132,14 @@ btnSearch.addEventListener('click', () => {
         "&checkOut=" + dateEndString + "&numberGuest=" + numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
 });
 const renderDataSearch = (nameCity, numGuest, numRoom) => {
-    if (numGuest<10){
-        numberGuest.textContent ="0"+numGuest;
-    }else {
+    if (numGuest < 10) {
+        numberGuest.textContent = "0" + numGuest;
+    } else {
         numberGuest.textContent = numGuest;
     }
-    if (numRoom<10){
-        numRoom.textContent ="0"+numRoom;
-    }else {
+    if (numRoom < 10) {
+        numRoom.textContent = "0" + numRoom;
+    } else {
         numberRoom.textContent = numRoom;
     }
 
@@ -148,55 +148,152 @@ const renderDataSearch = (nameCity, numGuest, numRoom) => {
 
 
 }
-window.addEventListener('load',()=>{
-    renderListHotel(hotelList)
+
+// khi vừa vào trang thì render ra dữ liệu
+window.addEventListener('load', () => {
+    // data hotel
+    renderListHotel(hotelList);
+    // data input tìm kiếm
     renderDataSearch(nameCity, valueNumberGuest, valueNumberRoom);
 })
 
-
-
-
-
-
-
-
-
+// thẻ chứa phần caard của  hotel đề xuất
 const containerParent = document.querySelector('.container-parent');
+
 
 let data = hotelList.slice();
 let sortHeightRating = () => {
     data.sort((hotel1, hotel2) => hotel2.rating - hotel1.rating);
-    console.log(data);
-    renderListHotel(data);
-    console.log(data);
+    functionFilter(options,data)
 }
 let sortHeightStar = () => {
     data.sort((hotel1, hotel2) => hotel2.star - hotel1.star);
-    console.log(data)
-    renderListHotel(data);
-    console.log(data)
+    functionFilter(options,data)
 }
 let dataDefault = () => {
-    renderListHotel(hotelList);
+    functionFilter(options,hotelList);
+}
+
+const searchByNameHotel = document.querySelector('.input-name-hotel');
+searchByNameHotel.addEventListener('keydown',(event)=>{
+    console.log(event)
+    if (event.key === 'Enter'){
+        let keyWord = searchByNameHotel.value.trim();
+        console.log(keyWord+'tên khách sạn tìm kiếm')
+
+        if (keyWord){
+            const  data = hotelList.filter(hotel =>
+                hotel.name.toLowerCase() === keyWord.toLowerCase())
+            renderListHotel(data)
+
+
+
+        }
+    }
+})
+
+
+// filter cho khách sạn
+let options = {
+    rentalType: [],
+    amenityHotel: [],
+    amenityRoom: [],
+    starHotel: [],
+    paymentMethod: [],
+    rating: []
+}
+
+const checkBoxList = document.querySelectorAll('.custom-checkbox');
+checkBoxList.forEach(checkBox => {
+    checkBox.addEventListener('change', () => {
+        if (checkBox.checked) {
+            filterChecked(checkBox);
+        } else {
+            filterUnChecked(checkBox)
+        }
+        functionFilter(options, hotelList);
+    });
+});
+function filterChecked(checkBox) {
+    let filterHotel = checkBox.getAttribute('type-check');
+    switch (filterHotel) {
+        case 'rental-type':
+            options.rentalType.push(checkBox.value);
+            break;
+        case 'star':
+            options.starHotel.push(checkBox.value);
+            console.log(checkBox.value)
+            break;
+        case 'rating':
+            options.rating.splice(0, 1);
+            console.log(options.rating)
+            let ratingNumber = parseInt(checkBox.value)
+            options.rating.push(ratingNumber);
+            console.log(checkBox.value)
+            break;
+
+    }
+
 }
 
 
+function filterUnChecked(checkBox) {
+    let filterHotel = checkBox.getAttribute('type-check');
+    switch (filterHotel) {
+        case 'rental-type':
+            const indexRentalType = options.rentalType.indexOf(checkBox.value);
+            if (indexRentalType !== -1) {
+                options.rentalType.splice(indexRentalType, 1);
+            }
+            break;
+        case 'star':
+            const indexStar = options.starHotel.indexOf(checkBox.value);
+            if (indexStar !== -1) {
+                options.starHotel.splice(indexStar, 1);
+            }
+            break;
+
+    }
+
+}
+
+const functionFilter = (options,hotelList) => {
+    const hotelListAfterFiltering = hotelList.filter(hotel => {
+
+        return (
+            (!options.rentalType.length || options.rentalType.includes(hotel.rentalType))&&
+            (!options.starHotel.length || options.starHotel.includes(hotel.star.toString()))&&
+            (!options.rating.length || options.rating.some(num =>num <= hotel.rating))
+
+        );
+    });
+
+    renderListHotel(hotelListAfterFiltering);
+};
+
 const renderListHotel = (hotelList) => {
-    let  newContent = '';
+    let newContent = '';
+    if (hotelList.length===0){
+        containerParent.innerHTML = ` <h5 class="d-flex justify-content-center" >Chúng tôi không thể tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng thử tìm lại.</h5>`;
+        return;
+    }
     hotelList.forEach((hotel) => {
+
+        let hotelSearch
 
         let htmlStar = '';
         for (let i = 0; i < hotel.star; i++) {
-            htmlStar+=`<i class="fa-solid fa-star" style="color: #CF2061;"></i>`
+            htmlStar += `<i class="fa-solid fa-star" style="color: #CF2061;"></i>`
         }
         let htmlAmenity = '';
-        for (let i = 0; i <2; i++) {
-            htmlAmenity+=`
+        for (let i = 0; i < 2; i++) {
+            htmlAmenity += `
                             <span style="font-size: 14px" class="me-3 ">${hotel.amenityHotelList[i].icon} ${hotel.amenityHotelList[i].name}</span>
                     `
 
         }
-        newContent += `<div  class="row container-hotel" >
+        newContent += `  
+                        <div  class="row container-hotel" >
                                 <button class="btn-favourite p-0 m-0" value="${hotel.id}">
                                            <i class="fa-solid fa-heart"></i>
                                 </button>
@@ -211,7 +308,7 @@ const renderListHotel = (hotelList) => {
                                     </div>
                                     <div class="course-info">
                                        <h4 class="p-0 mt-2 w-100" >${hotel.name}</h4>
-                                        <p style="font-size: 15px" class="m-0 w-50 overflow-hidden"><i class="fa-solid fa-location-dot"></i> ${hotel.address}</p>
+                                        <p style="font-size: 14px; color: #0d6efd"  class="m-0 overflow-hidden"><i class="fa-solid fa-location-dot"></i> ${hotel.address}</p>
                                         <div class="mt-1  overflow-hidden" >${htmlStar}</div>
                                         
                                        <div class="w-50 list-amenity d-flex overflow-hidden">
@@ -244,7 +341,7 @@ const renderListHotel = (hotelList) => {
 
 
     })
-    containerParent.innerHTML=newContent;
+    containerParent.innerHTML = newContent;
 
     // xủ lý khi người dùng click vào nút yêu thích
     let btnHeart = document.querySelectorAll('.btn-favourite')
@@ -257,18 +354,10 @@ const renderListHotel = (hotelList) => {
             }
 
         })
-
     })
-
-    // filter cho khách sạn
-    let options = {
-        rentalType : [],
-        amenityHotel : [],
-        amenityRoom : [],
-        starHotel : [],
-
-    }
 }
+
+
 
 
 

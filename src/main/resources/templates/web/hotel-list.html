@@ -4,9 +4,6 @@
       th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
     <title>list Hotel</title>
-
-
-
     <th:block id="css">
         <link rel="stylesheet" href="/web/assets/css/style-hotel-list.css">
     </th:block>
@@ -125,38 +122,37 @@
                         <h6>Loại hình lưu trú :</h6>
                         <ul class="list-unstyled ps-3">
                             <li>
-                                <input id="check-box1" class=" m-2 custom-checkbox" type="checkbox">
+                                <input id="check-box1" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="HOTEL">
                                 <label for="check-box1">Khách sạn</label>
                             </li>
                             <li>
-                                <input id="check-box2" class=" m-2 custom-checkbox" type="checkbox">
+                                <input id="check-box2" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="MOTEL">
                                 <label for="check-box2">Nhà Nghỉ tư nhân</label>
                             </li>
                             <li>
-                                <input id="check-box3" class=" m-2 custom-checkbox" type="checkbox">
+                                <input id="check-box3" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="RESORT">
                                 <label for="check-box3">Resort</label>
                             </li>
                             <li>
-                                <input id="check-box4" class=" m-2 custom-checkbox" type="checkbox">
+                                <input id="check-box4" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="APARTMENT">
                                 <label for="check-box4">Khách sạn căn hộ</label>
                             </li>
                             <li>
-                                <input id="check-box5" class=" m-2 custom-checkbox" type="checkbox">
+                                <input id="check-box5" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="VILLA">
                                 <label for="check-box5">Villa</label>
                             </li>
                             <li>
-                                <input id="check-box6" class=" m-2 custom-checkbox" type="checkbox">
+                                <input id="check-box6" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="HOLIDAY_HOME" >
                                 <label for="check-box6">Khu nghỉ dưỡng</label>
                             </li>
-                            <a href="#">Xem thêm</a>
                         </ul>
 
                     </form>
-                    <form class="sort-by-rental-type">
+                    <form class="sort-by-amenity-hotel">
                         <h6>Tiện ích khách sạn</h6>
                         <ul class="list-unstyled ps-3">
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                <input class=" m-2 custom-checkbox" type="checkbox" >
                                 <label>Wifi</label>
                             </li>
                             <li>
@@ -183,7 +179,7 @@
                         </ul>
 
                     </form>
-                     <form class="sort-by-rental-type">
+                     <form class="sort-by-amenity-room">
                         <h6>Tiện ích phòng</h6>
                         <ul class="list-unstyled ps-3">
                             <li>
@@ -215,11 +211,11 @@
 
                     </form>
 
-                    <form class="sort-by-rental-type w-100">
+                    <form class="sort-by-star w-100">
                         <h6>Xếp hạng sao</h6>
                         <ul class="list-unstyled ps-3 w-100">
                             <li>
-                                 <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <input class=" m-2 custom-checkbox" type="checkbox" type-check="star" value="5" >
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
@@ -229,7 +225,7 @@
 
                             </li>
                             <li>
-                                 <input class=" m-2 custom-checkbox" type="checkbox">
+                                <input class=" m-2 custom-checkbox" type="checkbox" type-check="star" value="4" >
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
@@ -238,7 +234,7 @@
 
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
+                               <input class=" m-2 custom-checkbox" type="checkbox" type-check="star" value="3" >
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
@@ -246,7 +242,7 @@
 
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
+                               <input class=" m-2 custom-checkbox" type="checkbox" type-check="star" value="2" >
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
 
@@ -254,10 +250,8 @@
 
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
+                              <input class=" m-2 custom-checkbox" type="checkbox" type-check="star" value="1" >
                                  <i class=" m-1 fa-solid fa-star" style="color: #FFD43B;"></i>
-
-
                             </li>
 
 
@@ -280,27 +274,28 @@
 
                     </form>
 
-                    <form class="sort-by-rental-type">
+                    <form class="sort-by-rating">
                         <h6>Đánh giá của khách hàng</h6>
                         <ul class="list-unstyled ps-3">
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <input class=" m-2 custom-checkbox" type="radio"  name="rating-hotel" type-check="rating" value="0" >
                                 <label>Bất kì</label>
                             </li>
+
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <input class=" m-2 custom-checkbox" type="radio"  name="rating-hotel" type-check="rating" value="9" >
                                 <label>Tuyệt vời 9+</label>
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <input class=" m-2 custom-checkbox" type="radio"  name="rating-hotel" type-check="rating" value="8" >
                                 <label>Rất tốt 8+</label>
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                 <input class=" m-2 custom-checkbox" type="radio"  name="rating-hotel" type-check="rating" value="7" >
                                 <label>Tốt 7+</label>
                             </li>
                             <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
+                                <input class=" m-2 custom-checkbox" type="radio"  name="rating-hotel" type-check="rating" value="6" >
                                 <label>Khá 6+</label>
                             </li>
                         </ul>
@@ -308,32 +303,6 @@
                     </form>
 
 
-<!--                    <form class="sort-by-rental-type">-->
-<!--                        <h6>Số lượng phòng ngủ</h6>-->
-<!--                        <ul class="list-unstyled ps-3">-->
-<!--                            <li>-->
-<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
-<!--                                <label>Studio</label>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
-<!--                                <label>1 Phòng ngủ</label>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
-<!--                                <label>2 Phòng ngủ</label>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
-<!--                                <label>3 Phòng ngủ</label>-->
-<!--                            </li>-->
-<!--                            <li>-->
-<!--                                <input class=" m-2 custom-checkbox" type="checkbox">-->
-<!--                                <label>4+ Phòng ngủ</label>-->
-<!--                            </li>-->
-<!--                        </ul>-->
-
-<!--                    </form>-->
 
 
                 </div>
@@ -376,8 +345,10 @@
                         </div>
                     </div>
                     <div class=" mt-4 ">
-                        <h5 class="d-flex justify-content-center" th:if="${hotelList.size()==0}">Chúng tôi không thể tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng thử tìm lại.</h5>
-                        <div class="container-parent"></div>
+
+                        <div class="container-parent">
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -424,7 +395,6 @@
         let valueNumberGuest = [[${numberGuest}]];
         let valueNumberRoom = [[${numberRoom}]];
         let hotelList = [[${hotelList}]];
-
     </script>
 
     <script src="/web/assets/js/hotel-list.js"></script>
