@@ -1,0 +1,47 @@
+
+body{
+    background-color: #F9F9F9;
+
+}
+.booking-detail{
+    margin-top: 30px !important;
+}
+.infor-booking{
+    padding-left: 100px;
+}
+.status-booking label{
+    color: red;
+}
+
+.link-search-and-rebook{
+
+    width: 500px;
+}
+
+.name-hotel{
+    font-weight: 1000;
+    text-decoration: none;
+    font-size: 25px;
+    color: #1772E5;
+}
+
+.id-booking{
+  margin: 10px 0px;
+}
+
+.infor-hotel{
+    padding: 10px 0px;
+    border-radius: 10px;
+}
+.image-hotel{
+    width: 170px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 50px;
+}
+
+.contact-hotel{
+    margin-top: 10px;
+    margin-bottom: 50px;
+}

@@ -12,11 +12,13 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "PriceRoom")
+@Table(name = "priceRoom")
 public class PriceRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     Integer id;
+    LocalDate date;
+
 
     @Enumerated(EnumType.STRING)
     DateType dateType;
@@ -24,7 +26,7 @@ public class PriceRoom {
     Double price;
     @ManyToOne
     @JoinColumn(name = "room_id")
-    Room room;
+    Hotel hotel;
 
     LocalDate createdAt;
     LocalDate updatedAt;

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
+<head>
+    <title>Đặt chỗ và chuyến đi</title>
+    <th:block id="css">
+        <link rel="stylesheet" href="/web/assets/css/style-list-booking.css">
+    </th:block>
+
+</head>
+<body>
+
+<div id="main-content">
+    <section class="content-page">
+        <div class="container">
+            <div class="row">
+               <div class="title-page d-flex justify-content-center">
+                   <div class="col-10">
+                       <h2 class="p-0 m-0"> <i class="fa-regular fa-calendar-check"></i> Đơn đặt chỗ của tôi</h2>
+                   </div>
+               </div>
+            </div>
+            <div class="row">
+                <div class="wrap d-flex justify-content-center">
+                    <div class="col-9">
+                        <div class="filter-booking d-flex">
+                            <div class="col-3 px-2">
+                                <button >Tất cả</button>
+                            </div>
+                            <div class="col-3 px-2">
+                                <button >Sắp tới</button>
+                            </div>
+                            <div class="col-3 px-2">
+                                <button>Hoàn tất</button>
+                            </div>
+                            <div class="col-3 px-2">
+                                <button >Đã hủy</button>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <div class=" d-flex justify-content-between">
+                            <div  class="sort-booking"  >
+                                <label class="select-type-sort">
+                                    <i class="fa-solid fa-arrow-up-wide-short"></i>
+                                    Sắp xếp theo :
+                                    <select >
+                                        <option class="pt-5"> Ngày nhận phòng </option>
+                                        <option> Ngày trả phòng </option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="search-by-id-booking">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input class="" type="text" placeholder="Tìm kiếm theo mã đặt phòng">
+                            </div>
+
+                        </div>
+
+                        <div class="list-booking">
+                            <ul class="list-unstyled">
+                                <li class="w-100">
+                                    <a class="card-booking" th:href="@{/chi-tiet-booking}">
+                                        <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+                                        <div class="infor-booking">
+                                            <h5>Khách Sạn Old Quarter 1961 (Old Quarter Hotel 1961)</h5>
+                                            <h6>Hà Nội</h6>
+                                            <span>15 tháng 5 - 20 tháng 5</span>
+                                            <p class="p-0 m-0">Đã xác nhận</p>
+                                        </div>
+                                    </a>
+
+                                </li>
+                                <li class="w-100">
+                                    <a class="card-booking" th:href="@{/chi-tiet-booking}">
+                                        <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+                                        <div class="infor-booking">
+                                            <h5>Khách Sạn Old Quarter 1961 (Old Quarter Hotel 1961)</h5>
+                                            <h6>Hà Nội</h6>
+                                            <span>15 tháng 5 - 20 tháng 5</span>
+                                            <p>Đã xác nhận</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="w-100">
+                                    <a class="card-booking" th:href="@{/chi-tiet-booking}">
+                                        <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+                                        <div class="infor-booking">
+                                            <h5>Khách Sạn Old Quarter 1961 (Old Quarter Hotel 1961)</h5>
+                                            <h6>Hà Nội</h6>
+                                            <span>15 tháng 5 - 20 tháng 5</span>
+                                            <p>Đã xác nhận</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="w-100">
+                                    <a class="card-booking">
+                                        <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+                                        <div class="infor-booking">
+                                            <h5>Khách Sạn Old Quarter 1961 (Old Quarter Hotel 1961)</h5>
+                                            <h6>Hà Nội</h6>
+                                            <span>15 tháng 5 - 20 tháng 5</span>
+                                            <p>Đã xác nhận</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="w-100">
+                                    <a class="card-booking">
+                                        <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+                                        <div class="infor-booking">
+                                            <h5>Khách Sạn Old Quarter 1961 (Old Quarter Hotel 1961)</h5>
+                                            <h6>Hà Nội</h6>
+                                            <span>15 tháng 5 - 20 tháng 5</span>
+                                            <p>Đã xác nhận</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+
+<th:block id="js">
+
+</th:block>
+
+</body>
+</html>

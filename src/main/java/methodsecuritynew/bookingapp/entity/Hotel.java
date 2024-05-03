@@ -62,6 +62,9 @@ public class Hotel {
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    private List<PriceRoom> priceRoomList;
+
 //    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
 //    private List<Image> images;
 

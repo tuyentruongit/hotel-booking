@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
+<head>
+    <title>Chi tiết đặt chỗ ở</title>
+    <th:block id="css">
+        <link rel="stylesheet" href="/web/assets/css/style-booking-detail.css">
+    </th:block>
+
+</head>
+<body>
+
+<div id="main-content">
+
+
+    <section class="booking-detail">
+
+        <div class="container">
+            <div class="row">
+                <div class=" infor-booking d-flex justify-content-center">
+                    <div class="col-12">
+                        <div class="status-booking">
+                            <label>Đã hủy</label>
+                            <h4>Đơn đặt đã bị hủy</h4>
+                            <div class="id-booking">Mã đơn đặt phòng : 29377027784302</div>
+                            <div class="link-search-and-rebook d-flex justify-content-between">
+                                <a th:href="@{/chi-tiet-khach-san/20}"> <i class="fa-solid fa-rotate-left"></i> Đặt lại </a>
+                                <a th:href="@{/chi-tiet-khach-san/20}"> <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm nơi lưu trú khác</a>
+                            </div>
+
+                        </div>
+
+
+                        <div class="infor-hotel d-flex align-content-center">
+                           <div class="col-9">
+                               <a class="name-hotel" href="">Khách Sạn Old Quarter 1961 (Old Quarter Hotel 1961)</a>
+                               <div class="row d-flex my-2">
+                                   <div class="col-1">
+                                       <i style="font-size: 20px" class="fa-regular fa-calendar"></i>
+                                   </div>
+                                   <div class="col-6 p-0 m-0">
+                                       <div class="w-100 d-flex">
+                                           <h6 class="w-50">Nhận phòng</h6>
+                                           <h6 class="w-50 ">Trả phòng</h6>
+                                       </div>
+                                       <div class="w100 d-flex p-0 m-0">
+                                           <h6 class="w-50 ">T5, 2 tháng 5 2024</h6>
+                                           <h6 class="w-50 ">T5, 6 tháng 5 2024</h6>
+                                       </div>
+                                   </div>
+                               </div>
+
+                               <div class="row d-flex my-2">
+                                   <div class="col-1">
+                                       <i style="font-size: 20px" class="fa-solid fa-list-ul"></i>
+                                   </div>
+                                   <div class="col-6 p-0 m-0">
+                                       <h6 class="p-0 m-0">Chi tiết đặt phòng</h6>
+                                       <p class="p-0 m-0">Tên Phòng : Khách Sạn Old Quarter 1961 (Old Quarter Hotel 1961)</p>
+                                       <p class="p-0 m-0">Số lượng phòng : 1</p>
+                                       <p class="p-0 m-0">Số lượng người : 2</p>
+
+                                   </div>
+                               </div>
+                               <div class="row d-flex my-2">
+                                   <div class="col-1">
+                                       <i style="font-size: 20px" class="fa-solid fa-location-dot"></i>
+                                   </div>
+                                   <div class="col-6 p-0 m-0">
+                                       <h6 class="p-0 m-0">Địa chỉ</h6>
+                                       <span>23d Thùy Vân 23d Thuy Van, Vũng Tàu, Việt Nam</span>
+                                   </div>
+                               </div>
+                           </div>
+
+
+                            <div class="col-3">
+                               <img class="image-hotel" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg">
+                            </div>
+                        </div>
+                        <hr>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-hotel row d-flex justify-content-center">
+                <div class="col-9">
+                   <div class="">
+                       <h4>Liên hệ chỗ nghỉ</h4>
+                       <span>Đối với hầu hết câu hỏi, chỗ nghỉ thường là nơi tốt nhất để liên hệ</span>
+                   </div>
+
+                    <div class="d-flex mt-3 ms-3">
+                        <i style="font-size: 25px" class="fa-regular fa-envelope"></i>
+                       <div class="ms-3">
+                           <h5 class="p-0 m-0">Gửi mail cho chỗ nghỉ</h5>
+                           <span>Mọi thắc mắc xin liên hệ qua email : abcdef@gmail.com</span>
+                       </div>
+                    </div>
+
+                    <div class="d-flex mt-3 ms-3">
+                        <i style="font-size: 25px" class="fa-solid fa-phone"></i>
+
+                        <div class=" ms-3">
+                            <h5 class="p-0 m-0">Gọi điện cho chỗ nghỉ</h5>
+                            <span>Mọi thắc mắc xin liên hệ qua số điện thoại :012345678</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+</div>
+
+<th:block id="js">
+
+</th:block>
+
+</body>
+</html>

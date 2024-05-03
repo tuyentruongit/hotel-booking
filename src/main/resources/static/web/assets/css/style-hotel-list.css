@@ -1,28 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
 
-:root {
-    --primary-color: #2c3855;
-    --primary-color-dark: #435681;
-    --text-dark: #333333;
-    --text-light: #767268;
-    --extra-light: #f3f4f6;
-    --white: #ffffff;
-    --max-width: 1200px;
-}
-
-.navbar-expand-lg{
-    background-color: #FFFFFF !important;
-}
-
-.img-logo{
-    width: 200px;
-    height: 50px;
-    object-fit: cover;
-    background-color: #F8F9FA;
-
-}
-
-
 /* style thanh tìm kiếm */
 .search{
     background-color: #20274D;
@@ -139,7 +116,6 @@
 
 }
 .input-data .input-name-hotel:focus{
-
     width: 90%;
     outline: none;
 
@@ -514,8 +490,3 @@ input[type="range"]::-moz-range-thumb {
 
 }
 
-.infor-web {
-    background-color:var(--primary-color-dark);
-    color: var(--extra-light);
-
-}

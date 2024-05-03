@@ -3,6 +3,8 @@ package methodsecuritynew.bookingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import methodsecuritynew.bookingapp.model.statics.RentalType;
+import methodsecuritynew.bookingapp.model.statics.RoomType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,7 +34,9 @@ public class Room {
 
     Integer capacity;
 
-    Integer basePrice;
+    @Enumerated(EnumType.STRING)
+    RoomType roomType;
+
 
 
     Integer area;
@@ -41,14 +45,12 @@ public class Room {
             name = "amenity_room",
             joinColumns = @JoinColumn(name = "id_room"),
             inverseJoinColumns = @JoinColumn(name = "id_amenity")
-
     )
     List<AmenityRoom> amenityRoomList ;
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Bed> bedList;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private List<PriceRoom> priceRoomList;
+
 
     Boolean status;
     LocalDate createdAt;
