@@ -1,0 +1,30 @@
+.favourite-by-city{
+    margin-top: 20px;
+   padding: 0 20px;
+    text-decoration: none;
+    color: #5c636a;
+}
+
+.card-city{
+    padding-bottom: 20px;
+    border: 1px solid #DFE0E4;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.favourite-by-city img  {
+    height: 300px;
+    object-fit: cover;
+
+}
+.quantity{
+
+    display: flex;
+    justify-content: center;
+}
+.name-city{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+   margin-bottom: 0;
+}

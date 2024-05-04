@@ -24,12 +24,6 @@
                     <span> <i class="fa-solid fa-angle-right"></i></span>
                 </a>
 
-                <a class="profile-menu text-reset text-decoration-none" th:onclick="renderEditPayment()">
-                    <span> <i class="fa-regular fa-credit-card"></i> Thanh toán</span>
-                    <span> <i class="fa-solid fa-angle-right"></i></span>
-                </a>
-
-
                 <a class="profile-menu text-reset text-decoration-none" th:onclick="renderSetting()">
                     <span> <i class="fa-solid fa-gear"></i> Thiết lập</span>
                     <span> <i class="fa-solid fa-angle-right"></i></span>
@@ -45,13 +39,45 @@
             </div>
             <div class="col-8">
                 <div class="my-setting-container">
+
                 </div>
 
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Đổi mật khẩu</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="input-password">
+                            Mật khẩu hiện tại
+                            <input  type="password" placeholder=" Mật khẩu hiện tại">
+                        </label>
+                        <label class="input-password">
+                            Mật khẩu mới
+                            <input type="password" placeholder="Mật khẩu mới">
+                        </label>
+                        <label class="input-password">
+                            Xác nhận mật khẩu mới
+                            <input  type="password" placeholder="Nhập lại mật khẩu">
+                        </label>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary"> Lưu lại thay đổi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
-
 
 
 <th:block id="js">

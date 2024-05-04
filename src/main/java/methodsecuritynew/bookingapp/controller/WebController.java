@@ -95,6 +95,17 @@ public class WebController {
     public String getFavouriteList(Model model) {
         return "web/favourite-list";
     }
-
+    @GetMapping("/account/login")
+    public String getLogin(Model model) {
+        return "web/auth/login";
+    }
+    @GetMapping("/account/dang-ky")
+    public String getRegister(Model model) {
+        return "web/auth/register";
+    }
+    @GetMapping("/account/quen-mat-khau")
+    public String getForgotPassword(Model model) {
+        return "web/auth/forgot-password";
+    }
 
 }
