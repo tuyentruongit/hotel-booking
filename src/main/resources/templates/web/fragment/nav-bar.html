@@ -42,12 +42,12 @@
         </a>
 
       </th:block>
-     <th:block sec:authorize="isAuthenticated()" th:class="${#authentication.isAuthenticated() ? 'd-none' : 'd-inline-block'}" >
+     <th:block sec:authorize="isAuthenticated()" >
        <div class="profile-dropdown h-100 ">
          <div onclick="toggle()" class="profile-dropdown-btn">
           <div class="btn-user" >
             <i class="fa-regular fa-user"></i>
-            <th:block th:text="${#authentication.principal.getNameCurrent()}"></th:block>
+            <th:block th:text="${#authentication.principal.user.getName()}"></th:block>
           </div>
          </div>
 
@@ -67,9 +67,9 @@
            </li>
 
            <li class="profile-dropdown-list-item">
-             <a th:href="@{/danh-sach-dat-phong/{id} (id=${#authentication.principal.user.getId()})}" class="text-decoration-none text-reset">
-               <i class="fa-solid fa-clock-rotate-left"></i>Đặt chỗ
-             </a>
+<!--             <a th:href="@{/danh-sach-dat-phong/{id} (id=${#authentication.principal.user.getId()})}" class="text-decoration-none text-reset">-->
+<!--               <i class="fa-solid fa-clock-rotate-left"></i>Đặt chỗ-->
+<!--             </a>-->
            </li>
 
            <li class="profile-dropdown-list-item">
