@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
+      th:replace="~{web/layout/layout :: layout(curentUser=${currentUser},~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
     <title>Thông tin thanh toán</title>
     <th:block id="css">

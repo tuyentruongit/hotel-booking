@@ -226,10 +226,8 @@ function filterChecked(checkBox) {
             break;
         case 'rating':
             options.rating.splice(0, 1);
-            console.log(options.rating)
             let ratingNumber = parseInt(checkBox.value)
             options.rating.push(ratingNumber);
-            console.log(checkBox.value)
             break;
 
     }
@@ -294,7 +292,7 @@ const renderListHotel = (hotelList) => {
         }
         newContent += `  
                         <div  class="row container-hotel" >
-                                <button class="btn-favourite p-0 m-0" value="${hotel.id}">
+                                <button class="btn-favourite p-0 m-0" value="${hotel.id}" type-button="add">
                                            <i class="fa-solid fa-heart"></i>
                                 </button>
 
@@ -347,13 +345,38 @@ const renderListHotel = (hotelList) => {
     let btnHeart = document.querySelectorAll('.btn-favourite')
     btnHeart.forEach((heart) => {
         heart.addEventListener('click', () => {
+           Number( heart.value);
             if (!heart.classList.contains('style-heart')) {
-                heart.classList.add("style-heart")
+
+                axios.post("/api/hotel/favourite/"+heart.value)
+                    .then(()=>{
+                        console.log("Thành công")
+                        heart.classList.add("style-heart")
+                        heart.setAttribute("type-button","delete")
+                    })
+                    .catch((err)=>{
+                        if (err.response.status===401){
+                            console.log("Đăng nhập đi");
+                        }
+                    })
+
             } else {
-                heart.classList.remove("style-heart");
+                axios.delete("/api/hotel/favourite/"+heart.value)
+                    .then(()=>{
+                        heart.classList.remove("style-heart");
+                        heart.setAttribute("type-button","add")
+                    })
+                    .catch((err)=>{
+                       if (err.response.status===401){
+                           console.log("Đăng nhập đi");
+                       }
+                    })
+
             }
 
+
         })
+
     })
 }
 

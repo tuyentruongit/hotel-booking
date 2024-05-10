@@ -23,6 +23,10 @@
     font-size: 18px ;
 }
 
+.my-setting-container{
+    min-height: 400px;
+}
+
 .information-user {
     border-radius: 15px;
     padding: 10px 0 10px 20px;
@@ -47,6 +51,19 @@
     width: 100%;
 }
 
+.input-birth-day select{
+    border-radius: 10px;
+    padding: 5px 10px;
+    width: 200px;
+    margin: 0 10px;
+}
+.input-birth-day input{
+    border-radius: 10px;
+    padding: 5px 10px;
+    width: 150px;
+    border: 1px solid var(--text-light);
+}
+
 
 .edit-name{
     margin: 5px 5px;
@@ -56,6 +73,7 @@
     border: 1px solid var(--text-light);
     padding: 5px 5px;
     border-radius: 10px;
+    width: 300px;
 }
 .edit-email input{
     border: 1px solid var(--text-light);
@@ -80,6 +98,24 @@
    outline-color: #5392F9;
     box-shadow: none;
 }
+ .edit-address-number  input:focus{
+    outline-color: #5392F9;
+    box-shadow: none;
+}
+
+ .edit-phone-number  input:focus{
+   outline-color: #5392F9;
+    box-shadow: none;
+}
+
+.edit-email,  input:focus{
+   outline-color: #5392F9;
+    box-shadow: none;
+}
+.edit-name  input:focus{
+   outline-color: #5392F9;
+    box-shadow: none;
+}
 
 .pr {
     margin-top: 100px;
@@ -99,6 +135,15 @@
     border: none;
 
     width: 100px;
+
+}
+
+.form-control{
+    background-color: white !important;
+    border: 1px solid var(--text-light)!important;
+    border-radius: 10px !important;
+    min-width: 200px;
+    text-align: center;
 
 }
 

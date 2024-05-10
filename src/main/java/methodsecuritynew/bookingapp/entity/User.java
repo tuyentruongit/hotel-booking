@@ -25,9 +25,10 @@ public class User {
 
     String name;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true,nullable = false)
     String email;
 
+    @Column( unique = true,nullable = false)
     String password;
 
     @Column(name = "avatar" )
@@ -35,25 +36,28 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    UserRole role;
+    UserRole userRole;
 
     LocalDate birthDay;
 
     String phoneNumber;
 
+    String address;
+
     @Enumerated(EnumType.STRING)
     Gender gender;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    PayCard payCard;
 
-//    @ManyToMany
-//            @JoinTable(name = "hotel_favourite",
-//            joinColumns =@JoinColumn (name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "hotel_id" ) )
-//    List<Hotel> hotelList;
 
-    Boolean enabled;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+            @JoinTable(name = "hotel_favourite",
+            joinColumns =@JoinColumn (name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "hotel_id" ) )
+    List<Hotel> hotelList;
+
+    Boolean enable;
+
 
     LocalDate createdAt;
 

@@ -10,6 +10,7 @@ import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,8 +38,10 @@ class BookingAppApplicationTests {
     private AmenityRoomRepository amenityRoomRepository;
     @Autowired
     private BedRepository bedRepository;
-
-
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Test
@@ -50,8 +53,9 @@ class BookingAppApplicationTests {
         });
 
     }
+
     @Test
-    void createDataCity(){
+    void createDataCity() {
 
         Faker faker = new Faker();
         String[] vietnamProvinces = {
@@ -66,7 +70,7 @@ class BookingAppApplicationTests {
                 "Bình Thuận", "Bắc Kạn", "Hà Nam", "Thái Bình", "Nam Định", "Hưng Yên",
                 "Thanh Hóa", "Ninh Bình", "Quảng Ngãi", "Quảng Trị"
         };
-        for (int i = 0; i < 63 ; i++) {
+        for (int i = 0; i < 63; i++) {
             City city = City.builder()
                     .name(vietnamProvinces[i])
                     .country("Việt Nam")
@@ -76,15 +80,16 @@ class BookingAppApplicationTests {
             cityRepository.save(city);
         }
     }
+
     @Test
-    void createDataPolicy(){
+    void createDataPolicy() {
 
         Faker faker = new Faker();
         Random random = new Random();
 
-        for (int i = 0; i < 300 ; i++) {
-            String age = String.valueOf(random.nextInt(18,80));
-            PolicyHotel	policyHotel= PolicyHotel.builder()
+        for (int i = 0; i < 300; i++) {
+            String age = String.valueOf(random.nextInt(18, 80));
+            PolicyHotel policyHotel = PolicyHotel.builder()
                     .checkIn(faker.date().future(30, TimeUnit.DAYS).toString())
                     .checkOut(faker.date().future(30, TimeUnit.DAYS).toString())
                     .service(faker.lorem().sentence())
@@ -98,27 +103,25 @@ class BookingAppApplicationTests {
             policyRepository.save(policyHotel);
         }
     }
+
     @Test
-    void createDataHotel(){
+    void createDataHotel() {
 
 
         Faker faker = new Faker();
         Random random = new Random();
 
-        City city = cityRepository.findCityByName("Quảng Ninh");
+//        City city = cityRepository.findCityByName("Hồ Chí Minh");
         List<City> list = cityRepository.findAll();
         List<AmenityHotel> amenityHotels = amenityHotelRepository.findAll();
 
 
-
-
-
-        for (int i = 0; i <20; i++) {
-            List< AmenityHotel> amenityHotels1 = new ArrayList<>();
-            for (int j = 0; j < random.nextInt(5,10)+1; j++) {
-                int number = random.nextInt(0,amenityHotels.size());
+        for (int i = 0; i < 200; i++) {
+            List<AmenityHotel> amenityHotels1 = new ArrayList<>();
+            for (int j = 0; j < random.nextInt(5, 10) + 1; j++) {
+                int number = random.nextInt(0, amenityHotels.size());
                 AmenityHotel amenityHotel = amenityHotels.get(number);
-                if (!amenityHotels1.contains(amenityHotel)){
+                if (!amenityHotels1.contains(amenityHotel)) {
                     amenityHotels1.add(amenityHotel);
                 }
             }
@@ -127,8 +130,8 @@ class BookingAppApplicationTests {
                     .email(faker.internet().emailAddress())
                     .description(faker.lorem().paragraph())
                     .address(faker.address().fullAddress())
-                    .city(city)
-                    .policyHotel(policyRepository.findAll().get(280+i))
+                    .city(list.get(random.nextInt(0, list.size())))
+                    .policyHotel(policyRepository.findAll().get(40+i))
                     .star(faker.number().numberBetween(1, 5))
                     .hotline(faker.phoneNumber().phoneNumber())
                     .rating((float) faker.number().randomDouble(1, 6, 10))
@@ -142,15 +145,16 @@ class BookingAppApplicationTests {
             hotelRepository.save(hotel);
         }
     }
+
     @Test
-    void createDataAmenityHotel(){
+    void createDataAmenityHotel() {
 
         Faker faker = new Faker();
         Random random = new Random();
 
-        for (int i = 0; i < 300 ; i++) {
+        for (int i = 0; i < 300; i++) {
 
-            AmenityHotel amenityHotel= new AmenityHotel();
+            AmenityHotel amenityHotel = new AmenityHotel();
             amenityHotel.setName(faker.company().name());
             amenityHotel.setIcon("<i class=\"fa-solid fa-icons\"></i>");
             amenityHotel.setCreatedAt(LocalDate.now());
@@ -159,15 +163,16 @@ class BookingAppApplicationTests {
             amenityHotelRepository.save(amenityHotel);
         }
     }
+
     @Test
-    void createDataAmenityRoom(){
+    void createDataAmenityRoom() {
 
         Faker faker = new Faker();
         Random random = new Random();
 
-        for (int i = 0; i < 300 ; i++) {
+        for (int i = 0; i < 300; i++) {
 
-            AmenityRoom amenityRoom= new AmenityRoom();
+            AmenityRoom amenityRoom = new AmenityRoom();
             amenityRoom.setName(faker.company().name());
 
             amenityRoom.setCreatedAt(LocalDate.now());
@@ -178,7 +183,7 @@ class BookingAppApplicationTests {
     }
 
     @Test
-    void createDataRoom(){
+    void createDataRoom() {
 
         List<Hotel> hotelList = hotelRepository.findAll();
 
@@ -186,19 +191,19 @@ class BookingAppApplicationTests {
         Faker faker = new Faker();
         Random random = new Random();
         List<AmenityRoom> amenityRoomList = amenityRoomRepository.findAll();
-        for (int i = 0; i < 1000 ; i++) {
-            List< AmenityRoom> amenityHotels1 = new ArrayList<>();
-            for (int j = 0; j < random.nextInt(5,10)+1; j++) {
-                int number = random.nextInt(0,amenityRoomList.size());
+        for (int i = 0; i < 1000; i++) {
+            List<AmenityRoom> amenityHotels1 = new ArrayList<>();
+            for (int j = 0; j < random.nextInt(5, 10) + 1; j++) {
+                int number = random.nextInt(0, amenityRoomList.size());
                 AmenityRoom amenityRoom = amenityRoomList.get(number);
-                if (!amenityHotels1.contains(amenityRoom)){
+                if (!amenityHotels1.contains(amenityRoom)) {
                     amenityHotels1.add(amenityRoom);
                 }
             }
-            Room room =  Room.builder()
+            Room room = Room.builder()
                     .name(faker.lorem().word())
                     .description(faker.lorem().sentence())
-                    .capacity(faker.number().numberBetween(1,10 )) // Giả sử dung lượng từ 1 đến 10
+                    .capacity(faker.number().numberBetween(1, 10)) // Giả sử dung lượng từ 1 đến 10
                     .area(faker.number().numberBetween(20, 50)) // Giả sử diện tích từ 20 đến 200
                     .status(faker.bool().bool())
                     .amenityRoomList(amenityHotels1)
@@ -213,7 +218,7 @@ class BookingAppApplicationTests {
     }
 
     @Test
-    void createDataBed(){
+    void createDataBed() {
 
         List<Hotel> hotelList = hotelRepository.findAll();
 
@@ -221,9 +226,9 @@ class BookingAppApplicationTests {
         Faker faker = new Faker();
         Random random = new Random();
         List<Room> roomList = roomRepository.findAll();
-        for (int i = 0; i < 1000 ; i++) {
+        for (int i = 0; i < 1000; i++) {
 
-            Bed bed =  Bed.builder()
+            Bed bed = Bed.builder()
                     .numberBed(faker.number().numberBetween(1, 5)) // Số lượng giường từ 1 đến 5
                     .bedType(BedType.values()[random.nextInt(BedType.values().length)]) // Loại giường ngẫu nhiên từ enum BedType
                     .bedSize(BedSize.values()[random.nextInt(BedSize.values().length)]) // Kích thước giường ngẫu nhiên từ enum BedSize
@@ -238,18 +243,18 @@ class BookingAppApplicationTests {
     }
 
     @Test
-    void createDataSupport(){Faker faker = new Faker();
+    void createDataSupport() {
+        Faker faker = new Faker();
 
 
         Slugify slugify = Slugify.builder().build();
 
 
-
         Random random = new Random();
-        for (int i = 0; i < 10 ; i++) {
+        for (int i = 0; i < 10; i++) {
             String title = faker.lorem().word();
 
-            Support support =  Support.builder()
+            Support support = Support.builder()
                     .title(title) // Tiêu đề ngẫu nhiên
                     .description(faker.lorem().paragraph()) // Mô tả ngẫu nhiên
                     .content(faker.lorem().paragraph(30)) // Nội dung ngẫu nhiên, 3 đoạn
@@ -266,10 +271,27 @@ class BookingAppApplicationTests {
         }
     }
 
+    @Test
+    void createDataUser() {
+        Faker faker = new Faker();
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            User user = User.builder()
+                    .name(faker.lorem().word())
+                    .email(faker.internet().emailAddress())
+                    .password(passwordEncoder.encode("123"))
+                    .userRole(UserRole.values()[random.nextInt(UserRole.values().length)])
+                    .birthDay(faker.date().birthdayLocalDate())
+                    .phoneNumber(faker.phoneNumber().phoneNumber())
+                    .gender(Gender.values()[random.nextInt(Gender.values().length)])
+                    .createdAt(LocalDate.now())
+                    .updateAt(LocalDate.now())
+                    .build();
 
+            userRepository.save(user);
+        }
 
-
-
+    }
 
 
 }

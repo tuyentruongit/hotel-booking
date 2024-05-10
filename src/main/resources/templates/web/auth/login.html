@@ -16,7 +16,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-5">
 
-                <form class="form-login">
+                <form class="form-login" >
 
                     <div class="title-description">
                         <h3 class="title-form">
@@ -28,16 +28,17 @@
                     <div class="input-account">
                         <span>Email</span>
                         <div class="input-box">
-                            <input type="email" placeholder="Email">
+                            <input id="email"  type="email" placeholder="Email">
                         </div>
                     </div>
                     <div class="input-account ">
                         <span>Mật khẩu</span>
                         <div class="input-box">
-                            <input type="password" placeholder="Mật khẩu">
+                            <input id="password"  type="password" placeholder="Mật khẩu">
                             <i class="fa-regular fa-eye"></i>
                         </div>
                     </div>
+
 
                     <button class="btn-login" type="submit">
                         Đăng nhập
@@ -45,7 +46,7 @@
 
                     <div class="link-create-forgot">
                         <a th:href="@{/account/dang-ky}"> Tạo tài khoản </a>
-                        <a th:href="@{/account/quen-mat-khau}"> <i class="fa-solid fa-unlock"></i> Quên mật khẩu ?</a>
+                        <button  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa-solid fa-unlock"></i> Quên mật khẩu ?</button>
                     </div>
 
                     <div class="customs-login">
@@ -64,6 +65,25 @@
 
             </div>
         </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Quên mật khẩu</h1>
+                    </div>
+                    <div class="modal-body">
+                        <h6 class="p-1 m-0">Email</h6>
+                        <input class="input-email-forgot"  type="email" placeholder="Email">
+                        <span>Xin vui lòng nhập email của bạn vào ô bên trên. Chúng tôi sẽ gởi cho bạn đường dẫn để xem hướng dẫn cụ thể.</span>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button  type="button" class="btn-forgot-password btn btn-primary"> Lấy lại mật khẩu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </div>
@@ -71,7 +91,7 @@
 
 
 <th:block id="js">
-    <script src="/web/assets/js/profile.js"></script>
+    <script src="/web/assets/js/login.js"></script>
 </th:block>
 
 

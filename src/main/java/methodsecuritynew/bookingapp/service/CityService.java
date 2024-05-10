@@ -19,4 +19,8 @@ public class CityService {
                .filter(city -> city.getId()<10)
                .toList();
     }
+
+    public CityRepository cityRepository(){
+        return cityRepository;
+    }
 }

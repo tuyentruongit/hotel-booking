@@ -136,6 +136,9 @@ const navigation = (inputNameCity) =>{
     // Phần thứ hai là ngày kết thúc
     const dateEndString = dateParts[1];
 
+    console.log(inputNameCity)
+
+
     window.location.href="/danh-sach-khach-san?" +
         "nameCity=" + inputNameCity + "&checkIn=" + dateStartString +
         "&checkOut=" + dateEndString + "&numberGuest=" + numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;

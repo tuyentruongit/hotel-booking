@@ -1,0 +1,51 @@
+package methodsecuritynew.bookingapp.rest;
+
+import lombok.RequiredArgsConstructor;
+import methodsecuritynew.bookingapp.entity.User;
+import methodsecuritynew.bookingapp.model.request.*;
+import methodsecuritynew.bookingapp.service.AuthService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
+public class AuthApi {
+    private final AuthService authService;
+    @PostMapping("/login")
+    public ResponseEntity<?> authentication(@RequestBody LoginRequest loginRequest){
+        authService.login(loginRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest){
+        return new  ResponseEntity<>(authService.register(registerRequest), HttpStatus.CREATED);
+
+    }
+    @PutMapping("/update-user/{id}")
+    public ResponseEntity<?> updateUser(@RequestBody ChangeInformationUserRequest changeInformationUserRequest, @PathVariable Integer id){
+        authService.updateUser(id,changeInformationUserRequest);
+        return ResponseEntity.ok().build();
+
+    }
+    @PutMapping("/change-password/{id}")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, @PathVariable Integer id){
+        authService.changePassword(id,changePasswordRequest);
+        return ResponseEntity.ok().build();
+
+    }
+    @PutMapping("/password-retrieval")
+    public ResponseEntity<?> changePassword(@RequestBody UpsertPasswordRetrieval upsertPasswordRetrieval){
+        authService.changePassword(upsertPasswordRetrieval);
+        return ResponseEntity.ok().build();
+
+    }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email){
+        authService.forgotPassword(email);
+        return ResponseEntity.ok().build();
+
+    }
+}

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -13,66 +14,82 @@
       <img class="img-logo" src="/web/assets/image/stayEase.png" alt="Ảnh Logo">
     </a>
     <div class="d-flex align-items-center">
-      <a target="_blank" class="nav-link text-decoration-none text-reset login" >
+      <a target="_blank" class="nav-link text-decoration-none text-reset " >
         <i class="fa-solid fa-globe"></i>
         Tiếng Việt
       </a>
 
-      <a target="_blank" class="nav-link text-decoration-none text-reset login" >
+      <a target="_blank" class="nav-link text-decoration-none text-reset " >
         Chuyến đi
       </a>
-      <a target="_blank" class="nav-link text-decoration-none text-reset login" th:href="@{/support}">
+      <a target="_blank" class="nav-link text-decoration-none text-reset " th:href="@{/support}">
         Hỗ trợ
       </a>
-      <a target="_blank" class="nav-link text-decoration-none text-reset login" >
+
+
+      <a target="_blank" class="nav-link text-decoration-none text-reset " >
         <i class="fa-solid fa-bell"></i>
       </a>
-      <div class="profile-dropdown h-100 ">
-        <div onclick="toggle()" class="profile-dropdown-btn">
-          <span
-          >Tuyen Truong
+      <th:block sec:authorize="not isAuthenticated()" >
+        <a target="_blank" class="nav-link text-decoration-none text-reset register" th:href="@{/account/dang-ky}">
+          <i class="fa-solid fa-user-plus"></i>
+          Tạo tài khoản
+
+        </a>
+        <a target="_blank" class="nav-link text-decoration-none text-reset login" th:href="@{/account/login}">
+          <i class="fa-regular fa-user"></i>
+          Đăng Nhập
+        </a>
+
+      </th:block>
+     <th:block sec:authorize="isAuthenticated()" th:class="${#authentication.isAuthenticated() ? 'd-none' : 'd-inline-block'}" >
+       <div class="profile-dropdown h-100 ">
+         <div onclick="toggle()" class="profile-dropdown-btn">
+          <div class="btn-user" >
             <i class="fa-regular fa-user"></i>
-          </span>
-        </div>
+            <th:block th:text="${#authentication.principal.getNameCurrent()}"></th:block>
+          </div>
+         </div>
 
-        <ul class="profile-dropdown-list  p-0 m-0">
-          <li class="profile-dropdown-list-item">
-            <a class="text-decoration-none text-reset" th:href="@{/thong-tin-khach-hang}">
-              <i class="fa-regular fa-user"></i>
-             Hồ sơ của tôi
-            </a>
-          </li>
+         <ul class="profile-dropdown-list  p-0 m-0">
+           <li class="profile-dropdown-list-item">
+             <a class="text-decoration-none text-reset" th:href="@{/thong-tin-khach-hang}">
+               <i class="fa-regular fa-user"></i>
+               Hồ sơ của tôi
+             </a>
+           </li>
 
-          <li class="profile-dropdown-list-item">
-            <a th:href="@{/yeu-thich}" class="text-decoration-none text-reset">
-              <i class="fa-regular fa-bookmark"></i>
-              Danh sách yêu thích
-            </a>
-          </li>
+           <li class="profile-dropdown-list-item">
+             <a th:href="@{/yeu-thich/{id} (id=${#authentication.principal.user.getId()})}" class="text-decoration-none text-reset">
+               <i class="fa-regular fa-bookmark"></i>
+               Danh sách yêu thích
+             </a>
+           </li>
 
-          <li class="profile-dropdown-list-item">
-            <a th:href="@{/danh-sach-dat-phong}" class="text-decoration-none text-reset">
-              <i class="fa-solid fa-clock-rotate-left"></i>Đặt chỗ
-            </a>
-          </li>
+           <li class="profile-dropdown-list-item">
+             <a th:href="@{/danh-sach-dat-phong/{id} (id=${#authentication.principal.user.getId()})}" class="text-decoration-none text-reset">
+               <i class="fa-solid fa-clock-rotate-left"></i>Đặt chỗ
+             </a>
+           </li>
 
-          <li class="profile-dropdown-list-item">
-            <a href="#" class="text-decoration-none text-reset">
-              <i class="fa-solid fa-gear"></i>
-              Thiết lập
-            </a>
-          </li>
+           <li class="profile-dropdown-list-item">
+             <a href="#" class="text-decoration-none text-reset">
+               <i class="fa-solid fa-gear"></i>
+               Thiết lập
+             </a>
+           </li>
 
-          <hr />
+           <hr />
 
-          <li class="profile-dropdown-list-item">
-            <a href="#" class="text-decoration-none text-reset">
-              <i class="fa-solid fa-arrow-right-from-bracket" ></i>
-              Đăng xuất
-            </a>
-          </li>
-        </ul>
-      </div>
+           <li class="profile-dropdown-list-item">
+             <a th:href="@{/logout}" class="text-decoration-none text-reset">
+               <i class="fa-solid fa-arrow-right-from-bracket" ></i>
+               Đăng xuất
+             </a>
+           </li>
+         </ul>
+       </div>
+     </th:block>
     </div>
   </div>
 
