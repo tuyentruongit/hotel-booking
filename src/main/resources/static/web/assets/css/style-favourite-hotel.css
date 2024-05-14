@@ -1,4 +1,4 @@
-.favourite{min-height: 500px}
+.list-hotel{min-height: 700px}
 .title-page{
     margin-top: 30px;
 }
@@ -33,13 +33,16 @@
     width: 100%;
     object-fit: cover;
     height: 200px;
+}.card-hotel a{
+    text-decoration: none;
+
 }
 .infor-hotel{
     padding: 10px 10px;
 }
 .infor-hotel .name-hotel{
     width: 100%;
-    font-size: 22px;
+    font-size: 20px;
     padding: 0 0;
     margin: 5px 0;
     font-weight: 490;
@@ -50,15 +53,15 @@
     width: 100%;
     font-size: 15px;
     color: #737373;
-    font-weight: 500;
-    letter-spacing: 1px;
+    font-weight: 400;
 
 }
 .star{
     margin: 5px 0;
 }
 .star i{
-    color: #FFA726;
+    margin-right: 5px;
+    color: #FF63A3;
 }
 hr{
     color: #737373;
@@ -68,15 +71,24 @@ hr{
  display: flex;
     justify-content: space-between;
 }
-.ratting-hotel .age-rating,.quantity{
-    font-size: 20px;
+.ratting-hotel .quantity{
+    font-size: 17px;
     font-weight: 500;
     color: #737373;
     letter-spacing: 1px;
 }
 .ratting-hotel .rating-text,.reviews{
-    font-size: 20px;
+    font-size: 16px;
     color: #737373;
+    letter-spacing: 1px;
+}
+.age-rating{
+    background-color: #227950;
+    padding: 5px;
+    color: white;
+    border-radius: 5px;
+    font-size: 17px;
+    font-weight: 500;
     letter-spacing: 1px;
 }
 
@@ -89,21 +101,20 @@ hr{
 .description-price{
     display: flex;
     justify-content: flex-end;
-    font-size: 15px;
+    font-size: 13px;
     color: #737373;
     font-weight: 450;
-    letter-spacing: 1px;
     margin-right: 5px;
 }
 .price-hotel .price{
     font-size: 25px;
     font-weight: 550;
-    color: #E12D2D;
-    letter-spacing: 1.5px;
+   color: #E12D2D;
+
 }
 .price-hotel .unit{
     margin-left: 5px;
-    font-size: 25px;
+    font-size: 15px;
     font-weight: 550;
     color: #737373;
     letter-spacing: 1.5px;

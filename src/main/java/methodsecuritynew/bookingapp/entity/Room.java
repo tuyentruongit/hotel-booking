@@ -40,6 +40,8 @@ public class Room {
 
 
     Integer area;
+
+    Integer quantity;
     @ManyToMany
     @JoinTable(
             name = "amenity_room",

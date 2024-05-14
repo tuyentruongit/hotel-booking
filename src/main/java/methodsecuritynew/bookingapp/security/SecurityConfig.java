@@ -56,9 +56,6 @@ public class SecurityConfig {
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests(authorization -> {
-//                    authorization.requestMatchers("/" , "http://localhost:9000/api/auth/login","account/login", "/chi-tiet-khach-san/**").permitAll();
-//                    authorization.requestMatchers("/web/assets/**", "web/lib/**").permitAll();
-//                    authorization.anyRequest().authenticated();
             authorization.anyRequest().permitAll();
                 }
         );

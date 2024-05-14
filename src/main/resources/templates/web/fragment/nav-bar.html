@@ -46,7 +46,7 @@
        <div class="profile-dropdown h-100 ">
          <div onclick="toggle()" class="profile-dropdown-btn">
           <div class="btn-user" >
-            <i class="fa-regular fa-user"></i>
+            <img class="" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
             <th:block th:text="${#authentication.principal.user.getName()}"></th:block>
           </div>
          </div>
@@ -67,9 +67,9 @@
            </li>
 
            <li class="profile-dropdown-list-item">
-<!--             <a th:href="@{/danh-sach-dat-phong/{id} (id=${#authentication.principal.user.getId()})}" class="text-decoration-none text-reset">-->
-<!--               <i class="fa-solid fa-clock-rotate-left"></i>Đặt chỗ-->
-<!--             </a>-->
+             <a th:href="@{/danh-sach-dat-phong/{id} (id=${#authentication.principal.user.getId()})}" class="text-decoration-none text-reset">
+               <i class="fa-solid fa-clock-rotate-left"></i>Đặt chỗ
+             </a>
            </li>
 
            <li class="profile-dropdown-list-item">

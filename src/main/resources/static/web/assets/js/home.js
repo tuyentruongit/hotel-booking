@@ -123,7 +123,6 @@ const  choiceOutstandingCity = () =>{
 
 // chuyển hướng tới trang danh sách
 const navigation = (inputNameCity) =>{
-    console.log(inputNameCity)
     const date = document.getElementById('date-range');
     const dateString = date.value;
 
@@ -141,7 +140,8 @@ const navigation = (inputNameCity) =>{
 
     window.location.href="/danh-sach-khach-san?" +
         "nameCity=" + inputNameCity + "&checkIn=" + dateStartString +
-        "&checkOut=" + dateEndString + "&numberGuest=" + numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
+        "&checkOut=" + dateEndString + "&numberGuest=" +
+        numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
 }
 
 
@@ -204,15 +204,29 @@ const renderCityData = (value) => {
 // render khách sạn recommend
 
 const renderHotel = (data) =>{
+
+    const date = document.getElementById('date-range');
+    const dateString = date.value;
+
+    // Tách chuỗi thành hai phần bằng từ "to"
+    const dateParts = dateString.split(" to ");
+
+    // Phần đầu tiên là ngày bắt đầu
+    const dateStartString = dateParts[0];
+
+    // Phần thứ hai là ngày kết thúc
+    const dateEndString = dateParts[1];
+
     let html = '';
     let count = 1 ;
     data.forEach((hotel)=>{
+        // console.log(hotel.city.name , checkIn , checkOut)
         if (count>8){
-            return
+            return;
         }
         html +=`
                     <div class="col-3 h-100">
-                        <a class="card mb-5 text-reset text-decoration-none  h-100" href="/chi-tiet-khach-san/${hotel.id}">
+                        <a class="card mb-5 text-reset text-decoration-none  h-100" href="/chi-tiet-khach-san/${hotel.id}?nameCity=${hotel.city.name}&checkIn=${dateStartString}&checkOut=${dateEndString}">
                             <img class="image-hotel" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
                             <div class="p-2 h-100">
                                 <div class="d-flex justify-content-start align-content-center h-100">

@@ -26,7 +26,7 @@
                     </div>
                     <div class="col-4" th:each="keyValue : ${mapHotelFavouriteByCity}">
 
-                        <a class="favourite-by-city " th:href="@{/danh-sach-yeu-thich}">
+                        <a class="favourite-by-city " th:href="@{/danh-sach-yeu-thich/{id}/{city} (id=${#authentication.principal.user.getId()},city=${keyValue.key})}">
                             <div class="card-city">
                                 <img class="w-100" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
 

@@ -14,6 +14,57 @@
 
 
 <div id="main-content">
+    <section class="search p-3">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-4">
+                    <div class="inputdata-search d-flex align-items-center p-1">
+                        <i style="font-size: 20px;" class="fa-solid fa-location-dot"></i>
+                        <input id="input-name-city" type="text" class=" w-100 p-2  " placeholder="Tìm địa điểm, khách sạn, v.v.">
+
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="inputdata-search d-flex align-items-center p-1">
+                        <i style="font-size: 15px;" class="fa-solid fa-calendar-days"></i>
+                        <input id="date-range" type="text" class=" w-100 p-2  " placeholder="Chọn ngày đến và đi của bạn">
+
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="button-guest-number w-100 h-100 border shadow d-flex justify-content-between align-items-center" >
+                        <i style="font-size: 20px;"  class="fa-solid fa-user-check"></i>
+                        <label class="">Số người</label>
+                        <div class="w-50 d-flex justify-content-between">
+                            <button id="minus-guest" class="minus-guest"><i class="fa-solid fa-minus"></i></button>
+                            <span id="num-guest" class="num-guest" >01</span>
+                            <button id="plus-guest" class="plus-guest"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-2" >
+                    <div class="button-room-number w-100 h-100 border shadow d-flex justify-content-between align-items-center">
+                        <i style="font-size: 15px;" class="fa-solid fa-house"></i>
+                        <label class="label">Số phòng</label>
+                        <div class="w-50 d-flex justify-content-between ">
+                            <button id=".minus-room" class="minus-room"><i class="fa-solid fa-minus"></i></button>
+                            <span id=".num-room" class="num-room">01</span>
+                            <button id=".plus-room" class="plus-room"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-1">
+                    <button type="submit" id="btn-search" class="btn-search w-100 h-100 py-2">
+                        <i class="fa-solid fa-magnifying-glass"style="color: #f7f9fc; font-size: 20px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
     <section class="list-image-hotel">
         <div class="container">
             <div class="row">
@@ -204,13 +255,13 @@
                                             <h4 class="price-room p-0 m-0">1.224.000 đ </h4>
                                             <span class="mx-2 original-price"><del>1.530.00 đ</del></span>
                                         </div>
-                                        <span class="description-price">Giá mỗi đêm chưa gồm thuế và phí</span>
+                                        <span class="description-price">Giá mỗi đêm đã gồm thuế và phí</span>
                                         <a class="d-flex align-items-center justify-content-start text-decoration-none "
                                            href="">
                                             <span>Chi tiết giá</span>
                                             <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
                                         </a>
-                                        <a th:href="@{/thanh-toan}"  class="btn-booking">
+                                        <a th:href="@{/thanh-toan/{id_hotel}/{id_room}(id_hotel=${hotel.id},id_room=${room.id}, checkIn=${checkIn}, checkOut=${checkOut},numberGuest = ${numberGuest},numberRoom=${numberRoom})}"  class="text-reset text-decoration-none btn-booking">
                                             Đặt
                                         </a>
                                     </div>

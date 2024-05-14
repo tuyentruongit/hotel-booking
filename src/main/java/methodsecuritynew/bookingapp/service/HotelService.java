@@ -9,7 +9,10 @@ import methodsecuritynew.bookingapp.entity.User;
 import methodsecuritynew.bookingapp.repository.HotelRepository;
 import methodsecuritynew.bookingapp.repository.RoomRepository;
 import methodsecuritynew.bookingapp.repository.UserRepository;
+import methodsecuritynew.bookingapp.security.CustomUserDetail;
 import methodsecuritynew.bookingapp.security.CustomUserDetailService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -77,8 +80,9 @@ public class HotelService {
         return myMap;
     }
 
-    public List<Hotel> getAllHotelFavourite() {
-        User user = (User) customUserDetailService.loadUserByUsername((String)session.getAttribute("MY_SESION"));
-        return user.getHotelList();
+    public List<Hotel> getAllHotelFavourite(String email) {
+        Optional<User> optionalUser= userRepository.findByEmail(email);
+       return optionalUser.get().getHotelList();
+
     }
 }

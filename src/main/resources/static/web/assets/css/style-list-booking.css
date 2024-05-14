@@ -5,6 +5,7 @@ body{
 }
 .content-page{
     margin: 20px 0px;
+    min-height: 500px;
 }
 .title-page{
     margin: 10px 0px;

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
-    <title>Chi tiết đặt chỗ ở</title>
+    <title>Chi tiết Booking</title>
     <th:block id="css">
         <link rel="stylesheet" href="/web/assets/css/style-booking-detail.css">
     </th:block>
@@ -17,108 +17,206 @@
     <section class="booking-detail">
 
         <div class="container">
-            <div class="row">
-                <div class=" infor-booking d-flex justify-content-center">
-                    <div class="col-12">
-                        <div class="status-booking">
-                            <label>Đã hủy</label>
-                            <h4>Đơn đặt đã bị hủy</h4>
-                            <div class="id-booking">Mã đơn đặt phòng : 29377027784302</div>
-                            <div class="link-search-and-rebook d-flex justify-content-between">
-                                <a th:href="@{/chi-tiet-khach-san/20}"> <i class="fa-solid fa-rotate-left"></i> Đặt lại </a>
-                                <a th:href="@{/chi-tiet-khach-san/20}"> <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm nơi lưu trú khác</a>
-                            </div>
-
+            <div class="row d-flex justify-content-center">
+                <div class="col-10">
+                    <div class="status-booking">
+                        <label th:text="${booking.statusBooking.value}"></label>
+                        <h4 th:if="${booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận')}">Đơn đặt phòng của bạn ở <th:block th:text="${booking.hotel.city.name}"></th:block> đang chờ xác nhận</h4>
+                        <h4 th:if="${booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận')}">Đơn đặt phòng của bạn ở <th:block th:text="${booking.hotel.city.name}"></th:block> đã được xác nhận</h4>
+                        <h4 th:if="${booking.statusBooking.value.equalsIgnoreCase('Đã hủy')}">Đơn đặt phòng của bạn ở <th:block th:text="${booking.hotel.city.name}"></th:block> đã bị hủy</h4>
+                        <h4 th:if="${booking.statusBooking.value.equalsIgnoreCase('Hoàn tất')}">Đơn đặt phòng của bạn ở <th:block th:text="${booking.hotel.city.name}"></th:block> đã hoàn tất</h4>
+                        <div class="link-search-and-rebook d-flex justify-content-between pt-3" th:if="${!booking.statusBooking.value.equalsIgnoreCase('Đã hủy')}">
+                            <a class="text-decoration-none"
+                               th:href="@{/thanh-toan/{idHotel}/{idRoom} (idHotel=${booking.hotel.id},idRoom=${booking.room.id},checkIn = ${booking.checkIn},checkOut = ${booking.checkOut},numberGuest = ${booking.guests},numberRoom = ${booking.numberRoom})}">
+                                <i class="fa-solid fa-rotate-left"></i> Đặt lại
+                            </a>
+                            <a class="text-decoration-none"
+                               th:href="@{/danh-sach-khach-san (nameCity = ${booking.hotel.city.name},checkIn = ${booking.checkIn},checkOut = ${booking.checkOut},numberGuest = ${booking.guests},numberRoom = ${booking.numberRoom})}">
+                                <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm nơi lưu trú khác
+                            </a>
                         </div>
-
-
-                        <div class="infor-hotel d-flex align-content-center">
-                           <div class="col-9">
-                               <a class="name-hotel" href="">Khách Sạn Old Quarter 1961 (Old Quarter Hotel 1961)</a>
-                               <div class="row d-flex my-2">
-                                   <div class="col-1">
-                                       <i style="font-size: 20px" class="fa-regular fa-calendar"></i>
-                                   </div>
-                                   <div class="col-6 p-0 m-0">
-                                       <div class="w-100 d-flex">
-                                           <h6 class="w-50">Nhận phòng</h6>
-                                           <h6 class="w-50 ">Trả phòng</h6>
-                                       </div>
-                                       <div class="w100 d-flex p-0 m-0">
-                                           <h6 class="w-50 ">T5, 2 tháng 5 2024</h6>
-                                           <h6 class="w-50 ">T5, 6 tháng 5 2024</h6>
-                                       </div>
-                                   </div>
-                               </div>
-
-                               <div class="row d-flex my-2">
-                                   <div class="col-1">
-                                       <i style="font-size: 20px" class="fa-solid fa-list-ul"></i>
-                                   </div>
-                                   <div class="col-6 p-0 m-0">
-                                       <h6 class="p-0 m-0">Chi tiết đặt phòng</h6>
-                                       <p class="p-0 m-0">Tên Phòng : Khách Sạn Old Quarter 1961 (Old Quarter Hotel 1961)</p>
-                                       <p class="p-0 m-0">Số lượng phòng : 1</p>
-                                       <p class="p-0 m-0">Số lượng người : 2</p>
-
-                                   </div>
-                               </div>
-                               <div class="row d-flex my-2">
-                                   <div class="col-1">
-                                       <i style="font-size: 20px" class="fa-solid fa-location-dot"></i>
-                                   </div>
-                                   <div class="col-6 p-0 m-0">
-                                       <h6 class="p-0 m-0">Địa chỉ</h6>
-                                       <span>23d Thùy Vân 23d Thuy Van, Vũng Tàu, Việt Nam</span>
-                                   </div>
-                               </div>
-                           </div>
-
-
-                            <div class="col-3">
-                               <img class="image-hotel" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg">
-                            </div>
-                        </div>
-                        <hr>
-
 
                     </div>
                 </div>
             </div>
-
-            <div class="contact-hotel row d-flex justify-content-center">
+            <div class="row">
                 <div class="col-9">
-                   <div class="">
-                       <h4>Liên hệ chỗ nghỉ</h4>
-                       <span>Đối với hầu hết câu hỏi, chỗ nghỉ thường là nơi tốt nhất để liên hệ</span>
-                   </div>
+                    <div class=" infor-booking">
+                        <div class="infor-detail">
+                            <div class="wrap-booking py-1 px-3">
+                                <a class="name-hotel w-100" th:text="${booking.hotel.name}" th:href="@{/chi-tiet-khach-san/{id} (id=${booking.hotel.id})}"></a>
+                                <div class="row d-flex my-2">
+                                    <div class="col-1">
+                                        <i style="font-size: 20px" class="fa-regular fa-calendar"></i>
+                                    </div>
+                                    <div class="col-10 p-0 m-0">
+                                        <div class="w-100 d-flex ">
+                                            <label class="title-in-out w-50">Nhận phòng</label>
+                                            <label class="title-in-out w-50 ">Trả phòng</label>
+                                        </div>
+                                        <div class="w-100 d-flex justify-content-between p-0 m-0">
+                                            <h6 class="content-in-out w-50"><th:block th:text="${dayOfWeekStar}"></th:block>, <th:block th:text="${booking.checkIn.getDayOfMonth()}"></th:block>  tháng <th:block th:text="${booking.checkIn.getMonth().value}"></th:block> <th:block th:text="${booking.checkIn.getYear()}"></th:block></h6>
+                                            <h6 class="content-in-out w-50"><th:block th:text="${dayOfWeekEnd}"></th:block>, <th:block th:text="${booking.checkIn.getDayOfMonth()}"></th:block> tháng <th:block th:text="${booking.checkOut.getMonth().value}"></th:block> <th:block th:text="${booking.checkOut.getYear()}"></th:block></h6>
+                                        </div> <div class="w-100 d-flex justify-content-between p-0 m-0">
+<!--                                            <span class="content-in-out w-50" th:text="${booking.hotel.policyHotel.checkIn}"></span>-->
+<!--                                            <span class="content-in-out w-50" th:text="${booking.hotel.policyHotel.checkOut}"></span>-->
+                                            <span class="content-in-out w-50">14:00 - 23:00</span>
+                                            <span class="content-in-out w-50" >10:00 - 12:00</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <div class="d-flex mt-3 ms-3">
-                        <i style="font-size: 25px" class="fa-regular fa-envelope"></i>
-                       <div class="ms-3">
-                           <h5 class="p-0 m-0">Gửi mail cho chỗ nghỉ</h5>
-                           <span>Mọi thắc mắc xin liên hệ qua email : abcdef@gmail.com</span>
+                                <div class="row d-flex my-2">
+                                    <div class="col-1">
+                                        <i style="font-size: 20px" class="fa-solid fa-list-ul"></i>
+                                    </div>
+                                    <div class="col-8 p-0 m-0">
+                                        <h6 class="p-0 m-0">Chi tiết đặt phòng</h6>
+                                        <label class="w-100 p-0 m-0">Tên Phòng : <th:block th:text="${booking.hotel.name}"></th:block></label>
+                                       <div>
+                                           <label class="w-50 p-0 m-0">Số lượng phòng : </label>
+                                           <span > <th:block th:text="${booking.numberRoom}"></th:block> phòng</span>
+                                       </div>
+                                        <div>
+                                            <label class="w-50 p-0 m-0">Số lượng người : </label>
+                                            <span > <th:block th:text="${booking.numberRoom}"></th:block> người</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row d-flex my-2">
+                                    <div class="col-1">
+                                        <i style="font-size: 20px" class="fa-solid fa-location-dot"></i>
+                                    </div>
+                                    <div class="col-11 p-0 m-0">
+                                        <h6 class="p-0 m-0">Địa chỉ</h6>
+                                        <span th:text="${booking.hotel.address}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <img class="image-hotel" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg">
+                            </div>
+                        </div>
+                        <h5 class="title-detail-room">Chi tiết phòng</h5>
+                        <div class="room-detail">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img class="image-room" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+                                </div>
+                                <div class="col-9">
+                                    <h6 th:text="${booking.room.name}"></h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                   <h6 class="title-infor">Tên khách hàng</h6>
+                                </div>
+                                <div class="col-9">
+                                    <span th:text="${booking.user.name}"></span>
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-3">
+                                    <h6 class="title-infor">Sức chứa tối đa</h6>
+                                </div>
+                                <div class="col-9">
+                                    <span th:text="${booking.room.capacity}"></span>
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-3">
+                                    <h6 class="title-infor">Diện tích</h6>
+                                </div>
+                                <div class="col-9">
+                                    <span th:text="${booking.room.area}"></span>
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-3">
+                                    <h6 class="title-infor">Loại phòng</h6>
+                                </div>
+                                <div class="col-9">
+                                    <span th:text="${booking.room.roomType}"></span>
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-3">
+                                    <h6 class="title-infor">Tiện nghi</h6>
+                                </div>
+                                <div class="col-9">
+                                    <span th:each="amenity : ${booking.room.amenityRoomList}">
+                                        <th:block th:text="${amenity.name}">,</th:block>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-3">
+                                    <h6 class="title-infor">Chính sách hủy</h6>
+                                </div>
+                                <div class="col-9">
+                                    <span th:text="${booking.hotel.policyHotel.cancelPolicy}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="col-3">
+                    <div class="id-booking">Mã đặt phòng :<th:block th:text="${booking.id}"></th:block></div>
+                    <div class="id-booking" th:classappend="${!booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận') || booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận') ? 'd-none': 'd-inline-block' }">
+                        <h6 class="w-100">Tất cả thông tin có đều chính xác ?</h6>
+                        <span>Bạn có thể thay đổi thông tin bất kỳ lúc nào .</span>
+                        <button th:value="${booking.id}"  class="cancel-booking w-100 " th:href="@{/cancel/{idBooking} (idBooking = ${booking.id})}"> <i class="fa-solid fa-xmark"></i> Hủy đặt phòng</button>
+                    </div>
+                    <div class="id-booking" th:classappend="${!booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận') || booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận') ? 'd-none': 'd-inline-block' }">
+                        <h6 class="w-100">Viết đánh giá</h6>
+                        <span>Bạn có thể chia sẻ cảm nhận của mình về chuyến đi vừa rồi .</span>
+                        <button th:value="${booking.id}"  class="cancel-booking w-100 " th:href="@{/cancel/{idBooking} (idBooking = ${booking.id})}"> <i class="fa-solid fa-xmark"></i> Đánh giá</button>
+                    </div>
+                    <div class="contact">
+                        <h6>Thông tin liên hệ.</h6>
+                        <span class="title-contact">Mọi góp ý về trang web xin được nhận qua :</span>
+                       <div class="phone">
+                           <label>Điện thoại : </label>
+                           <span >(941) 919-1419</span>
+                       </div>
+                        <div class="email">
+                           <label>Email : </label>
+                           <span >darlene.harvey@yahoo.com</span>
                        </div>
                     </div>
+<!--                    <div class="contact">-->
+<!--                        <a>Những câu hỏi thường gặp ?</a>-->
+<!--                    </div>-->
 
-                    <div class="d-flex mt-3 ms-3">
-                        <i style="font-size: 25px" class="fa-solid fa-phone"></i>
-
-                        <div class=" ms-3">
-                            <h5 class="p-0 m-0">Gọi điện cho chỗ nghỉ</h5>
-                            <span>Mọi thắc mắc xin liên hệ qua số điện thoại :012345678</span>
-                        </div>
-                    </div>
                 </div>
             </div>
+
         </div>
 
     </section>
+
+    <section class="support">
+        <div class="container">
+
+        </div>
+    </section>
+
 
 
 </div>
 
 <th:block id="js">
+    <script th:inline="javascript">
+        const cancelBooking = document.querySelector('.cancel-booking');
+        console.log(cancelBooking)
+        cancelBooking.addEventListener('click' , ()=>{
+            window.location.href="/cancel-booking/"+cancelBooking.value;
+        })
+    </script>
 
 </th:block>
 

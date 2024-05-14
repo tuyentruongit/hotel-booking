@@ -24,14 +24,11 @@ public class CustomFilter extends OncePerRequestFilter {
         String emailUser = (String) request.getSession().getAttribute("MY_SESSION");
 
         if(emailUser != null && SecurityContextHolder.getContext().getAuthentication()==null){
-            System.out.println("-----------------------------------------------------");
             UserDetails userDetail = customUserDetailService.loadUserByUsername(emailUser);
-
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetail,null,userDetail.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
-
         filterChain.doFilter(request,response);
     }
 }

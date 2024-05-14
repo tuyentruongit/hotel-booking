@@ -12,7 +12,6 @@ $("#date-range").flatpickr({
 const rangeInput = document.querySelectorAll(".range-input input"),
     priceInput = document.querySelectorAll(".price-input input"),
     range = document.querySelector(".slider .progress");
-
 let priceGap = 1000;
 
 priceInput.forEach((input) => {
@@ -131,6 +130,7 @@ btnSearch.addEventListener('click', () => {
         "nameCity=" + inputNameCity.value + "&checkIn=" + dateStartString +
         "&checkOut=" + dateEndString + "&numberGuest=" + numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
 });
+
 const renderDataSearch = (nameCity, numGuest, numRoom) => {
     if (numGuest < 10) {
         numberGuest.textContent = "0" + numGuest;
@@ -143,10 +143,7 @@ const renderDataSearch = (nameCity, numGuest, numRoom) => {
         numberRoom.textContent = numRoom;
     }
 
-
     inputNameCity.value = nameCity
-
-
 }
 
 // khi vừa vào trang thì render ra dữ liệu
@@ -202,15 +199,19 @@ let options = {
     paymentMethod: [],
     rating: []
 }
-
+// lọc qua từng ô check box
 const checkBoxList = document.querySelectorAll('.custom-checkbox');
 checkBoxList.forEach(checkBox => {
+    // lắng nghe sự kiện khi người dùng click vào ô
     checkBox.addEventListener('change', () => {
         if (checkBox.checked) {
+            // gọi hàm xử lý filter
             filterChecked(checkBox);
         } else {
+            // gọi hàm xử lý khi nguười dùng unchecked
             filterUnChecked(checkBox)
         }
+        // gọi hàm lọc dữ liệu khách sạn
         functionFilter(options, hotelList);
     });
 });
@@ -235,16 +236,19 @@ function filterChecked(checkBox) {
 }
 
 
+// xóa filter khi người dùng bỏ check box
 function filterUnChecked(checkBox) {
     let filterHotel = checkBox.getAttribute('type-check');
     switch (filterHotel) {
         case 'rental-type':
+            // lấy ra vị trí của filter đó trong option
             const indexRentalType = options.rentalType.indexOf(checkBox.value);
             if (indexRentalType !== -1) {
                 options.rentalType.splice(indexRentalType, 1);
             }
             break;
         case 'star':
+            // lấy ra vị trí của filter đó trong option
             const indexStar = options.starHotel.indexOf(checkBox.value);
             if (indexStar !== -1) {
                 options.starHotel.splice(indexStar, 1);
@@ -255,9 +259,10 @@ function filterUnChecked(checkBox) {
 
 }
 
+
+// hàm lọc dữ liệu khách sạn
 const functionFilter = (options,hotelList) => {
     const hotelListAfterFiltering = hotelList.filter(hotel => {
-
         return (
             (!options.rentalType.length || options.rentalType.includes(hotel.rentalType))&&
             (!options.starHotel.length || options.starHotel.includes(hotel.star.toString()))&&
@@ -266,9 +271,12 @@ const functionFilter = (options,hotelList) => {
         );
     });
 
+    // ggọi hàm render dữ liệu khách sạn sau khi đã được lọc
     renderListHotel(hotelListAfterFiltering);
 };
 
+
+//hàm render dữ liệu khách sạn sau khi đã được lọc
 const renderListHotel = (hotelList) => {
     let newContent = '';
     if (hotelList.length===0){
@@ -290,14 +298,14 @@ const renderListHotel = (hotelList) => {
                     `
 
         }
-        newContent += `  
+        newContent += `
                         <div  class="row container-hotel" >
-                                <button class="btn-favourite p-0 m-0" value="${hotel.id}" type-button="add">
+                                <button  class="btn-favourite p-0 m-0" value="${hotel.id}" type-button="add">
                                            <i class="fa-solid fa-heart"></i>
                                 </button>
 
                                 <a class="card-hotel text-reset text-decoration-none d-flex my-3 "
-                                href="/chi-tiet-khach-san/${hotel.id}">
+                                href="/chi-tiet-khach-san/${hotel.id}?nameCity=${nameCity}&checkIn=${checkIn}&checkOut=${checkOut}&numberGuest=${valueNumberGuest}&numberRoom=${valueNumberRoom}">
 
                                 <div class="course w-100 border">
                                     <div class="image-btn">
@@ -308,7 +316,7 @@ const renderListHotel = (hotelList) => {
                                        <h4 class="p-0 mt-2 w-100" >${hotel.name}</h4>
                                         <p style="font-size: 14px; color: #0d6efd"  class="m-0 overflow-hidden"><i class="fa-solid fa-location-dot"></i> ${hotel.address}</p>
                                         <div class="mt-1  overflow-hidden" >${htmlStar}</div>
-                                        
+
                                        <div class="w-50 list-amenity d-flex overflow-hidden">
                                                ${htmlAmenity}
                                         </div>
@@ -341,13 +349,21 @@ const renderListHotel = (hotelList) => {
     })
     containerParent.innerHTML = newContent;
 
+
+
+    const listIdHotel = hotelsFavourite.map(hotel => Number(hotel.id));
+    console.log(listIdHotel)
+
     // xủ lý khi người dùng click vào nút yêu thích
     let btnHeart = document.querySelectorAll('.btn-favourite')
     btnHeart.forEach((heart) => {
+        let idHotelAtButtton = Number(heart.value)
+        if (listIdHotel.includes(idHotelAtButtton)){
+            heart.classList.add("style-heart")
+            heart.setAttribute("type-button","delete")
+        }
         heart.addEventListener('click', () => {
-           Number( heart.value);
             if (!heart.classList.contains('style-heart')) {
-
                 axios.post("/api/hotel/favourite/"+heart.value)
                     .then(()=>{
                         console.log("Thành công")
@@ -363,6 +379,7 @@ const renderListHotel = (hotelList) => {
             } else {
                 axios.delete("/api/hotel/favourite/"+heart.value)
                     .then(()=>{
+                        console.log("Thành công")
                         heart.classList.remove("style-heart");
                         heart.setAttribute("type-button","add")
                     })
@@ -379,6 +396,7 @@ const renderListHotel = (hotelList) => {
 
     })
 }
+console.log(hotelsFavourite);
 
 
 

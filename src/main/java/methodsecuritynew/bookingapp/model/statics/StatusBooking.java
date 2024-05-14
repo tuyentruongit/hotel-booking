@@ -11,7 +11,7 @@ public enum StatusBooking {
     CANCELLED("Đã hủy"),
     CHECKED_IN("Đã nhận phòng"),
     CHECKED_OUT("Đã trả phòng"),
-    EXPIRED("Hết hạn");
+    COMPLETE("Hoàn tất");
 
     private final String value;
 }

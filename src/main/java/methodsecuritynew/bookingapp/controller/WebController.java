@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.*;
 import methodsecuritynew.bookingapp.model.response.VerifyAccountResponse;
 import methodsecuritynew.bookingapp.model.statics.Gender;
+import methodsecuritynew.bookingapp.model.statics.PaymentMethod;
 import methodsecuritynew.bookingapp.model.statics.SupportType;
+import methodsecuritynew.bookingapp.repository.BookingRepository;
 import methodsecuritynew.bookingapp.service.*;
 
 import org.springframework.security.access.annotation.Secured;
@@ -19,10 +21,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,6 +37,8 @@ public class WebController {
     private final BookingService bookingService;
 
     private final HotelService hotelService;
+    private final HttpSession session;
+    private  final BookingRepository bookingRepository;
 
     @GetMapping("/")
     public String getHome(Model model) {
@@ -53,8 +58,13 @@ public class WebController {
                                Model model) {
 
         List<Hotel> hotelList = hotelService.getHotelBySearch(nameCity, checkIn, checkOut, numberGuest, numberRoom);
-        List<Hotel> hotelsFavourite = hotelService.getAllHotelFavourite();
-        model.addAttribute("hotelsFavourite", hotelsFavourite);
+        if (session.getAttribute("MY_SESSION")!= null) {
+            System.out.println(session.getAttribute("MY_SESSION"));
+            List<Hotel> hotelFavourite = hotelService.getAllHotelFavourite((String) session.getAttribute("MY_SESSION"));
+            System.out.println("dữ liệu"+hotelFavourite);
+            model.addAttribute("hotelFavourite", hotelFavourite);
+        }
+
         model.addAttribute("nameCity", nameCity);
         model.addAttribute("checkIn", checkIn);
         model.addAttribute("checkOut", checkOut);
@@ -67,11 +77,21 @@ public class WebController {
 
 
     @GetMapping("/chi-tiet-khach-san/{id}")
-    public String getHotelDetail(@PathVariable Integer id, Model model) {
+    public String getHotelDetail(@PathVariable Integer id, Model model,
+                                 @RequestParam String nameCity,
+                                 @RequestParam(required = false) String checkIn,
+                                 @RequestParam(required = false) String checkOut,
+                                 @RequestParam(required = false, defaultValue = "1") Integer numberGuest,
+                                 @RequestParam(required = false, defaultValue = "1") Integer numberRoom) {
         Hotel hotel = hotelService.getHotelById(id);
         List<Room> roomList = roomService.getRoomByIdHotel(id);
         model.addAttribute("hotel", hotel);
         model.addAttribute("roomList", roomList);
+        model.addAttribute("nameCity", nameCity);
+        model.addAttribute("checkIn", checkIn);
+        model.addAttribute("checkOut", checkOut);
+        model.addAttribute("numberGuest", numberGuest);
+        model.addAttribute("numberRoom", numberRoom);
         return "web/hotel-detail";
     }
 
@@ -86,13 +106,13 @@ public class WebController {
         return "web/support";
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_USER"})
     @GetMapping("/thong-tin-khach-hang")
     public String getProfile(Model model) {
         List<Gender> list = Arrays.stream(Gender.values()).toList();
         model.addAttribute("listGender", list );
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("user" , authentication);
+        User user = authService.getUserCurrent();
+        model.addAttribute("user" , user);
         return "web/profile-user";
     }
 
@@ -114,22 +134,71 @@ public class WebController {
         return "web/booking";
     }
     @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
-    @GetMapping("/danh-sach-yeu-thich/{id}")
-    public String getFavouriteList(Model model, @PathVariable Integer id ,@RequestParam String city) {
-        List<Hotel> hotelList = hotelService.findHotelFavouriteByCity(id,city);
-        return "web/favourite-list";
-    }
+    @GetMapping("/cancel-booking/{id}")
+    public String getCancelBooking(Model model, @PathVariable Integer id) {
+        Booking booking = bookingRepository.findById(id).get();
+        model.addAttribute("booking",booking);
 
+        return "web/cancel-booking";
+    }
     @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
     @GetMapping("/chi-tiet-booking/{id}")
-    public String getBookingDetail(Model model, @PathVariable String id) {
+    public String getBookingDetail(Model model, @PathVariable Integer id) {
+        Booking booking = bookingService.getBooking(id);
+        Locale locale = new Locale("vi","VN");
+        String dayOfWeekStar = booking.getCheckIn().getDayOfWeek().getDisplayName(TextStyle.SHORT,locale);
+        String dayOfWeekEnd = booking.getCheckOut().getDayOfWeek().getDisplayName(TextStyle.SHORT,locale);
+
+        model.addAttribute("booking" , booking);
+        model.addAttribute("dayOfWeekStar" , dayOfWeekStar);
+        model.addAttribute("dayOfWeekEnd" , dayOfWeekEnd);
+
         return "web/booking-detail";
     }
 
+    @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
+    @GetMapping("/danh-sach-yeu-thich/{id}/{city}")
+    public String getFavouriteList(Model model, @PathVariable Integer id ,@PathVariable String city) {
+        List<Hotel> hotelList = hotelService.findHotelFavouriteByCity(id,city);
+        model.addAttribute("hotelsFavouriteBuCity",hotelList);
+        return "web/favourite-list";
+    }
+
 
     @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
-    @GetMapping("/thanh-toan")
-    public String getPayment(Model model) {
+    @GetMapping("/thanh-toan/{idHotel}/{idRoom}")
+    public String getPayment(@PathVariable Integer idHotel,
+                             @PathVariable Integer idRoom,
+                             @RequestParam String checkIn,
+                             @RequestParam String checkOut,
+                             @RequestParam String numberGuest,
+                             @RequestParam String numberRoom,
+                             Model model) {
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate start = LocalDate.parse(checkIn,dateTimeFormatter);
+        LocalDate end = LocalDate.parse(checkOut,dateTimeFormatter);
+        Hotel hotel = hotelService.getHotelById(idHotel);
+        Room room = roomService.getRoomById(idRoom);
+
+        Locale locale = new Locale("vi","VN");
+
+
+        String startDayOfWeek = start.getDayOfWeek().getDisplayName(TextStyle.SHORT, locale);
+        String endDayOfWeek = end.getDayOfWeek().getDisplayName(TextStyle.SHORT, locale);
+        Period period = Period.between(start,end);
+
+
+        model.addAttribute("startDayOfWeek",startDayOfWeek);
+        model.addAttribute("listPaymentMethod", PaymentMethod.values());
+        model.addAttribute("endDayOfWeek",endDayOfWeek);
+        model.addAttribute("start",start);
+        model.addAttribute("end",end);
+        model.addAttribute("hotel",hotel);
+        model.addAttribute("room",room);
+        model.addAttribute("period",period);
+        model.addAttribute("numberGuest",numberGuest);
+        model.addAttribute("numberRoom",numberRoom);
         return "web/thong-tin-thanh-toan";
     }
 
@@ -150,10 +219,8 @@ public class WebController {
 
     @GetMapping("/account/xac-minh-tai-khoan")
     public String getVerifyAccount(@RequestParam(required = false) String token, Model model) {
-
         VerifyAccountResponse data = authService.verifyAccount(token);
         model.addAttribute("data" , data);
-
         return "web/auth/verify-account";
     }
 

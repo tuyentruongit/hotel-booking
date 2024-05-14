@@ -1,47 +1,100 @@
 
-body{
-    background-color: #F9F9F9;
 
-}
-.booking-detail{
+
+.booking-detail {
     margin-top: 30px !important;
 }
-.infor-booking{
+
+.infor-booking {
     padding-left: 100px;
 }
-.status-booking label{
+
+.status-booking label {
     color: red;
 }
 
-.link-search-and-rebook{
+.link-search-and-rebook {
 
     width: 500px;
 }
 
-.name-hotel{
+.name-hotel {
     font-weight: 1000;
     text-decoration: none;
     font-size: 25px;
     color: #1772E5;
 }
 
-.id-booking{
-  margin: 10px 0px;
+.id-booking {
+    border: 1px solid #E7E7E7;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
-.infor-hotel{
-    padding: 10px 0px;
+.cancel-booking {
+    background-color: #0d6efd;
+    color: white;
+    text-decoration: none;
+    padding: 5px 5px;
+    border-radius: 10px;
+    border: none;
+}
+
+.contact{
+    border: 1px solid #E7E7E7;
+    padding: 10px;
     border-radius: 10px;
 }
-.image-hotel{
-    width: 170px;
-    height: 200px;
+.title-contact{
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.phone{
+    margin-top: 8px;
+}
+.email{
+    margin-bottom: 8px;
+}
+
+.infor-detail {
+    display: flex;
+    background-color: #F9F9F9;
+
+    border: 1px solid #E7E7E7;
+    border-radius: 10px;
+
+}
+
+.wrap-booking {
+    width: 70%;
+    border-radius: 10px;
+    margin-right: 10px;
+    padding: 0px 10px;
+}
+
+.content-in-out {
+    margin: 0 0;
+}
+
+.image-hotel {
+    width: 250px;
+    max-height: 305px;
+    height: 100%;
     object-fit: cover;
     border-radius: 10px;
-    margin-top: 50px;
 }
 
-.contact-hotel{
-    margin-top: 10px;
-    margin-bottom: 50px;
+.room-detail{padding: 0 10px;
+}
+
+.image-room{
+    width: 50%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.booking-detail{
+    margin-bottom: 100px;
 }

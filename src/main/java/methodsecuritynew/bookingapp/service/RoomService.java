@@ -15,4 +15,10 @@ public class RoomService {
     public List<Room> getRoomByIdHotel(Integer id) {
         return roomRepository.findRoomByHotel_Id(id);
     }
+
+    public Room getRoomById(Integer idRoom) {
+        roomRepository.findById(idRoom);
+        return roomRepository.findById(idRoom).get();
+    }
+
 }

@@ -192,7 +192,6 @@ public class AuthService {
                 .user(user)
 
                 .build();
-
         tokenConfirmRepository.save(tokenConfirm);
         String link = "http://localhost:9000/account/quen-mat-khau?token=" + tokenConfirm.getNameToken();
         mailService.sendMail(user.getEmail(),
@@ -224,5 +223,10 @@ public class AuthService {
         }
         tokenConfirmRepository.save(tokenConfirm);
         return tokenConfirm.getNameToken();
+    }
+
+    public User getUserCurrent (){
+        Optional<User> optionalUser= userRepository.findByEmail(httpSession.getAttribute("MY_SESSION").toString());
+        return optionalUser.get();
     }
 }

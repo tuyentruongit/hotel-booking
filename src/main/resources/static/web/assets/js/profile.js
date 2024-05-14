@@ -24,22 +24,22 @@ const listGender = document.querySelectorAll('.gender-option');
 
 // let month="";
 const renderData = ()=>{
-    inputName.value = inforUser.principal.user.name;
-    inputPhoneNumber.value = inforUser.principal.user.phoneNumber;
-    inputAddress.value = inforUser.principal.user.address;
-    flatpickr("#date-birth-day", {
-        altInput: true,
-        altFormat: "d-m-Y", // Custom altFormat
-        dateFormat: "d-m-Y",
-        minDate: "01-01-1900",
-        maxDate : "today",
-        separator: "",
-        defaultDate: inforUser.principal.user.birthDay, // Sử dụng giá trị đã chuyển đổi của LocalDate
-
-    });
+    inputName.value = inforUser.name;
+    inputPhoneNumber.value = inforUser.phoneNumber;
+    inputAddress.value = inforUser.address;
+    // flatpickr("#date-birth-day", {
+    //     altInput: true,
+    //     altFormat: "Y-m-d", // Custom altFormat
+    //     dateFormat: "d-m-Y",
+    //     minDate: "01-01-1900",
+    //     maxDate : "today",
+    //     separator: "",
+    //     defaultDate: inforUser.birthDay, // Sử dụng giá trị đã chuyển đổi của LocalDate
+    //
+    // });
 
     listGender.forEach((gender) =>{
-        if (gender.value === inforUser.principal.user.gender){
+        if (gender.value === inforUser.gender){
             gender.selected = true
         }
     })
@@ -101,7 +101,7 @@ btnSave.addEventListener('click' ,()=>{
         address : inputAddress.value,
         birthDay : date.value
     }
-    axios.put("/api/auth/update-user/"+inforUser.principal.user.id , dataUser)
+    axios.put("/api/auth/update-user/"+inforUser.id , dataUser)
         .then((response)=>{
             console.log("Cập nhật thành công")
         })
@@ -126,23 +126,11 @@ btnChangePassword.addEventListener('click',()=>{
         newPassword:  newPassword.value
 
     }
-    axios.put("/api/auth/change-password/"+inforUser.principal.user.id ,data)
+    axios.put("/api/auth/change-password/"+inforUser.id ,data)
         .then((response) =>{
             console.log("Đổi được rồi ")
         })
         .catch((err)=>{
-           console.log(err)
+            console.log(err)
         })
 })
-
-
-
-
-
-
-
-
-
-
-
-

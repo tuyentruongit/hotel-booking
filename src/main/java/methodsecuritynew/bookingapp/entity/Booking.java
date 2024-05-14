@@ -7,6 +7,7 @@ import methodsecuritynew.bookingapp.model.statics.PaymentMethod;
 import methodsecuritynew.bookingapp.model.statics.StatusBooking;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "booking")
+@Builder
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +36,10 @@ public class Booking {
     @JoinColumn(name = "room")
     Room room;
 
+    String nameCustomer;
+    String emailCustomer;
+    String phoneCustomer;
+
     Integer guests;
 
     LocalDate checkIn;
@@ -41,26 +47,13 @@ public class Booking {
     LocalDate checkOut;
 
     Integer price;
+    Integer numberRoom;
 
     @Enumerated(EnumType.STRING)
     PaymentMethod paymentMethod;
 
     @Enumerated(EnumType.STRING)
-    StatusBooking status;
+    StatusBooking statusBooking;
 
-    LocalDate createAt;
-
-
-
-    //id int [pk, increment]
-    //  id_customer integer [ref: > user.id]
-    //  hotel_id integer [ref: > hotel.id]
-    //  room_id integer [ref: > Room.id]
-    //  guests  int
-    //  checkin  localdate
-    //  checkout localdate
-    //  price  int
-    //  paymentmethod PaymentMethod // enum :hình thức thanh toán
-    //  status  StatusBooking // Enum: chờ xác nhận , đã xác nhận
-    //  createAt  localdate
+    LocalDateTime createAt;
 }

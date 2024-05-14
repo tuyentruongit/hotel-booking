@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{web/layout/layout :: layout(curentUser=${currentUser},~{::title},~{::#css},~{::#main-content},~{::#js})}">
+      th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
     <title>Thông tin thanh toán</title>
     <th:block id="css">
@@ -11,111 +11,40 @@
 </head>
 <body>
 
-<div id="main-content">
+<div id="main-content" >
 
 
-    <section class=" mb-5">
+    <section class="">
 
         <div class="container">
             <div class="row">
 
 
-                <div class="col-8">
-                    <div class=" infor-customer  p-3 my-3">
-                        <h5 >Nhập thông tin chi tiết của bạn</h5>
-                        <div class="name-customer d-flex">
-                            <div class="w-50 px-3">
-                                <h6>Tên</h6>
-                                <input class="w-100" type="text" placeholder="Nhập tên của bạn">
-                            </div>
-                            <div class="w-50 px-3">
-                                <h6>Họ</h6>
-                                <input class="w-100" type="text" placeholder="Nhập họ của bạn">
-                            </div>
-                        </div>
-                        <div class="email w-50 px-3 mt-3">
-                            <h6 class="m-0 p-0">Email</h6>
-                            <input class="w-100" type="text" placeholder="Nhập email của bạn">
-                        </div>
-                        <div class="phone w-50 px-3 mt-3">
-                            <h6 class="m-0 p-0">Số điện thoại</h6>
-                            <input class="w-100" type="text" placeholder="Nhập số điện thoại của bạn">
-                        </div>
-                    </div>
-                    <div class=" payment-type p-3 my-3">
-                        <form class="">
-                            <h5>Hình thức thanh toán</h5>
-                            <ul class="list-type-payment list-unstyled ps-3">
-                                <li class="d-flex align-items-center">
-                                    <input id="payment-hotel" class=" m-2 custom-checkbox" type="radio"  name="payment"  >
-                                    <label for="payment-hotel">Thánh toán tại nơi lưu trú</label>
-                                </li>
 
-                                <li class="d-flex align-items-center">
-                                    <input id="payment-VNpay" class=" m-2 custom-checkbox" type="radio"  name="payment"  >
-                                    <label for="payment-VNpay">Thánh toán bằng VN Pay</label>
-                                </li>
-
-                            </ul>
-
-                        </form>
-                    </div>
-
-                    <div class="card-payment p-3  my-3">
-                        <form class="form-card-payment">
-                            <h5>Thông tin thanh toán </h5>
-                            <ul class=" list-infor-card-payment list-unstyled ps-3">
-                                <li class="my-2">
-                                    <h6>Tên chủ thẻ </h6>
-                                    <input class="w-50 " type="text"   placeholder="Nhập số thẻ " >
-                                </li>
-
-                                <li class="my-2">
-                                    <h6>Số thẻ tín dụng/ghi nợ</h6>
-                                    <input class=" w-50" type="text"   placeholder="0000 0000 0000 0000" >
-                                </li>
-                                <li class="my-2">
-                                    <h6>Mã bảo mật</h6>
-                                    <input class=" w-50" type="text"  placeholder="Nhập mã bảo mật của thẻ " >
-                                </li>
-
-                            </ul>
-
-                        </form>
-
-                    </div>
-                    <div class="btn-booking d-flex justify-content-end my-3">
-                        <button > <i class="fa-solid fa-lock"></i> Hoàn tất đặt chỗ </button>
-                    </div>
-                </div>
                 <div class="col-4">
                     <div class="infor-hotel py-2  px-3  rounded my-3">
                         <div class="image-hotel">
                             <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="IMG Hotel">
                         </div>
                         <div class="rental-type-star">
-                            <span class="rental-type">Khách sạn</span>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
+                            <span class="rental-type" th:text="${hotel.rentalType.value}"></span>
+                            <i class="fa-solid fa-star" th:each="star : ${#numbers.sequence(0,hotel.star)}"></i>
                         </div>
 
-                        <h5>Milanesa Hotel and Apartment</h5>
-                        <span class="address-hotel"><i class="fa-solid fa-location-dot"></i> 5A Đinh Tiên Hoàng Phường 2, Vũng Tàu, Việt Nam</span>
+                        <h5 th:text="${hotel.name}"></h5>
+                        <span class="address-hotel"><i class="fa-solid fa-location-dot"></i> <th:block th:text="${hotel.address}"></th:block></span>
                         <div class="ratting-hotel">
-                            <span class="age-rating">8.8</span>
-                            <span class="rating-text">Rất tốt</span>
+                            <span class="age-rating" th:text="${hotel.rating}"></span>
+                            <span class="rating-text" th:text="${hotel.ratingText}"></span>
                         </div>
                         <div class="amenity-hotel ">
                             <div class="w-50">
-                                <i class="fa-solid fa-wifi"></i>
-                                <span>Wifi miễn phí</span>
+                                <th:block th:utext="${hotel.amenityHotelList.get(0).icon}"></th:block>
+                                <span th:text="${hotel.amenityHotelList.get(0).name}"></span>
                             </div>
                             <div class="w-50">
-                                <i class="fa-solid fa-square-parking"></i>
-                                <span>Chỗ để xe</span>
+                                <th:block th:utext="${hotel.amenityHotelList.get(2).icon}"></th:block>
+                                <span th:text="${hotel.amenityHotelList.get(2).name}"></span>
                             </div>
                         </div>
                     </div>
@@ -126,20 +55,20 @@
                             <span class="w-50">Trả phòng</span>
                         </div>
                         <div class="d-flex p-0 m-0">
-                            <h6 class="w-50 p-0 m-0">T5, 2 tháng 5 2024</h6>
-                            <h6 class="w-50 p-0 m-0">T5, 6 tháng 5 2024</h6>
+                            <h6 class="w-50 p-0 m-0"><th:block th:text="${startDayOfWeek}"></th:block>, <th:block th:text="${start.getDayOfMonth()}"></th:block> tháng <th:block th:text="${start.getMonth().value}"></th:block> <th:block th:text="${start.getYear()}"></th:block></h6>
+                            <h6 class="w-50 p-0 m-0"><th:block th:text="${endDayOfWeek}"></th:block>, <th:block th:text="${end.getDayOfMonth()}"></th:block> tháng <th:block th:text="${end.getMonth().value}"></th:block> <th:block th:text="${end.getYear()}"></th:block></h6>
                         </div>
                         <div class="d-flex p-0 m-0">
-                            <span class="w-50 p-0 m-0">14:00 - 00:00</span>
-                            <span class="w-50 p-0 m-0">00:00 - 12:00</span>
+                            <span class="w-50 p-0 m-0" th:text="${hotel.policyHotel.getCheckIn()}"></span>
+                            <span class="w-50 p-0 m-0" th:text="${hotel.policyHotel.getCheckOut()}"></span>
                         </div>
                         <div class="d-flex align-items-center mt-3">
                             <h6 class=" w-50  p-0 m-0">Thời gian lưu trú : </h6>
-                            <span class="w-50"> 4 đêm</span>
+                            <span class="w-50"> <th:block th:text="${period.getDays()}"></th:block> đêm</span>
                         </div>
                         <div class="d-flex align-content-between mt-3">
                             <h6 class=" w-50  p-0 m-0">Số người và phòng:</h6>
-                            <span class="w-50 "> 2 Người 1 phòng</span>
+                            <span class="w-50 "> <th:block th:text="${numberGuest}"></th:block> Người <th:block th:text="${numberRoom}"></th:block> phòng</span>
                         </div>
                         <hr>
                         <h5 class="">Phòng bạn đã chọn</h5>
@@ -147,10 +76,45 @@
                         <div class="image-room overflow-hidden">
                             <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="IMG Hotel">
                         </div>
-                        <h6 class="name-room">
-                            Phòng Đôi - Ở Trong Ngày, Ở Tối Đa 2 Tiếng (Day Use - Double Room - Max 2 Hours Stay)
+                        <h6 class="name-room" th:text="${room.getName()}">
                         </h6>
 
+                    </div>
+
+
+                </div>
+
+                <div class="col-8">
+                    <div class=" infor-customer  p-3 my-3">
+                        <h5 >Nhập thông tin chi tiết của bạn</h5>
+                        <div class="name-customer d-flex">
+                            <div class="w-50 px-3">
+                                <h6>Tên</h6>
+                                <input th:value="${#authentication.principal.user.getName()}" class="w-100 name-customer-value" type="text" placeholder="Nhập tên của bạn">
+                            </div>
+                            <div class="w-50 px-3">
+                                <h6>Email</h6>
+                                <input th:value="${#authentication.principal.user.getEmail()}" class="w-100 email-customer-value" type="email" placeholder="Nhập email của bạn">
+                            </div>
+                        </div>
+                        <div class="phone w-50 px-3 mt-3">
+                            <h6 class="m-0 p-0">Số điện thoại</h6>
+                            <input class="phone-customer-value w-100" type="text" placeholder="Nhập số điện thoại của bạn">
+                        </div>
+                    </div>
+                    <div class=" payment-type p-3 my-3">
+                        <form class="">
+                            <h5>Hình thức thanh toán</h5>
+                            <ul class="list-type-payment list-unstyled ps-3">
+                                <li class="d-flex align-items-center" th:each="payemtMethod : ${listPaymentMethod}">
+                                    <input id="payment-hotel" class=" m-2 custom-checkbox" type="radio"  name="payment" th:value="${payemtMethod}" >
+                                    <label for="payment-hotel" th:text="${payemtMethod.value}"></label>
+                                </li>
+
+
+                            </ul>
+
+                        </form>
                     </div>
                     <div class="price-detail py-2  px-3  rounded my-3">
                         <h5>Chi tiết giá</h5>
@@ -174,6 +138,32 @@
 
                     </div>
 
+                    <!--                    <div class="card-payment p-3  my-3">-->
+                    <!--                        <form class="form-card-payment">-->
+                    <!--                            <h5>Thông tin thanh toán </h5>-->
+                    <!--                            <ul class=" list-infor-card-payment list-unstyled ps-3">-->
+                    <!--                                <li class="my-2">-->
+                    <!--                                    <h6>Tên chủ thẻ </h6>-->
+                    <!--                                    <input class="w-50 " type="text"   placeholder="Nhập số thẻ " >-->
+                    <!--                                </li>-->
+
+                    <!--                                <li class="my-2">-->
+                    <!--                                    <h6>Số thẻ tín dụng/ghi nợ</h6>-->
+                    <!--                                    <input class=" w-50" type="text"   placeholder="0000 0000 0000 0000" >-->
+                    <!--                                </li>-->
+                    <!--                                <li class="my-2">-->
+                    <!--                                    <h6>Mã bảo mật</h6>-->
+                    <!--                                    <input class=" w-50" type="text"  placeholder="Nhập mã bảo mật của thẻ " >-->
+                    <!--                                </li>-->
+
+                    <!--                            </ul>-->
+
+                    <!--                        </form>-->
+
+                    <!--                    </div>-->
+                    <div class="btn-booking d-flex justify-content-end my-3">
+                        <button class="verify-booking"><i class="fa-solid fa-lock"></i> Hoàn tất đặt chỗ </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -184,6 +174,15 @@
 </div>
 
 <th:block id="js">
+    <script th:inline="javascript">
+        let idHotel = [[${hotel.id}]];
+        let idRoom = [[${room.id}]];
+        let numGuest = [[${numberGuest}]];
+        let numRoom = [[${numberRoom}]];
+        let startDate = [[${start}]];
+        let endDate = [[${end}]];
+    </script>
+    <script src="/web/assets/js/payment-booking.js"> </script>
 
 </th:block>
 
