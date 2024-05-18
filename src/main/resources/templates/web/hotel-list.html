@@ -310,17 +310,16 @@
                     <div class="result  p-1 " th:if="${hotelList.size()>0}">
                         <h4><th:block th:text="${nameCity}"></th:block> tìm thấy <th:block th:text="${hotelList.size()}"></th:block> chỗ nghỉ</h4>
                     </div>
-                    <div id="sort-by" class="sort-by border shadow  d-flex justify-content-center align-items-center">
+                    <div id="sort-by" class="sort-by border  d-flex justify-content-center align-items-center">
                         <div class=" col-1  d-flex justify-content-center align-items-center">
                            <span>
                             Sắp xếp
                            </span>
                         </div>
                         <div class="col-2 ">
-                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center " type="submit" th:onclick="dataDefault()">Phù hợp
+                            <button class="py-2 type-sort h-100 w-100  d-flex justify-content-center select-sort " type="submit" th:onclick="dataDefault()">Phù hợp
                                 nhất
                             </button>
-
                         </div>
 
                         <div class="col-2 ">
@@ -372,9 +371,9 @@
                             <p>Tiết kiệm tại một số khách sạn . Với ưu đãi trên app của chúng tôi, bạn có thể tiết kiệm để
                                 đi được nhiều hơn và quản lý mọi thứ trong khi đang di chuyển</p>
                         </div>
-                        <div class="btn-pr">
-                            <a href="#">Xem chi tiết</a>
-                        </div>
+<!--                        <div class="btn-pr">-->
+<!--                            <a href="#">Xem chi tiết</a>-->
+<!--                        </div>-->
 
                     </div>
 

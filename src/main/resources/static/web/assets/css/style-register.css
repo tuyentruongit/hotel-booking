@@ -40,11 +40,11 @@ body{
 }
 .input-box{
     position: relative;
+    margin-bottom: 10px;
 }
 .input-box input{
-    border: 1px solid #E7E7E7 !important;
+    border: 1px solid #E7E7E7 ;
     padding: 7px 7px;
-    margin-bottom: 10px;
     border-radius: 5px;
     width: 100%;
 }
@@ -55,7 +55,7 @@ body{
 .input-box i{
     position: absolute;
     top: 12px;
-    right: 10px;
+    right: 30px;
     cursor: pointer;
 }
 
@@ -65,7 +65,7 @@ body{
     padding: 10px 0;
     margin-top: 20px;
     border-radius: 5px;
-    background-color:#5392F9 ;
+    background-color:#526D82 ;
     color: #F5F5F5;
     font-size: 17px;
     font-weight: 500;

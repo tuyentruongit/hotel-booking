@@ -174,19 +174,22 @@ let dataDefault = () => {
 const searchByNameHotel = document.querySelector('.input-name-hotel');
 searchByNameHotel.addEventListener('keydown',(event)=>{
     console.log(event)
+
     if (event.key === 'Enter'){
         let keyWord = searchByNameHotel.value.trim();
         console.log(keyWord+'tên khách sạn tìm kiếm')
 
         if (keyWord){
             const  data = hotelList.filter(hotel =>
-                hotel.name.toLowerCase() === keyWord.toLowerCase())
+                hotel.name.toLowerCase().includes(keyWord.toLowerCase()))
             renderListHotel(data)
 
-
-
+        }else {
+            renderListHotel(hotelList);
         }
+
     }
+
 })
 
 
@@ -285,7 +288,6 @@ const renderListHotel = (hotelList) => {
     }
     hotelList.forEach((hotel) => {
 
-        let hotelSearch
 
         let htmlStar = '';
         for (let i = 0; i < hotel.star; i++) {
@@ -298,6 +300,7 @@ const renderListHotel = (hotelList) => {
                     `
 
         }
+        //<span class="quantity">${hotel.reviews.length} nhận xét</span>
         newContent += `
                         <div  class="row container-hotel" >
                                 <button  class="btn-favourite p-0 m-0" value="${hotel.id}" type-button="add">
@@ -309,7 +312,7 @@ const renderListHotel = (hotelList) => {
 
                                 <div class="course w-100 border">
                                     <div class="image-btn">
-                                        <img class="course-preview " src="/web/assets/image/uudai.jpg">
+                                        <img class="course-preview " src="/web/assets/image/dep.jpg">
 
                                     </div>
                                     <div class="course-info">
@@ -325,7 +328,7 @@ const renderListHotel = (hotelList) => {
                                             <div class="age-rating">${hotel.rating.toFixed(1)} </div>
                                             <div class="infor-rating-hotel">
                                                 <h6 class="p-0 m-0" >${hotel.ratingText}</h6>
-                                                <span class="quantity">${hotel.reviews.length} nhận xét</span>
+                                               
                                             </div>
                                         </div>
                                         <ul class="price list-unstyled justify-content-center p-0 m-0">
@@ -350,7 +353,6 @@ const renderListHotel = (hotelList) => {
     containerParent.innerHTML = newContent;
 
 
-
     const listIdHotel = hotelsFavourite.map(hotel => Number(hotel.id));
     console.log(listIdHotel)
 
@@ -366,32 +368,30 @@ const renderListHotel = (hotelList) => {
             if (!heart.classList.contains('style-heart')) {
                 axios.post("/api/hotel/favourite/"+heart.value)
                     .then(()=>{
-                        console.log("Thành công")
+                        toastr.success("Đã thêm khách sạn vào danh sách yêu thích.")
                         heart.classList.add("style-heart")
                         heart.setAttribute("type-button","delete")
                     })
                     .catch((err)=>{
                         if (err.response.status===401){
-                            console.log("Đăng nhập đi");
+                            toastr.error("Vui lòng đăng nhập");
                         }
                     })
 
             } else {
                 axios.delete("/api/hotel/favourite/"+heart.value)
                     .then(()=>{
-                        console.log("Thành công")
+                        toastr.success("Đã xóa khách sạn khỏi danh sách yêu thích.")
                         heart.classList.remove("style-heart");
                         heart.setAttribute("type-button","add")
                     })
                     .catch((err)=>{
                        if (err.response.status===401){
-                           console.log("Đăng nhập đi");
+                           toastr.error("Vui lòng đăng nhập");
                        }
                     })
 
             }
-
-
         })
 
     })

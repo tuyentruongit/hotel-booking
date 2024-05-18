@@ -20,19 +20,22 @@
             <div class="row d-flex justify-content-center">
                 <div class="col-10">
                     <div class="status-booking">
-                        <label th:text="${booking.statusBooking.value}"></label>
+                        <label th:text="${booking.statusBooking.value}"
+                                th:class="${booking.statusBooking.value== 'Đã hủy' ? 'text-danger' : 'text-success'}"
+                        ></label>
                         <h4 th:if="${booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận')}">Đơn đặt phòng của bạn ở <th:block th:text="${booking.hotel.city.name}"></th:block> đang chờ xác nhận</h4>
                         <h4 th:if="${booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận')}">Đơn đặt phòng của bạn ở <th:block th:text="${booking.hotel.city.name}"></th:block> đã được xác nhận</h4>
                         <h4 th:if="${booking.statusBooking.value.equalsIgnoreCase('Đã hủy')}">Đơn đặt phòng của bạn ở <th:block th:text="${booking.hotel.city.name}"></th:block> đã bị hủy</h4>
                         <h4 th:if="${booking.statusBooking.value.equalsIgnoreCase('Hoàn tất')}">Đơn đặt phòng của bạn ở <th:block th:text="${booking.hotel.city.name}"></th:block> đã hoàn tất</h4>
                         <div class="link-search-and-rebook d-flex justify-content-between pt-3" th:if="${!booking.statusBooking.value.equalsIgnoreCase('Đã hủy')}">
-                            <a class="text-decoration-none"
-                               th:href="@{/thanh-toan/{idHotel}/{idRoom} (idHotel=${booking.hotel.id},idRoom=${booking.room.id},checkIn = ${booking.checkIn},checkOut = ${booking.checkOut},numberGuest = ${booking.guests},numberRoom = ${booking.numberRoom})}">
-                                <i class="fa-solid fa-rotate-left"></i> Đặt lại
-                            </a>
-                            <a class="text-decoration-none"
+                            <a class="text-decoration-none text-reset"
                                th:href="@{/danh-sach-khach-san (nameCity = ${booking.hotel.city.name},checkIn = ${booking.checkIn},checkOut = ${booking.checkOut},numberGuest = ${booking.guests},numberRoom = ${booking.numberRoom})}">
                                 <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm nơi lưu trú khác
+                            </a>
+
+                            <a class="text-decoration-none text-reset"
+                               th:href="@{/thanh-toan/{idHotel}/{idRoom} (idHotel=${booking.hotel.id},idRoom=${booking.room.id},checkIn = ${booking.checkIn},checkOut = ${booking.checkOut},numberGuest = ${booking.guests},numberRoom = ${booking.numberRoom})}">
+                                <i class="fa-solid fa-rotate-left"></i> Đặt lại
                             </a>
                         </div>
 
@@ -44,7 +47,7 @@
                     <div class=" infor-booking">
                         <div class="infor-detail">
                             <div class="wrap-booking py-1 px-3">
-                                <a class="name-hotel w-100" th:text="${booking.hotel.name}" th:href="@{/chi-tiet-khach-san/{id} (id=${booking.hotel.id})}"></a>
+                                <a class="name-hotel w-100" th:text="${booking.hotel.name}" th:href="@{/chi-tiet-khach-san/{id} (id=${booking.hotel.id} , nameCity = ${booking.hotel.city.name},checkIn = ${booking.checkIn},checkOut = ${booking.checkOut},numberGuest = ${booking.guests},numberRoom = ${booking.numberRoom})}"></a>
                                 <div class="row d-flex my-2">
                                     <div class="col-1">
                                         <i style="font-size: 20px" class="fa-regular fa-calendar"></i>
@@ -105,7 +108,8 @@
                                     <img class="image-room" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
                                 </div>
                                 <div class="col-9">
-                                    <h6 th:text="${booking.room.name}"></h6>
+<!--                                    <h6 th:text="${booking.room.name}"></h6>-->
+                                    <h6>Phòng đôi Superior</h6>
                                 </div>
                             </div>
                             <div class="row">
@@ -134,10 +138,20 @@
                             </div>
                             <div class="row my-3">
                                 <div class="col-3">
+                                    <h6 class="title-infor">Giường</h6>
+                                </div>
+                                <div class="col-9">
+<!--                                    <span th:text="${booking.room.area}"></span>-->
+                                    2 giường cỡ KING
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-3">
                                     <h6 class="title-infor">Loại phòng</h6>
                                 </div>
                                 <div class="col-9">
-                                    <span th:text="${booking.room.roomType}"></span>
+<!--                                    <span th:text="${booking.room.roomType}"></span>-->
+                                    Phòng Đôi
                                 </div>
                             </div>
                             <div class="row my-3">
@@ -159,6 +173,14 @@
                                 </div>
                             </div>
                         </div>
+
+
+
+
+
+
+
+
                     </div>
 
 
@@ -166,19 +188,90 @@
 
                 <div class="col-3">
                     <div class="id-booking">Mã đặt phòng :<th:block th:text="${booking.id}"></th:block></div>
-                    <div class="id-booking" th:classappend="${!booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận') || booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận') ? 'd-none': 'd-inline-block' }">
+                    <div class="cancel-booking" th:classappend="${booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận') || booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận') ? 'd-inline-block': 'd-none' }">
                         <h6 class="w-100">Tất cả thông tin có đều chính xác ?</h6>
                         <span>Bạn có thể thay đổi thông tin bất kỳ lúc nào .</span>
-                        <button th:value="${booking.id}"  class="cancel-booking w-100 " th:href="@{/cancel/{idBooking} (idBooking = ${booking.id})}"> <i class="fa-solid fa-xmark"></i> Hủy đặt phòng</button>
+                        <a th:value="${booking.id}"  class="btn-cancel-booking w-100 " th:href="@{/cancel-booking/{idBooking} (idBooking = ${booking.id})}"> <i class="fa-solid fa-xmark"></i> Hủy đặt phòng</a>
                     </div>
-                    <div class="id-booking" th:classappend="${!booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận') || booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận') ? 'd-none': 'd-inline-block' }">
+                    <div class="reviews"  th:classappend="${!booking.statusBooking.value.equalsIgnoreCase('Hoàn Tất') ? 'd-none': 'd-inline-block' }">
                         <h6 class="w-100">Viết đánh giá</h6>
                         <span>Bạn có thể chia sẻ cảm nhận của mình về chuyến đi vừa rồi .</span>
-                        <button th:value="${booking.id}"  class="cancel-booking w-100 " th:href="@{/cancel/{idBooking} (idBooking = ${booking.id})}"> <i class="fa-solid fa-xmark"></i> Đánh giá</button>
+                        <button th:value="${booking.getHotel().getId()}"   type="button" class="mt-3 create-review w-100 btn" data-bs-toggle="modal" data-bs-target="#myModal">
+                            <i class="fa-solid fa-pen fa-rotate-270 mx-1"  ></i> Đánh giá
+                        </button>
                     </div>
+
+                    <!-- The Modal -->
+                    <div class="modal" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Viết đánh giá</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="rating d-flex justify-content-center">
+                                        <span class="star px-1" data-rating="1">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    <span class="star px-1" data-rating="2">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    <span class="star px-1" data-rating="3">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    <span class="star px-1" data-rating="4">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    <span class="star px-1" data-rating="5">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    <span class="star px-1" data-rating="6">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    <span class="star px-1" data-rating="7">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    <span class="star px-1" data-rating="8">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    <span class="star px-1" data-rating="9">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                    <span class="star px-1" data-rating="10">
+                                              <i class="fa-solid fa-star"></i>
+                                        </span>
+                                </div>
+                                <div class="d-flex justify-content-center" id="rating-value"></div>
+
+
+                                <!-- Modal body -->
+                                <form id="form-review">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                                      <textarea id="reviewContent" class="w-100 rounded overflow-hidden  my-2"
+                                                                type="text" placeholder="Viết bình luận . . . ." name="contentReview-review"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn text-black-50" data-bs-dismiss="modal">Đóng</button>
+                                        <button id="submitReview" type="button" class="btn">Gửi Đánh Giá
+                                        </button>
+
+                                    </div>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
                     <div class="contact">
                         <h6>Thông tin liên hệ.</h6>
-                        <span class="title-contact">Mọi góp ý về trang web xin được nhận qua :</span>
+                        <span class="title-contact">Đối với hầu hết câu hỏi, chỗ nghỉ thường là nơi tốt nhất để liên hệ</span>
                        <div class="phone">
                            <label>Điện thoại : </label>
                            <span >(941) 919-1419</span>
@@ -193,6 +286,7 @@
 <!--                    </div>-->
 
                 </div>
+
             </div>
 
         </div>
@@ -210,13 +304,16 @@
 </div>
 
 <th:block id="js">
+
+
+
     <script th:inline="javascript">
-        const cancelBooking = document.querySelector('.cancel-booking');
-        console.log(cancelBooking)
-        cancelBooking.addEventListener('click' , ()=>{
-            window.location.href="/cancel-booking/"+cancelBooking.value;
-        })
+
+
     </script>
+
+    <script src="/web/assets/js/booking-detail.js"></script>
+
 
 </th:block>
 

@@ -9,9 +9,6 @@
     padding-left: 100px;
 }
 
-.status-booking label {
-    color: red;
-}
 
 .link-search-and-rebook {
 
@@ -22,7 +19,7 @@
     font-weight: 1000;
     text-decoration: none;
     font-size: 25px;
-    color: #1772E5;
+    color: #27374D;
 }
 
 .id-booking {
@@ -30,16 +27,47 @@
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
+    background-color: #DDE6ED;
+}
+.cancel-booking{
+    border: 1px solid #E7E7E7;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
-.cancel-booking {
-    background-color: #0d6efd;
+.btn-cancel-booking {
+    background-color: #526D82;
     color: white;
     text-decoration: none;
     padding: 5px 5px;
     border-radius: 10px;
     border: none;
 }
+.reviews{
+    border: 1px solid #E7E7E7;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+.create-review {
+    background-color: #526D82;
+    color: #F5F5F5;
+    text-decoration: none;
+    padding: 5px 5px;
+    border-radius: 10px;
+    border: none;
+}
+.create-review:hover{
+    background-color: #9DB2BF;
+    color: #F5F5F5;
+}
+
+#submitReview{
+    background-color: #27374D;
+    color: #F5F5F5;
+}
+
 
 .contact{
     border: 1px solid #E7E7E7;
@@ -59,7 +87,7 @@
 
 .infor-detail {
     display: flex;
-    background-color: #F9F9F9;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 
     border: 1px solid #E7E7E7;
     border-radius: 10px;
@@ -85,7 +113,13 @@
     border-radius: 10px;
 }
 
-.room-detail{padding: 0 10px;
+.title-detail-room{
+
+    margin-top: 20px;
+}
+
+.room-detail{
+    padding: 0 10px;
 }
 
 .image-room{
@@ -97,4 +131,23 @@
 
 .booking-detail{
     margin-bottom: 100px;
+}
+
+.rating {
+    font-size: 24px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.star {
+    display: inline-block;
+}
+
+.star:hover,
+.star.active {
+    color: #EDBB0E;
+}
+
+#reviewContent{
+    height: 150px;
 }

@@ -18,96 +18,99 @@
     <header class="section__container header__container container mt-3">
         <div class="header__image__container">
             <div class="header__content">
-                <h1>Tận hưởng kỳ nghỉ mơ ước của bạn</h1>
+                <h1>Tận hưởng kỳ nghỉ theo cách riêng của bạn.</h1>
                 <p> Đặt khách sạn và các gói lưu trú ở mức giá thấp nhất.</p>
             </div>
         </div>
-    </header>
-    <section class="search">
-        <div class="container">
-            <div class="col-1"></div>
-            <div class="row ">
-                <div class="col-3"></div>
-                <div class="col-6 ">
-                    <div class="title-search d-flex justify-content-center align-items-center py-2">
-                        <i style="font-size: 20px;" class="fa-solid fa-hotel"></i>
-                        <h4 class="py-0 px-2 m-0">Tìm kiếm nơi lưu trú cho bạn</h4>
-                    </div>
+        <section class="search">
+            <div class="container">
+                <div class="col-1"></div>
+                <div class="row ">
                     <div class="col-3"></div>
-                </div>
-                <div class="">
+                    <div class="col-6 ">
+                        <div class="title-search d-flex justify-content-center align-items-center py-2">
+                            <i class="fa-solid fa-umbrella-beach" style="color: #fdfdfc;"></i>
+                            <h4 class="py-0 px-2 m-0">Tìm kiếm nơi lưu trú cho bạn</h4>
+                        </div>
+                        <div class="col-3"></div>
+                    </div>
+                    <div class="">
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col-10  py-3 px-5 border input-infor  ">
+
+                                <div class="row py-2">
+                                    <div class="col-12">
+                                        <form id="name-city">
+                                            <div class="form-group">
+                                                <div class=" search-city d-flex align-items-center p-2">
+                                                    <i style="font-size: 20px;" class="fa-solid fa-location-dot"></i>
+                                                    <input id="input-name-city" name="nameCity" class="w-100 form-control" type="text" placeholder="Tìm địa điểm mà bạn muốn đến v.v.">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                                <div class="row py-2">
+                                    <div class="col-6">
+                                        <div class="search-date d-flex align-items-center  border shadow p-2">
+                                            <i style="font-size: 20px;" class="fas fa-calendar-alt"></i>
+                                            <input type="text" id="date-range" class=" form-control w-100 ps-3 " placeholder="Ngập ngày đến và đi của bạn">
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="button-guest-number w-100 h-100 border shadow d-flex justify-content-between align-items-center" >
+                                            <i style="font-size: 20px;"  class="fa-solid fa-user-check"></i>
+                                            <span class="">Số người</span>
+                                            <div class="w-50 d-flex justify-content-between">
+                                                <button id="minus-guest" class="minus-guest"><i class="fa-solid fa-minus"></i></button>
+                                                <span id="num-guest" class="num-guest">01</span>
+                                                <button id="plus-guest" class="plus-guest"><i class="fa-solid fa-plus"></i></button>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-3" >
+                                        <div class="button-room-number w-100 h-100 border shadow d-flex justify-content-between align-items-center">
+                                            <i style="font-size: 20px;" class="fa-solid fa-house"></i>
+                                            <span class="">Số phòng</span>
+                                            <div class="w-50 d-flex justify-content-between ">
+                                                <button id=".minus-room" class="minus-room"><i class="fa-solid fa-minus"></i></button>
+                                                <span id=".num-room" class="num-room">01</span>
+                                                <button id=".plus-room" class="plus-room"><i class="fa-solid fa-plus"></i></button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+                    </div>
                     <div class="row">
-                        <div class="col-1"></div>
-                        <div class="col-10  py-3 px-5 border input-infor  ">
-
-                            <div class="row py-2">
-                                <div class="col-12">
-                                    <div class="search-country d-flex align-items-center border shadow p-2">
-                                        <i style="font-size: 20px;" class="fa-solid fa-location-dot"></i>
-                                        <input id="input-name-city" type="text" class=" form-control w-100 ps-3 "
-                                               placeholder="Tìm địa điểm, khách sạn, v.v.">
-                                    </div>
-                                </div>
-
+                        <div class="col-5"></div>
+                        <div class="col-2">
+                            <div class="btn-search py-2">
+                                <button  id="btn-search" type="submit" class="border py-2 w-100 h-100">Tìm kiếm</button>
                             </div>
-                            <div class="row py-2">
-                                <div class="col-6">
-                                    <div class="search-country d-flex align-items-center  border shadow p-2">
-                                        <i style="font-size: 20px;" class="fas fa-calendar-alt"></i>
-                                        <input type="text" id="date-range" class=" form-control w-100 ps-3 " placeholder="Ngập ngày đến và đi của bạn">
-                                    </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="button-guest-number w-100 h-100 border shadow d-flex justify-content-between align-items-center" >
-                                        <i style="font-size: 20px;"  class="fa-solid fa-user-check"></i>
-                                        <span class="">Số người</span>
-                                        <div class="w-50 d-flex justify-content-between">
-                                            <button id="minus-guest" class="minus-guest"><i class="fa-solid fa-minus"></i></button>
-                                            <span id="num-guest" class="num-guest">01</span>
-                                            <button id="plus-guest" class="plus-guest"><i class="fa-solid fa-plus"></i></button>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <div class="col-3" >
-                                    <div class="button-room-number w-100 h-100 border shadow d-flex justify-content-between align-items-center">
-                                        <i style="font-size: 20px;" class="fa-solid fa-house"></i>
-                                        <span class="">Số phòng</span>
-                                        <div class="w-50 d-flex justify-content-between ">
-                                            <button id=".minus-room" class="minus-room"><i class="fa-solid fa-minus"></i></button>
-                                            <span id=".num-room" class="num-room">01</span>
-                                            <button id=".plus-room" class="plus-room"><i class="fa-solid fa-plus"></i></button>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-                            </div>
-
                         </div>
-                        <div class="col-1"></div>
+                        <div class="col-5"></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-5"></div>
-                    <div class="col-2">
-                        <div class="btn-search py-2">
-                            <button  id="btn-search" type="submit" class="border py-2 w-100 h-100">Tìm kiếm</button>
-                        </div>
-                    </div>
-                    <div class="col-5"></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </header>
 
     <div class="slider-area pt-5">
         <div class="container">
 
             <div class="d-flex justify-content-center py-3">
-                <h3>Các điểm đến thu hút tại Việt Nam</h3>
+                <h3>Địa điểm lý tưởng đáng để trải nghiệm tại Việt Nam</h3>
             </div>
             <div class="row">
                 <div class="col-1"></div>
@@ -116,7 +119,7 @@
                         <div class="slider-item outstanding-city text-reset text-decoration-none "   th:each="city : ${cityFavourite}">
 
                             <div  class="slider-item outstanding-city text-reset text-decoration-none  border-none" th:data-name="${city.name}" th:onclick="navigation(this.getAttribute('data-name'))">
-                                <img src="/web/assets/image/song-nho-que-du-lich-ha-giang-kynghidongduong-071.jpg" alt="">
+                                <img src="/web/assets/image/city.jpg" alt="">
                                 <div class="country-city p-2 d-flex justify-content-center"  >
                                     <h5 class="name-city" th:value="${city.name}" th:text="${city.getName()}"></h5>
                                 </div>
@@ -138,7 +141,7 @@
         <div class="container">
             <div class="row">
                 <div class="title-outstanding-hotel d-flex justify-content-center">
-                    <h3>Những chỗ nghỉ nổi bật được đề xuất cho quý khách:</h3>
+                    <h3>Những chỗ nghỉ nổi bật được đề xuất cho bạn:</h3>
                 </div>
             </div>
             <div class="row">
@@ -176,17 +179,17 @@
                     <div class="col-4">
                         <img class="w-100 image-pr" src="/web/assets/image/uudai.jpg" alt="">
                     </div>
-                    <div class="col-6 px-3">
+                    <div class="col-7 px-3">
                         <div class="title-pr mt-2 ">
-                            <h3>Hưởng nhiều quyền lợi hơn với app STAYEASE</h3>
+                            <h3>Hưởng nhiều quyền lợi hơn với app WeFindTravel</h3>
                         </div>
                         <div class="content-pr pt-2">
                             <p>Tiết kiệm tại một số khách sạn . Với ưu đãi trên app của chúng tôi, bạn có thể tiết kiệm
                                 để đi được nhiều hơn và quản lý mọi thứ trong khi đang di chuyển</p>
                         </div>
-                        <div class="btn-pr">
-                            <a href="">Xem chi tiết</a>
-                        </div>
+<!--                        <div class="btn-pr">-->
+<!--                            <a href="">Xem chi tiết</a>-->
+<!--                        </div>-->
                     </div>
                 </div>
 
@@ -199,11 +202,34 @@
 
 <th:block id="js">
     <script src="/web/lib/OwlCarousel/dist/owl.carousel.min.js"></script>
-    <script src="/web/assets/js/home.js"></script>
     <script th:inline="javascript">
+        $('#name-city').validate({
+            rules: {
+                nameCity: {
+                    required: true,
+                },
+            },
+            messages: {
+                nameCity: {
+                    required: "Vui lòng nhập địa chỉ tên thành phố mà bạn muốn tìm kiếm",
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
 
 
     </script>
+    <script src="/web/assets/js/home.js"></script>
 </th:block>
 </body>
 </html>

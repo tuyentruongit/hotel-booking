@@ -17,5 +17,5 @@ public enum ImageType {
     CONFERENCE_ROOM("Phòng họp"), // Ảnh phòng họp
     OTHER("Khác"); // Ảnh khác
 
-    private final String name;
+    private final String value;
 }

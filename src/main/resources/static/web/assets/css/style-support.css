@@ -39,7 +39,7 @@
 }
 
 
-.btn-title-support:hover i {
+.btn-title-support:focus i {
     transform: rotate(90deg); /* Xoay phần tử đi 45 độ khi con trỏ di chuyển qua phần tử */
 }
 

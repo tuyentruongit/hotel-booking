@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import methodsecuritynew.bookingapp.model.statics.ImageType;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,10 +18,10 @@ public class ImageHotel extends Image {
     @Enumerated(EnumType.STRING)
     ImageType imageType;
 
-
-
     @ManyToOne
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
+
+
 
 }

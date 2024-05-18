@@ -50,6 +50,8 @@ public class Hotel {
 
     @Enumerated(EnumType.STRING)
     RentalType rentalType;
+
+
     @ManyToMany
     @JoinTable(
             name = "amenity_hotel",
@@ -58,9 +60,6 @@ public class Hotel {
 
     )
     List<AmenityHotel> amenityHotelList;
-
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
-    private List<Review> reviews;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
     private List<PriceRoom> priceRoomList;

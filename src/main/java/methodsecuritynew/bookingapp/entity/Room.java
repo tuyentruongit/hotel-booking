@@ -49,8 +49,14 @@ public class Room {
             inverseJoinColumns = @JoinColumn(name = "id_amenity")
     )
     List<AmenityRoom> amenityRoomList ;
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    private List<Bed> bedList;
+
+    @ManyToMany
+    @JoinTable(
+            name = "bed_room",
+            joinColumns = @JoinColumn(name = "id_room"),
+            inverseJoinColumns = @JoinColumn(name = "id_bed")
+    )
+    List<Bed> bedList ;
 
 
 

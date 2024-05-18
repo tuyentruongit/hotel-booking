@@ -22,7 +22,6 @@ public class Bed {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    Integer numberBed;
 
 
     @Column(columnDefinition = "TEXT")
@@ -36,8 +35,5 @@ public class Bed {
     LocalDate createAt;
     LocalDate updateAt;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id")
-    Room room;
 
 }

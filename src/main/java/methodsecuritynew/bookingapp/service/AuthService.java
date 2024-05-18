@@ -73,6 +73,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .email(registerRequest.getEmail())
                 .createdAt(LocalDate.now())
+                .avatar("/web/assets/image/avatar-default.jpg")
                 .enable(false)
                 .build();
         userRepository.save(user);
@@ -143,9 +144,7 @@ public class AuthService {
 
     public void updateUser(Integer id, ChangeInformationUserRequest changeInformationUserRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user") );
-
-
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
         LocalDate birthday = LocalDate.parse(changeInformationUserRequest.getBirthDay(),dateTimeFormatter);
         user.setAddress(changeInformationUserRequest.getAddress());
         user.setAddress(changeInformationUserRequest.getAddress());
@@ -205,7 +204,6 @@ public class AuthService {
                         link+"\n" +
                         "\n" +
                         "Trân trọng.\n" );
-
     }
 
     public String verifyForgotPassword(String token) {
@@ -226,7 +224,7 @@ public class AuthService {
     }
 
     public User getUserCurrent (){
-        Optional<User> optionalUser= userRepository.findByEmail(httpSession.getAttribute("MY_SESSION").toString());
-        return optionalUser.get();
+        return userRepository.findByEmail(httpSession.getAttribute("MY_SESSION").toString()).orElseThrow(()->new UsernameNotFoundException("Không tìm thấy"));
     }
+
 }

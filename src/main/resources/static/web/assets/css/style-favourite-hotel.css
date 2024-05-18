@@ -19,21 +19,53 @@
    margin-top: 10px;
 }
 
+.slider-main {
+    position: relative;
+}
+
+.slider-main .fa-angle-left {
+    position: absolute;
+    top: 40%;
+    left: 10px;
+    font-size: 20px;
+    color: #0d6efd;
+    background-color: #F5F5F5;
+    padding: 8px 12px;
+    border-radius: 50%;
+
+}
+
+
+
+.slider-main .fa-angle-right {
+    position: absolute;
+    top: 40%;
+    right: 10px;
+    font-size: 20px;
+    color: #0d6efd;
+    background-color: #F5F5F5;
+    padding: 8px 12px;
+    border-radius: 50%;
+}
+
+.slider-main img{
+    border-radius: 15px;
+    object-fit: cover;
+    height: 200px;
+}
+.btn-close{
+    border: 1px solid var(--text-light);
+    border-radius: 50%;
+}
+
 
 .card-hotel{
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     border: 1px solid #E7E7E7 !important;
     position: relative;
     border-radius: 10px;
+    width: auto;
 }
-.card-hotel img{
-
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    width: 100%;
-    object-fit: cover;
-    height: 200px;
-}.card-hotel a{
+.card-hotel a{
     text-decoration: none;
 
 }
@@ -42,10 +74,10 @@
 }
 .infor-hotel .name-hotel{
     width: 100%;
-    font-size: 20px;
+    font-size: 17px;
     padding: 0 0;
     margin: 5px 0;
-    font-weight: 490;
+    font-weight:500;
     letter-spacing: 1px;
 
 }
@@ -61,7 +93,7 @@
 }
 .star i{
     margin-right: 5px;
-    color: #FF63A3;
+    color: #CF2061;
 }
 hr{
     color: #737373;
@@ -83,7 +115,7 @@ hr{
     letter-spacing: 1px;
 }
 .age-rating{
-    background-color: #227950;
+    background-color: #27374D;
     padding: 5px;
     color: white;
     border-radius: 5px;
@@ -122,15 +154,20 @@ hr{
 .delete {
     position: absolute;
     top: 10px;
-    right: 10px
+    right: 10px;
 }
 .delete button{
     border: none;
     font-size: 23px;
-    background-color: white;
-    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.5); /* Background xuyên thấu */
 }
 .delete button i{
-   color: #E12D2D;
+   color: #27374D;
 }
 

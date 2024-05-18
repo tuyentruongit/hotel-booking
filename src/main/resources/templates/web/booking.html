@@ -17,7 +17,7 @@
             <div class="row">
                <div class="title-page d-flex justify-content-center">
                    <div class="col-10">
-                       <h2 class="p-0 m-0"> <i class="fa-regular fa-calendar-check"></i> Đơn đặt chỗ của tôi</h2>
+                       <h2 class="p-0 m-0"> <i class="fa-regular fa-calendar-check"></i> Lịch sử đơn đặt khách sạn của bạn </h2>
                    </div>
                </div>
             </div>
@@ -60,7 +60,10 @@
                         </div>
 
                         <div class="list-booking">
-                            <ul class="list-unstyled ">
+                            <h1 th:if="${bookingList.size()==0}">
+                                Chưa có đơn nào được đặt
+                            </h1>
+                            <ul class="list-unstyled " >
                                 <li class="w-100" th:each="booking : ${bookingList}">
                                     <a class="card-booking" th:href="@{/chi-tiet-booking/{id} (id=${booking.id})}">
                                         <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
@@ -73,7 +76,7 @@
                                                 - <th:block th:text="${booking.getCheckOut().getDayOfMonth()}"></th:block>
                                                 tháng
                                                 <th:block th:text="${booking.getCheckOut().getMonth().getValue()}"></th:block></span>
-                                            <p class="p-0 m-0" th:text="${booking.statusBooking.value}"></p>
+                                            <p class="p-0 m-0" th:classappend="${booking.statusBooking.value.equalsIgnoreCase('Đã hủy') ?'text-danger':'text-succses'}" th:text="${booking.statusBooking.value}"></p>
                                         </div>
                                     </a>
                                 </li>

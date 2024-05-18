@@ -2,7 +2,7 @@
 
 /* style thanh tìm kiếm */
 .search{
-    background-color: #20274D;
+    background-color: #27374D;
 }
 
 .inputdata-search{
@@ -29,7 +29,7 @@
 
 
 .btn-search{
-    background-color:#5392F9;
+    background-color:#9DB2BF;
     border-radius: 10px;
     border: none
 }
@@ -49,14 +49,15 @@
 /* style danh sách khách sạn */
 .sort-by{
     border-radius: 10px;
-    background-color: #FFFFFF;
+    background-color: #DDE6ED;
     overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 
 
 .type-sort{
     border: none;
-    background-color: #FFFFFF;
+    background-color: #DDE6ED;
     width: 100px; /* Độ rộng của phần tử */
     height: 20px; /* Độ cao của phần tử */
 
@@ -64,9 +65,12 @@
 
 }
 .type-sort:hover{
+    background-color: #9DB2BF;
+    color: #F5F5F5;
+}
+.select-sort{
     background-color: #435681;
     color: var(--extra-light);
-
 }
 .style-sortType{
     background-color: #435681;
@@ -180,7 +184,7 @@ input[type="number"]::-webkit-inner-spin-button {
     right:0;
     position: absolute;
     border-radius: 5px;
-    background: #5392F9 ;
+    background: #27374D ;
 }
 .range-input {
     position: relative;
@@ -199,7 +203,7 @@ input[type="range"]::-webkit-slider-thumb {
     height: 17px;
     width: 17px;
     border-radius: 50%;
-    background: #5392F9;
+    background: #27374D;
     pointer-events: auto;
     -webkit-appearance: none;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
@@ -209,7 +213,7 @@ input[type="range"]::-moz-range-thumb {
     width: 17px;
     border: none;
     border-radius: 50%;
-    background:#5392F9;
+    background:#27374D;
     pointer-events: auto;
     -moz-appearance: none;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
@@ -329,13 +333,14 @@ input[type="range"]::-moz-range-thumb {
 
 .card-hotel{
     position: relative;
+
 }
 
 
 .course {
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     display: flex;
     max-width: 100%;
     overflow: hidden;
@@ -348,6 +353,8 @@ input[type="range"]::-moz-range-thumb {
 .course-preview {
     color: #fff;
     height: 200px;
+    min-width: 300px;
+    max-width: 305px;
     object-fit: cover;
 }
 

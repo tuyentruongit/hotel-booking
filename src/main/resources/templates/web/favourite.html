@@ -18,13 +18,13 @@
         <div class="container">
             <div class="row px-5 mt-5">
                 <div class="" th:if="${mapHotelFavouriteByCity.isEmpty()}">
-                    Chưa có khách sạn nào được thêm vào danh sách yêu thích
+                    <h1>Chưa có khách sạn nào được thêm vào mục yêu thích</h1>
                 </div>
                 <th:block th:if="${!mapHotelFavouriteByCity.isEmpty()}" >
                     <div class="col-12">
                         <h3>Danh dách yêu thích</h3>
                     </div>
-                    <div class="col-4" th:each="keyValue : ${mapHotelFavouriteByCity}">
+                    <div class="col-3" th:each="keyValue : ${mapHotelFavouriteByCity}">
 
                         <a class="favourite-by-city " th:href="@{/danh-sach-yeu-thich/{id}/{city} (id=${#authentication.principal.user.getId()},city=${keyValue.key})}">
                             <div class="card-city">

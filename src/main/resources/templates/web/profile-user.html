@@ -36,7 +36,7 @@
                 </a>
 
 
-                <a th:href="@{/logout}" class=" text-reset text-decoration-none" id="logout">
+                <a th:href="@{/logout}" class="profile-menu text-reset text-decoration-none" id="logout">
                     <span> <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</span>
                     <span> <i class="fa-solid fa-angle-right"></i></span>
                 </a>
@@ -56,26 +56,29 @@
                                 </div>
 
                                 <div class="col-2 d-flex flex-column">
-                                    <div class="avatar w-100 ">
-                                        <img class="" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+                                    <div class="avatar-upload-avatar">
+                                        <img id="image-user-information" class="" th:src="${#authentication.principal.user.getAvatar()}" alt="">
+                                        <button  type="button" class=" btn-upload-avatar" data-bs-toggle="modal" data-bs-target="#uploadImage">
+                                            Sửa
+                                        </button>
                                     </div>
-                                    <label for="avatar" class="btn-warning btn-upload-avatar">Thay ảnh</label>
-                                    <input type="file" id="avatar" class="d-none">
+
                                 </div>
                             </div>
                             <hr>
 
                             <div class="edit-name-user">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-3 d-flex align-items-center">
                                         <span class="w-100">Tên</span>
                                     </div>
                                     <div class="col-6 d-flex">
-                                        <div class="edit-name">
-                                            <input th:value="${#authentication.principal.user.getName()}"
-                                                   class="input-name-user" type="text" placeholder="Tên">
-
-                                        </div>
+                                       <form id="input-name-user">
+                                           <div class="edit-name form-group">
+                                               <input th:value="${#authentication.principal.user.getName()}"
+                                                      class="input-name-user form-control" type="text" placeholder="Tên" name="nameUser">
+                                           </div>
+                                       </form>
 
                                     </div>
 
@@ -85,7 +88,7 @@
 
                             <div class="edit-email-user">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-3 d-flex align-items-center">
                                         <span class="w-100">Địa chỉ email</span>
                                     </div>
                                     <div class="col-6 d-flex">
@@ -101,7 +104,7 @@
 
                             <div class="edit-phone-number-user">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-3 d-flex align-items-center">
                                         <span class="w-100">Số điện thoại</span>
                                     </div>
                                     <div class="col-6 d-flex">
@@ -117,49 +120,28 @@
 
                             <div class="edit-birthday-user">
                                 <div class="row">
-                                    <div class="col-3">
+                                    <div class="col-3 d-flex align-items-center">
                                         <span class="w-100">Ngày sinh</span>
                                     </div>
                                     <div class="col-6 d-flex">
-<!--                                        <div class="input-birth-day">-->
-<!--                                            <input class="day"  type="number" placeholder="Ngày sinh">-->
-
-<!--                                            <select name="select-day" id="select-day">-->
-<!--                                                <option th:each="" class="month" value="1" > 1</option>-->
-
-<!--                                            </select>-->
-<!--                                        </div>-->
-<!--                                        <div class="input-birth-day">-->
-<!--                                            <select name="select-month" id="select-month">-->
-<!--                                                <option class="month" value="1">Tháng 1</option>-->
-<!--                                                <option class="month" value="2">Tháng 2</option>-->
-<!--                                                <option class="month" value="3">Tháng 3</option>-->
-<!--                                                <option class="month" value="4">Tháng 4</option>-->
-<!--                                                <option class="month" value="5">Tháng 5</option>-->
-<!--                                                <option class="month" value="6">Tháng 6</option>-->
-<!--                                                <option class="month" value="7">Tháng 7</option>-->
-<!--                                                <option class="month" value="8">Tháng 8</option>-->
-<!--                                                <option class="month" value="9">Tháng 9</option>-->
-<!--                                                <option class="month" value="10">Tháng 10</option>-->
-<!--                                                <option class="month" value="11">Tháng 11</option>-->
-<!--                                                <option class="month" value="12">Tháng 12</option>-->
-
-<!--                                            </select>-->
-<!--                                        </div>-->
                                         <div class="input-birth-day">
-                                            <input class="year" type="number" placeholder="Năm sinh">
+                                            <select name="select-day" id="select-day">
+                                                <option class="day" th:each="day : ${#numbers.sequence(1,31)}" th:value="${day}"  th:text="${day}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="input-birth-day">
+                                            <select name="select-month" id="select-month">
+                                                <option class="month" th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}">
+                                                    Tháng <th:block th:text="${month}"></th:block>
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="input-birth-day">
+                                            <select name="select-year" id="select-year">
+                                                <option class="year" th:each="year : ${#numbers.sequence(1960,2023)}" th:value="${year}" th:text="${year}"></option>
+                                            </select>
                                         </div>
 
-                                                                                <div class="flatpickr">
-                                                                                    <input  id="date-birth-day" type="date" placeholder="Chọn ngày, tháng, năm sinh" data-input>
-                                                                                    <a class="input-button" title="toggle" data-toggle>
-                                                                                        <i class="icon-calendar"></i>
-                                                                                    </a>
-
-                                                                                    <a class="input-button" title="clear" data-clear>
-                                                                                        <i class="icon-close"></i>
-                                                                                    </a>
-                                                                                </div>
                                     </div>
 
                                 </div>
@@ -226,7 +208,7 @@
                             </div>
                             <div class="col-3 d-flex justify-content-center">
                                 <button type="button" class="btn-change-password" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">Đổi mật khẩu
+                                        data-bs-target="#changePassword">Đổi mật khẩu
                                 </button>
                             </div>
                         </div>
@@ -248,31 +230,69 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="uploadImage" tabindex="-1" aria-labelledby="modalUploadImage" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body d-flex justify-content-between py-4">
+                        <div class="avatar-modal">
+                            <img id="image-user-modal" class="" th:src="${#authentication.principal.user.getAvatar()}" alt="">
+                            <button th:classappend="${imageUser == null?'d-none':'d-block'}" class="btn text-danger" type="button" id="btn-delete-image-user">Xóa</button>
+                        </div>
+
+                        <div class="modal-body">
+                          <div class=" d-flex justify-content-between">
+                              <h1 class="modal-title fs-5" id="modalUploadImage">Chọn hình ảnh để tải lên </h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="showImageOld()"></button>
+                          </div>
+                            <div class="file-image">
+                                <label for="avatar" class="btn">Chọn tập tin</label>
+                                <input id="avatar" style="display:none;" type="file">
+
+                            </div>
+                           <div class="save-image d-flex justify-content-end mt-5">
+                               <button type="button" class="" id="saveImage" disabled>Lưu ảnh</button>
+                           </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Change Password -->
+        <div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="modalChangePassword" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Đổi mật khẩu</h1>
+                        <h1 class="modal-title fs-5" id="modalChangePassword">Đổi mật khẩu</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <label class="input-password">
-                            Mật khẩu hiện tại
-                            <input class="old-password" type="password" placeholder=" Mật khẩu hiện tại">
-                        </label>
-                        <label class="input-password">
-                            Mật khẩu mới
-                            <input class="new-password" type="password" placeholder="Mật khẩu mới">
-                        </label>
-                        <label class="input-password">
-                            Xác nhận mật khẩu mới
-                            <input class="confirm-password" type="password" placeholder="Nhập lại mật khẩu">
-                        </label>
+                       <form id="form-change-password">
+                          <div class="form-group">
+                              <label class="input-password">
+                                  Mật khẩu hiện tại
+                                  <input name="currentPassword" class="old-password form-control" type="password" placeholder=" Mật khẩu hiện tại">
+                              </label>
+                          </div>
+                          <div class="form-group">
+                              <label class="input-password">
+                                  Mật khẩu mới
+                                  <input  name="newPassword" class="new-password form-control" type="password" placeholder="Mật khẩu mới">
+                              </label>
+                          </div>
+                          <div class="form-group">
+                              <label class="input-password">
+                                  Xác nhận mật khẩu mới
+                                  <input  name="confirmNewPassword" class="confirm-password form-control" type="password" placeholder="Nhập lại mật khẩu">
+                              </label>
+                          </div>
+                       </form>
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn-change btn btn-primary"> Lưu lại thay đổi</button>
+                        <button type="button" class="btn-change "> Lưu lại thay đổi</button>
                     </div>
                 </div>
             </div>
@@ -286,6 +306,68 @@
 <th:block id="js">
     <script th:inline="javascript">
         let inforUser = [[${user}]];
+        const imageUser = [[${imageUser}]];
+        $('#input-name-user').validate({
+            rules: {
+                nameUser: {
+                    required: true,
+                },
+            },
+            messages: {
+                nameUser: {
+                    required: "Tên của bạn không được để trống.",
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+        $('#form-change-password').validate({
+            rules: {
+                currentPassword: {
+                    required: true,
+                }
+                ,newPassword: {
+                    required: true,
+                }
+                ,confirmNewPassword: {
+                    required: true,
+                },
+            },
+            messages: {
+                currentPassword: {
+                    required: "Mật khẩu không được để trống",
+                }
+                ,newPassword: {
+                    required: "Mật khẩu mới không được để trống",
+                }
+                ,confirmNewPassword: {
+                    required:"Vui lòng nhập lại mật khẩu mới của bạn",
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+
     </script>
     <script src="/web/assets/js/profile.js"></script>
 </th:block>

@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "reviews")
+@Builder
 public class Review {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -40,12 +41,12 @@ public class Review {
     @Column(name = "update_at")
     LocalDate updateAt;
 
-    @ManyToMany
-    @JoinTable(name = "reviews_hotelLikes",
-            joinColumns = @JoinColumn(name = "id_review"),
-            inverseJoinColumns = @JoinColumn(name = "id_hotelLike")
-    )
-    List<HotelLikes> reviews;
+//    @ManyToMany
+//    @JoinTable(name = "reviews_hotelLikes",
+//            joinColumns = @JoinColumn(name = "id_review"),
+//            inverseJoinColumns = @JoinColumn(name = "id_hotelLike")
+//    )
+//    List<HotelLikes> reviews;
 
     public String getRatingText() {
         if (rating == null) {

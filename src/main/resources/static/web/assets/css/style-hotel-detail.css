@@ -1,7 +1,7 @@
 
 /* style thanh tìm kiếm */
 .search{
-    background-color: #20274D;
+    background-color: #27374D;
 }
 
 .inputdata-search{
@@ -27,7 +27,7 @@
 }
 
 .btn-search{
-    background-color:#5392F9;
+    background-color:#9DB2BF;
     border-radius: 10px;
     border: none
 }
@@ -102,12 +102,10 @@ body {
     --gap: 5px;
     --num-cols: 4;
     --row-height: 150px;
-
     box-sizing: border-box;
     padding: var(--gap);
-
     display: grid;
-    grid-template-columns: repeat(var(--num-cols), 1fr);
+    grid-template-columns: repeat(var(--num-cols), 1fr) 1fr; /* Thêm một cột mới vào cuối */
     grid-auto-rows: var(--row-height);
     gap: var(--gap);
     border: none;
@@ -119,6 +117,8 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    outline: none;
+    border-radius: 5px;
 }
 
 .image-grid-col-2 {
@@ -133,11 +133,11 @@ body {
 
 .btn-list-favorite{
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
-    padding: 10px 15px;
+    padding: 10px ;
     border: 1px solid var(--text-light) ;
-    border-radius: 10px;
+    border-radius: 50%;
     background-color: white;
 }
 
@@ -163,9 +163,10 @@ body {
     font-size: 15px;
     color: rgb(235, 151, 17);
 }
-.desciption-hotel{
+.description-hotel{
     font-size: 15px;
-    font-family:Arial, Helvetica, sans-serif ;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .amenity-grid {
@@ -176,6 +177,7 @@ body {
 
 }
 .amenity-grid .grid-item{
+    white-space: nowrap;
     padding: 5px 0 ;
 
 }
@@ -185,6 +187,16 @@ body {
     margin-top: 10px;
     width: 30%;
     border-radius: 10px;
+}
+.image-map{
+    object-fit: cover;
+    width: 100%;
+    height: 150px;
+}
+.address-hotel{
+    white-space: nowrap;
+    overflow: hidden;    /* Ẩn phần text tràn ra */
+    text-overflow: ellipsis; /* Hiển thị dấu chấm lửng */
 }
 
 .ratting-hotel {
@@ -260,25 +272,36 @@ body {
     border-top-right-radius: 10px;
 }
 .btn-show-image-room{
-
     position: absolute;
     top: 150px;
     right: 10px;
     border: none;
-    background-color: white;
     border-radius: 10px;
     padding: 5px 10px ;
-    color: var(--text-light);
+    color: var(--text-dark);
+    background: rgba(255, 255, 255, 0.5); /* Background xuyên thấu */
 }
-.amenity-room span{
+.room-index {
+    display: flex;
     font-size: 15px;
+    margin: 5px 0px;
 
 }
+.icon-room-index{
+    width: 25px;
+    height: 25px;
+    display: flex;align-items: center;justify-content: center;
+}
+.icon-room-index i{
+    font-size: 17px;
+}
+
+
 .discount{
     border: none;
     letter-spacing: 0.5px; /* Điều chỉnh khoảng cách giữa các ký tự */
     border-radius: 5px;
-    background-color:#E03126;
+    background-color:#40A578;
 
     font-size: 15px;
     color: var(--extra-light);
@@ -294,7 +317,7 @@ body {
 }
 .description-price {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-
+    width: 50%;
     color: var(--text-light);
     font-size: 12px;
     margin: 5px 0px ;
@@ -306,18 +329,19 @@ body {
     right: 15px;
     border: none;
     border-radius: 20px;
-    background-color: #1668E3;
-    color: var(--white);
+    background-color: #526D82;
     display:flex;
     justify-content: center;
     align-items: center;
     padding: 5px 15px;
+    color: #F5F5F5 !important;
 }
 
 /*  style chính sách khách sạn */
 .policy-hotel{
     border: 1px solid #DFE0E4;
     border-radius: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 
@@ -325,7 +349,11 @@ body {
 
 /* style review */
 .wrapper-review{
-    background-color: #F5F5F5;
+    border-radius: 20px;
+}
+.ratting-hotel-detail{
+    background-color: #DDE6ED;
+    border-radius: 20px;
 }
 
 .ratting-hotel-detail{
@@ -341,6 +369,28 @@ body {
     padding: 5px;
     border: 1px solid #DFE0E4;
     border-radius: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.creatAt-review{
+    font-size: 14px;
+    margin-left: 10px;
+}
+.name-user-review{
+  margin-bottom: 0;
+    margin-left: 10px;
+}
+.content-review{
+    margin-left: 10px;
+    margin-top: 5px;
+
+}
+.warp-button-edit{
+    padding:0!important;
+}
+.btn-edit-review{
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 
@@ -372,3 +422,201 @@ body {
 
 }
 
+
+.rating {
+    font-size: 24px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.star {
+    display: inline-block;
+}
+
+.star:hover,
+.star.active {
+    color: #EDBB0E;
+}
+
+#reviewContent{
+    height: 150px;
+}
+
+
+/* modal - ảnh khách sạn*/
+.modal-xl{
+    width: 1000px !important;
+}
+
+.modal-image{
+    display: grid;
+    overflow-y: auto; /* Kích thước thanh trượt sẽ xuất hiện khi nội dung vượt quá kích thước */
+    max-height: 500px;
+
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+}
+.modal-image img{
+    width: 100%;
+    height: 270px;
+    border-radius: 5px;
+}
+.list-filter-image{
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+.btn-filter-type-image{
+    border: 1px solid var(--text-light);
+    min-width: 100px;
+    border-radius: 20px;
+    padding: 5px 5px;
+    margin: 5px 3px;
+    font-size: 13px;
+
+    background-color: white;
+}
+.btn-filter-type-image:focus{
+    border: 1px solid var(--text-light);
+    min-width: 100px;
+    border-radius: 20px;
+    padding: 5px 5px;
+    margin: 5px 3px;
+    font-size: 13px;
+
+
+    background-color: #ECF4FD;
+}
+.container-modal-image{
+    border-radius: 20px !important;
+}
+
+/* modal amenity hotel */
+.btn-show-amenity-hotel{
+    font-size: 14px;
+}
+.show-amenity-hotel{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 7px;
+}
+.title-amenity-hotel{
+    margin-left: 1rem;
+    font-size: 18px;
+}
+.title-service{
+    margin-left: 1rem;
+    font-size: 18px;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+
+.icon-amenity{
+    margin-right: 10px;
+
+}
+.name-amenity{
+    font-size: 14px !important;
+}
+.btn-show-detail-room{
+    border: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.container-modal-room-detail{
+    width: 700px!important;
+}
+.modal-room-detail img{
+    object-fit: cover;
+    height: 350px!important;
+}
+
+/**/
+.slider-main {
+    position: relative;
+}
+
+.slider-main .fa-angle-left {
+    position: absolute;
+    top: 40%;
+    left: 10px;
+    font-size: 20px;
+    color: #0d6efd;
+    background-color: #F5F5F5;
+    padding: 8px 12px;
+    border-radius: 50%;
+
+}
+
+
+
+.slider-main .fa-angle-right {
+    position: absolute;
+    top: 40%;
+    right: 10px;
+    font-size: 20px;
+    color: #0d6efd;
+    background-color: #F5F5F5;
+    padding: 8px 12px;
+    border-radius: 50%;
+}
+
+.slider-main img{
+    border-radius: 15px;
+}
+.btn-close{
+    border: 1px solid var(--text-light);
+    border-radius: 50%;
+}
+.information-room .name-hotel{
+    font-size: 25px;
+}
+.wrap-icon{
+    margin: 15px;
+    display: flex;
+    align-content: center;
+}
+.icon-amenity{
+    width: 30px;
+    margin-right: 20px;
+}
+.icon-amenity i{
+    font-size: 20px;
+}
+.name-amenity-modal{
+    font-size: 17px;
+    font-weight: 500;
+}
+.title-amenity-room{
+    font-size: 25px;
+}
+.amenity-room-detail{
+    margin: 15px;
+}
+
+.wrap-amenity-room{
+    min-width: 50%;
+}
+.title-amenity-type{
+    margin-left: 10px;
+}
+.wrap-modal{
+    border: 1px solid var(--text-light);
+    border-radius: 10px;
+    padding: 15px;
+}
+.title-price-modal{
+    font-size: 20px;
+}
+.price-room-new{
+padding: 0;
+    margin-bottom: 0;
+    margin-right: 11px;
+}
+.price-room-modal{
+    display: flex;
+    align-items: center;
+}
+.original-price-modal{
+    font-size: 13px;
+}

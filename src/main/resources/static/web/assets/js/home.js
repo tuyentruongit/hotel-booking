@@ -20,13 +20,13 @@ $('.owl-carousel').owlCarousel({
     dots: false,
     responsive:{
         0:{
-            items:1.2
-        },
-        600:{
             items:2.2
         },
-        1000:{
+        600:{
             items:3.2
+        },
+        1000:{
+            items:4.2
         }
     }
 })
@@ -95,13 +95,22 @@ const showHotelCity = document.getElementById("show-hotel-city");// btn chuyển
 
 // chuyển hướng tới trang sanh sách khi người dùng click vào ô tìm kiếm
 btnSearch.addEventListener('click' ,()=>{
+    if (!$('#name-city').valid()) return;
     let nameCity = inputNameCity.value;
     navigation(nameCity);
 
 });
 
+inputNameCity.addEventListener('keydown',(e)=>{
+    if (!$('#name-city').valid()) return;
+
+    if (e.key === 'Enter'){
+        navigation(inputNameCity.value);
+    }
+})
+
 // click vào các khách sạn sẽ chuyển hướng tới trang danh sách khách sạn theo thành phố người dùng đã chọn
-showHotelCity.addEventListener('click' , (inputNameCity)=>{
+showHotelCity.addEventListener('click' , (e)=>{
     let nameCity= showHotelCity.getAttribute('value');
     console.log(nameCity);
     navigation(nameCity);
@@ -195,7 +204,7 @@ const renderCityData = (value) => {
             renderHotel(data);
         })
         .catch((err) => {
-            console.log("Error");
+           console.log(err)
         });
 };
 
@@ -219,20 +228,21 @@ const renderHotel = (data) =>{
 
     let html = '';
     let count = 1 ;
-    data.forEach((hotel)=>{
+    data.forEach((hotel)=> {
+        // <span class="p-1 m-0 h-100" >(${hotel.reviews.length}nhận xét)</span>
         // console.log(hotel.city.name , checkIn , checkOut)
-        if (count>8){
+        if (count > 8) {
             return;
         }
-        html +=`
+        html += `
                     <div class="col-3 h-100">
                         <a class="card mb-5 text-reset text-decoration-none  h-100" href="/chi-tiet-khach-san/${hotel.id}?nameCity=${hotel.city.name}&checkIn=${dateStartString}&checkOut=${dateEndString}">
-                            <img class="image-hotel" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="Ảnh Hotel">
+                            <img class="image-hotel" src="/web/assets/image/dep.jpg" alt="Ảnh Hotel">
                             <div class="p-2 h-100">
                                 <div class="d-flex justify-content-start align-content-center h-100">
                                     <span class="p-1 m-0 score-rating h-100">${hotel.rating.toFixed(1)}</span>
                                     <span class="p-1 m-0 h-100" >${hotel.ratingText}</span>
-                                    <span class="p-1 m-0 h-100" >(${hotel.reviews.length}nhận xét)</span>
+                                   
                                 </div>
                             
                                 <h5 class="p-0 m-0 h-100" >${hotel.name}</h5>
@@ -256,7 +266,7 @@ const renderHotel = (data) =>{
         count++;
 
     })
-    listCardHotel.innerHTML=html;
+    listCardHotel.innerHTML = html;
 
 
 }

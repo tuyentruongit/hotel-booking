@@ -6,45 +6,84 @@ flatpickr("#date-birth-day", {
     maxDate : "today",
     separator: "",
 });
-const proFileMenu = document.querySelectorAll('.profile-menu');
+const proFileMenu = document.querySelectorAll('.profile-menu')
+
+// truy cập vào các node thông tin người dùng để render dữ liêu
 const inputName = document.querySelector('.input-name-user');
 const inputPhoneNumber = document.querySelector('.input-phone');
 const inputAddress = document.querySelector('.address');
-// const listMonth = document.querySelectorAll('.month')
-// const inputDay = document.querySelector('.day');
-// const inputYear = document.querySelector('.year');
-// const selectMonth = document.getElementById('listMonth')
+const inputMonth = document.querySelectorAll('.month')
+const inputDay = document.querySelectorAll('.day');
+const inputYear = document.querySelectorAll('.year');
 
 const date = document.getElementById('date-birth-day');
 const listGender = document.querySelectorAll('.gender-option');
 
+// lấy ngày tháng năm sinh từ các ô option để update dữ liệu
+const  getBirthday = () =>{
+    let dayBirthday = null;
+    inputDay.forEach(optionDay =>{
+        if (optionDay.selected === true){
+            dayBirthday = optionDay.value
+            console.log(dayBirthday)
+        }
+    })
+    let monthBirthday = null;
+    inputMonth.forEach(optionMonth =>{
+        if (optionMonth.selected === true){
+            monthBirthday = optionMonth.value
+            console.log(monthBirthday)
+        }
+    })
+    let yearBirthday = null;
+    inputYear.forEach(optionYear =>{
+        if (optionYear.selected === true){
+            yearBirthday = optionYear.value
+            console.log(yearBirthday)
+        }
+    })
+    return monthBirthday + '-' + dayBirthday + '-' + yearBirthday;
+}
 
 
 
 
-// let month="";
+
+
+
+
+// hiện dữ liệu của người dùng khi vào trang user
 const renderData = ()=>{
+    let birthdayUser =  new Date( inforUser.birthDay);
     inputName.value = inforUser.name;
     inputPhoneNumber.value = inforUser.phoneNumber;
     inputAddress.value = inforUser.address;
-    // flatpickr("#date-birth-day", {
-    //     altInput: true,
-    //     altFormat: "Y-m-d", // Custom altFormat
-    //     dateFormat: "d-m-Y",
-    //     minDate: "01-01-1900",
-    //     maxDate : "today",
-    //     separator: "",
-    //     defaultDate: inforUser.birthDay, // Sử dụng giá trị đã chuyển đổi của LocalDate
-    //
-    // });
-
     listGender.forEach((gender) =>{
         if (gender.value === inforUser.gender){
             gender.selected = true
         }
     })
 
+    inputDay.forEach(optionDay =>{
+        if (optionDay.value === birthdayUser.getDate().toString()){
+            optionDay.selected = true
+        }
+    })
+    inputMonth.forEach(optionMonth =>{
+        if (optionMonth.value === (birthdayUser.getMonth()+1).toString()){
+            optionMonth.selected = true
+        }
+    })
+    let yearBirthday = null;
+    inputYear.forEach(optionYear =>{
+        if (optionYear.value === birthdayUser.getFullYear().toString()){
+            optionYear.selected = true
+        }
+    })
+
 }
+
+
 
 
 proFileMenu.forEach(btn =>{
@@ -60,7 +99,6 @@ proFileMenu.forEach(btn =>{
                 document.querySelector('.content-setting').classList.add('d-none');
                 document.querySelector('.setting-account').classList.remove('d-none');
                 break;
-
         }
 
     })
@@ -71,51 +109,67 @@ proFileMenu.forEach(btn =>{
 
 
 
-
-
-
-const btnSave = document.querySelector('.btn-save');
+// tạo ra form date 00/00/0000
 const formatDate = (dateString) => {
+    console.log( 'đầu vào'+dateString)
     const date = new Date(dateString);
+    console.log( 'tạo date'+date)
+
+
+
+    const day = `0${date.getDate()}`.slice(-2); // `05` -> 05 , '015' -> 15
+    console.log( 'ngày'+day)
+    const month = `0${date.getMonth() + 1}`.slice(-2);
+    console.log( 'tháng'+month)
+
+    const year = date.getFullYear();
+    console.log( 'năm'+year)
+
+    console.log(`${month}/${day}/${year}`)
+
+    return `${day}/${month}/${year}`;
 };
+
+// gọi api khi ấn vào nút lưu , cập nhật dữ liệu cho người dùng
+const btnSave = document.querySelector('.btn-save');
 btnSave.addEventListener('click' ,()=>{
-    // listMonth.forEach((op) =>{
-    //     if (op.selected){
-    //         month=op.value;
-    //     }
-    // })
+    if (!$('#input-name-user').valid()) return;
+
+    // lấy ra gender người dùng đang chọn
     let gender = '';
     listGender.forEach((genderEl) =>{
         if (genderEl.selected){
             gender=genderEl.value;
         }
     })
-    console.log(gender)
 
-    const date = document.getElementById('date-birth-day');
-    console.log( date.value)
+    // lấy ngày sinh nhật người dùng đang  chọn
+    const birthdayUser = formatDate(getBirthday());
+    console.log(birthdayUser)
     const  dataUser ={
         name : inputName.value,
         phone: inputPhoneNumber.value,
         gender : gender,
         address : inputAddress.value,
-        birthDay : date.value
+        birthDay : birthdayUser
     }
+
+    // gọi api
     axios.put("/api/auth/update-user/"+inforUser.id , dataUser)
         .then((response)=>{
-            console.log("Cập nhật thành công")
+            toastr.success("Đã cập nhật thông tin của bạn")
         })
         .catch((err)=>{
-            console.log("Lỗi rồi mầy ơi")
+            toastr.success("Thất bại")
         })
 
 
 })
-renderData()
 
 
 const btnChangePassword = document.querySelector('.btn-change');
 btnChangePassword.addEventListener('click',()=>{
+    if ( !$('#form-change-password').valid()) return;
     const password = document.querySelector('.old-password');
     const newPassword = document.querySelector('.new-password');
     console.log( password.value)
@@ -128,9 +182,116 @@ btnChangePassword.addEventListener('click',()=>{
     }
     axios.put("/api/auth/change-password/"+inforUser.id ,data)
         .then((response) =>{
-            console.log("Đổi được rồi ")
+            modalChangePassword.hide()
+            toastr.success("Thay đổi mật khẩu thành công")
         })
         .catch((err)=>{
-            console.log(err)
+            toastr.success("Mật khẩu không trùng khớp")
         })
 })
+
+
+const inputImage = document.getElementById('avatar');
+const imageModal = document.getElementById('image-user-modal');
+const imageUserInformation = document.getElementById('image-user-information');
+const saveImage = document.getElementById('saveImage');
+
+
+
+// modal thay đổi mật khẩu
+const modalChangePassword = new bootstrap.Modal('#changePassword', {
+    keyboard: false
+})
+// modal thay đổi avatar
+const modalUploadImage = new bootstrap.Modal('#uploadImage', {
+    keyboard: false
+})
+// // modal thay đổi mật khẩu
+// const modalLogout = new bootstrap.Modal('#changePassword', {
+//     keyboard: false
+// })
+
+let formData = new FormData();
+let file = null
+
+// lắng nghe sự kiện khi user upload file
+inputImage.addEventListener('input',(e)=>{
+    // lấy ra thông tin file upload
+    let file = e.target.files[0];
+    showImageForElement(file,imageModal)
+    // lưu vào đối tượng form data
+    formData.append('file',file);
+    saveImage.disabled=false;
+    console.log(formData)
+})
+
+
+// lưu ảnh vừa upload lên sever
+saveImage.addEventListener('click',(e)=>{
+    // gọi api để đẩy dữ liệu ảnh lên
+    axios.post('api/images/upload/user',formData)
+        .then((response)=>{
+            saveImage.disabled=true;
+            modalUploadImage.hide();
+            imageModal.src=response.data.url
+            imageUserInformation.src=response.data.url
+            document.querySelector('.img-user-nav-bar').src=response.data.url
+            toastr.success("Cập nhật avatar thành công")
+
+        })
+        .catch((err)=>{
+            toastr.error(err.data.message)
+
+        })
+
+})
+
+
+const btnDeleteImageUser = document.getElementById('btn-delete-image-user');
+// xử lý khi click vaào button xóa image
+btnDeleteImageUser.addEventListener('click',(e)=>{
+    e.preventDefault();
+    // gọi api để đẩy dữ liệu ảnh lên
+    axios.delete('api/images/delete/user/'+imageUser.id)
+        .then((response)=>{
+            btnDeleteImageUser.classList.add('d-none')
+            modalUploadImage.hide()
+            toastr.success("Xóa avatar thành công")
+
+        })
+        .catch((err)=>{
+            toastr.error(err.data.message)
+        })
+
+
+})
+
+// show image vừa chọn ra client nhưng chưa được dược lưu
+const showImageForElement = (file,elementShow)=>{
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            var content = event.target.result;
+            var fileType = file.type;
+
+            // Kiểm tra nếu tệp tin là hình ảnh
+            if (fileType && fileType.startsWith('image')) {
+                elementShow.src=content
+            } else {
+
+                // Hiển thị nội dung văn bản cho các loại tệp tin khác
+                elementShow.innerText = content;
+            }
+        };
+        reader.readAsDataURL(file);
+    } else {
+        imageModal.innerText = 'Chưa chọn tệp tin.';
+    }
+}
+
+const showImageOld = () => {
+    imageModal.src = imageUser.url;
+    formData = new FormData();
+}
+
+renderData()

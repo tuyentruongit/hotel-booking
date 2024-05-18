@@ -5,9 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.*;
 import methodsecuritynew.bookingapp.model.response.VerifyAccountResponse;
-import methodsecuritynew.bookingapp.model.statics.Gender;
-import methodsecuritynew.bookingapp.model.statics.PaymentMethod;
-import methodsecuritynew.bookingapp.model.statics.SupportType;
+import methodsecuritynew.bookingapp.model.statics.*;
 import methodsecuritynew.bookingapp.repository.BookingRepository;
 import methodsecuritynew.bookingapp.service.*;
 
@@ -39,6 +37,9 @@ public class WebController {
     private final HotelService hotelService;
     private final HttpSession session;
     private  final BookingRepository bookingRepository;
+    private final ReviewsService reviewsService;
+    private final ImageService imageService;
+
 
     @GetMapping("/")
     public String getHome(Model model) {
@@ -59,9 +60,7 @@ public class WebController {
 
         List<Hotel> hotelList = hotelService.getHotelBySearch(nameCity, checkIn, checkOut, numberGuest, numberRoom);
         if (session.getAttribute("MY_SESSION")!= null) {
-            System.out.println(session.getAttribute("MY_SESSION"));
             List<Hotel> hotelFavourite = hotelService.getAllHotelFavourite((String) session.getAttribute("MY_SESSION"));
-            System.out.println("dữ liệu"+hotelFavourite);
             model.addAttribute("hotelFavourite", hotelFavourite);
         }
 
@@ -85,6 +84,9 @@ public class WebController {
                                  @RequestParam(required = false, defaultValue = "1") Integer numberRoom) {
         Hotel hotel = hotelService.getHotelById(id);
         List<Room> roomList = roomService.getRoomByIdHotel(id);
+        List<Review> reviewList = reviewsService.findAllReview(id);
+
+        model.addAttribute("reviewList" , reviewList);
         model.addAttribute("hotel", hotel);
         model.addAttribute("roomList", roomList);
         model.addAttribute("nameCity", nameCity);
@@ -92,7 +94,17 @@ public class WebController {
         model.addAttribute("checkOut", checkOut);
         model.addAttribute("numberGuest", numberGuest);
         model.addAttribute("numberRoom", numberRoom);
+        if (session.getAttribute("MY_SESSION")!=null){
+            User user = authService.getUserCurrent();
+            model.addAttribute("user" , user);
+        }
+        List<ImageType> imageTypes = List.of(ImageType.values());
+        model.addAttribute("imageTypes", imageTypes);
+        List<AmenityRoomType> amenityRoomTypes = List.of(AmenityRoomType.values());
+        model.addAttribute("amenityRoomTypes", amenityRoomTypes);
+
         return "web/hotel-detail";
+
     }
 
 
@@ -106,13 +118,17 @@ public class WebController {
         return "web/support";
     }
 
-    @Secured({"ROLE_USER"})
+    @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
     @GetMapping("/thong-tin-khach-hang")
     public String getProfile(Model model) {
         List<Gender> list = Arrays.stream(Gender.values()).toList();
         model.addAttribute("listGender", list );
         User user = authService.getUserCurrent();
         model.addAttribute("user" , user);
+
+        ImageUser imageUser = imageService.getImageCurrentUser(user.getId());
+        model.addAttribute("imageUser" , imageUser);
+
         return "web/profile-user";
     }
 
@@ -138,7 +154,6 @@ public class WebController {
     public String getCancelBooking(Model model, @PathVariable Integer id) {
         Booking booking = bookingRepository.findById(id).get();
         model.addAttribute("booking",booking);
-
         return "web/cancel-booking";
     }
     @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})

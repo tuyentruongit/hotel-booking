@@ -1,8 +1,4 @@
 
-body{
-    background-color: #F9F9F9;
-
-}
 .content-page{
     margin: 20px 0px;
     min-height: 500px;
@@ -14,27 +10,28 @@ body{
     margin: 10px 0;
 }
 .filter-booking button{
+    background-color:#526D82;
+    padding: 5px 0;
     display: flex;
     justify-content: center;
     border: none;
     width: 100%;
     border-radius: 10px;
-    background-color: #F9F9F9;
+    color: #F5F5F5;
 }
 .filter-booking button:hover{
-    background-color:#EDF0F9;
-
+    background-color: #27374D;
+    color: #F5F5F5;
 }
 .sort-booking{
     border: 1px solid #E7E7E7;
     padding: 10px 15px;
     border-radius: 30px;
-    background-color: white;
+    background-color: #DDE6ED;
 }
 .sort-booking .select-type-sort select{
    border: none;
-    background-color: white;
-}
+    background-color: #DDE6ED;}
 .sort-booking .select-type-sort select:focus{
     border: none;
 }
@@ -42,12 +39,12 @@ body{
     border: 1px solid #E7E7E7;
     padding: 10px 15px;
     border-radius: 30px;
-    background-color: #EDF0F9;
+    background-color: #DDE6ED;
 }
 .search-by-id-booking input {
     border: none;
     width: 300px;
-    background-color: #EDF0F9;
+    background-color: #DDE6ED;
     margin-left: 5px;
 
 }
@@ -68,6 +65,7 @@ body{
     padding: 10px 10px;
     margin: 10px 0px;
     border-radius:20px ;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 .infor-booking{
     height: 120px;

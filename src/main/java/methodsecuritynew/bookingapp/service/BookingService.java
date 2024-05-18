@@ -53,7 +53,7 @@ public class BookingService {
                 .price(bookingRequest.getPrice())
                 .numberRoom(bookingRequest.getNumberRoom())
                 .paymentMethod(paymentMethod)
-               .statusBooking(StatusBooking.PENDING)
+               .statusBooking(StatusBooking.COMPLETE)
                .createAt(LocalDateTime.now())
                 .build();
        return bookingRepository.save(booking);

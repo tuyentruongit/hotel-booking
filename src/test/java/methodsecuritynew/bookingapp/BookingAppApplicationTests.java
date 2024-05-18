@@ -111,7 +111,7 @@ class BookingAppApplicationTests {
         Faker faker = new Faker();
         Random random = new Random();
 
-//        City city = cityRepository.findCityByName("Hồ Chí Minh");
+//        City city = cityRepository.findCityByName("Hà Nội");
         List<City> list = cityRepository.findAll();
         List<AmenityHotel> amenityHotels = amenityHotelRepository.findAll();
 
@@ -130,7 +130,7 @@ class BookingAppApplicationTests {
                     .email(faker.internet().emailAddress())
                     .description(faker.lorem().paragraph())
                     .address(faker.address().fullAddress())
-                    .city(list.get(random.nextInt(0, list.size())))
+                    .city(list.get(random.nextInt(1,63)))
                     .policyHotel(policyRepository.findAll().get(40+i))
                     .star(faker.number().numberBetween(1, 5))
                     .hotline(faker.phoneNumber().phoneNumber())
@@ -222,7 +222,6 @@ class BookingAppApplicationTests {
 
         List<Hotel> hotelList = hotelRepository.findAll();
 
-
         Faker faker = new Faker();
         Random random = new Random();
         List<Room> roomList = roomRepository.findAll();
@@ -236,6 +235,7 @@ class BookingAppApplicationTests {
                     .updateAt(LocalDate.now())
                     .room(roomList.get(random.nextInt(roomList.size())))
                     .build();
+
 
 
             bedRepository.save(bed);

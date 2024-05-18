@@ -87,20 +87,22 @@
                 <div class="col-8">
                     <div class=" infor-customer  p-3 my-3">
                         <h5 >Nhập thông tin chi tiết của bạn</h5>
-                        <div class="name-customer d-flex">
-                            <div class="w-50 px-3">
-                                <h6>Tên</h6>
-                                <input th:value="${#authentication.principal.user.getName()}" class="w-100 name-customer-value" type="text" placeholder="Nhập tên của bạn">
+                        <form id="info-customer">
+                            <div class="name-customer d-flex">
+                                <div class="w-50 px-3 form-group">
+                                    <h6>Tên</h6>
+                                    <input name="nameCustomer" th:value="${#authentication.principal.user.getName()}" class=" form-control w-100 name-customer-value" type="text" placeholder="Nhập tên của bạn">
+                                </div>
+                                <div class="w-50 px-3 form-group">
+                                    <h6>Email</h6>
+                                    <input name="emailCustomer" th:value="${#authentication.principal.user.getEmail()}" class="form-control w-100 email-customer-value" type="email" placeholder="Nhập email của bạn">
+                                </div>
                             </div>
-                            <div class="w-50 px-3">
-                                <h6>Email</h6>
-                                <input th:value="${#authentication.principal.user.getEmail()}" class="w-100 email-customer-value" type="email" placeholder="Nhập email của bạn">
+                            <div class="phone w-50 px-3 mt-3 form-group">
+                                <h6 class="m-0 p-0">Số điện thoại</h6>
+                                <input name="phoneCustomer" class="form-control phone-customer-value w-100" type="text" placeholder="Nhập số điện thoại của bạn">
                             </div>
-                        </div>
-                        <div class="phone w-50 px-3 mt-3">
-                            <h6 class="m-0 p-0">Số điện thoại</h6>
-                            <input class="phone-customer-value w-100" type="text" placeholder="Nhập số điện thoại của bạn">
-                        </div>
+                        </form>
                     </div>
                     <div class=" payment-type p-3 my-3">
                         <form class="">
