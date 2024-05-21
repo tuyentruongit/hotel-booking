@@ -242,7 +242,7 @@ const renderHotel = (data) =>{
                                 <div class="d-flex justify-content-start align-content-center h-100">
                                     <span class="p-1 m-0 score-rating h-100">${hotel.rating.toFixed(1)}</span>
                                     <span class="p-1 m-0 h-100" >${hotel.ratingText}</span>
-                                   
+                                  
                                 </div>
                             
                                 <h5 class="p-0 m-0 h-100" >${hotel.name}</h5>

@@ -18,10 +18,10 @@ formRegister.addEventListener('submit' ,(e)=>{
 
     axios.post("/api/auth/register",data)
         .then((res) =>{
-            window.location.href = "http://localhost:9000/";
+           toastr.success("Đăng ký thành công. Vui lòng kiểm tra email xác thực tài khoản ")
         })
         .catch((er)=>{
-            console.log("Nhập sai rồi mày ơi");
+            toastr.success("Đăng ký thất bại ")
         })
 })
 

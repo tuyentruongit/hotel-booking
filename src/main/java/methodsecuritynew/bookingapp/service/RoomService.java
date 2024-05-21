@@ -17,8 +17,8 @@ public class RoomService {
     }
 
     public Room getRoomById(Integer idRoom) {
-        roomRepository.findById(idRoom);
-        return roomRepository.findById(idRoom).get();
+
+        return  roomRepository.findById(idRoom).orElseThrow(()-> new RuntimeException("Không tìm thấy phòng có id: " + idRoom));
     }
 
 }

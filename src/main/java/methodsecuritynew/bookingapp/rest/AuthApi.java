@@ -24,6 +24,7 @@ public class AuthApi {
         return new  ResponseEntity<>(authService.register(registerRequest), HttpStatus.CREATED);
 
     }
+
     @PutMapping("/update-user/{id}")
     public ResponseEntity<?> updateUser(@RequestBody ChangeInformationUserRequest changeInformationUserRequest, @PathVariable Integer id){
         authService.updateUser(id,changeInformationUserRequest);
@@ -37,8 +38,8 @@ public class AuthApi {
 
     }
     @PutMapping("/password-retrieval")
-    public ResponseEntity<?> changePassword(@RequestBody UpsertPasswordRetrieval upsertPasswordRetrieval){
-        authService.changePassword(upsertPasswordRetrieval);
+    public ResponseEntity<?> changePasswordForForgetPassword(@RequestBody UpsertPasswordRetrieval upsertPasswordRetrieval){
+      authService.changePasswordForForgetPassword(upsertPasswordRetrieval);
         return ResponseEntity.ok().build();
 
     }
@@ -46,6 +47,5 @@ public class AuthApi {
     public ResponseEntity<?> forgotPassword(@RequestParam String email){
         authService.forgotPassword(email);
         return ResponseEntity.ok().build();
-
     }
 }

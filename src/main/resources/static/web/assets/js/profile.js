@@ -1,11 +1,4 @@
-flatpickr("#date-birth-day", {
-    altInput: true,
-    altFormat: "d-m-Y", // Custom altFormat
-    dateFormat: "d-m-Y",
-    minDate: "01-01-1900",
-    maxDate : "today",
-    separator: "",
-});
+
 const proFileMenu = document.querySelectorAll('.profile-menu')
 
 // truy cập vào các node thông tin người dùng để render dữ liêu
@@ -160,7 +153,7 @@ btnSave.addEventListener('click' ,()=>{
             toastr.success("Đã cập nhật thông tin của bạn")
         })
         .catch((err)=>{
-            toastr.success("Thất bại")
+            toastr.error(err.response.data.message)
         })
 
 
@@ -172,12 +165,14 @@ btnChangePassword.addEventListener('click',()=>{
     if ( !$('#form-change-password').valid()) return;
     const password = document.querySelector('.old-password');
     const newPassword = document.querySelector('.new-password');
+    const confirmPassword = document.querySelector('.confirm-password');
     console.log( password.value)
     console.log( newPassword.value)
 
     const data = {
         oldPassword : password.value,
-        newPassword:  newPassword.value
+        newPassword:  newPassword.value,
+        confirmPassword:  confirmPassword.value
 
     }
     axios.put("/api/auth/change-password/"+inforUser.id ,data)
@@ -186,7 +181,7 @@ btnChangePassword.addEventListener('click',()=>{
             toastr.success("Thay đổi mật khẩu thành công")
         })
         .catch((err)=>{
-            toastr.success("Mật khẩu không trùng khớp")
+            toastr.error(err.data.message)
         })
 })
 
@@ -241,7 +236,6 @@ saveImage.addEventListener('click',(e)=>{
         })
         .catch((err)=>{
             toastr.error(err.data.message)
-
         })
 
 })
@@ -293,5 +287,6 @@ const showImageOld = () => {
     imageModal.src = imageUser.url;
     formData = new FormData();
 }
+
 
 renderData()

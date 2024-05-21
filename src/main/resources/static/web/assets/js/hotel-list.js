@@ -1,3 +1,8 @@
+
+let currentPage = 1 ;
+let hotels = [];
+let totalPage = null;
+
 $("#date-range").flatpickr({
     mode: "range",
     showMonths: 2,
@@ -13,7 +18,6 @@ const rangeInput = document.querySelectorAll(".range-input input"),
     priceInput = document.querySelectorAll(".price-input input"),
     range = document.querySelector(".slider .progress");
 let priceGap = 1000;
-
 priceInput.forEach((input) => {
     input.addEventListener("input", (e) => {
         let minPrice = parseInt(priceInput[0].value),
@@ -31,7 +35,6 @@ priceInput.forEach((input) => {
         }
     });
 });
-
 rangeInput.forEach((input) => {
     input.addEventListener("input", (e) => {
         let minVal = parseInt(rangeInput[0].value),
@@ -110,7 +113,7 @@ let inputNameCity = document.getElementById('input-name-city');
 
 
 btnSearch.addEventListener('click', () => {
-
+    if (!$('#form-search').valid()) return;
 
     const date = document.getElementById('date-range');
     const dateString = date.value;
@@ -120,11 +123,9 @@ btnSearch.addEventListener('click', () => {
 
     // Phần đầu tiên là ngày bắt đầu
     const dateStartString = dateParts[0];
-    console.log(dateStartString)
 
     // Phần thứ hai là ngày kết thúc
     const dateEndString = dateParts[1];
-    console.log(dateEndString)
 
     window.location.href = "/danh-sach-khach-san?" +
         "nameCity=" + inputNameCity.value + "&checkIn=" + dateStartString +
@@ -138,7 +139,9 @@ const renderDataSearch = (nameCity, numGuest, numRoom) => {
         numberGuest.textContent = numGuest;
     }
     if (numRoom < 10) {
-        numRoom.textContent = "0" + numRoom;
+        console.log(numberGuest);
+        console.log(numberRoom);
+        numberRoom.textContent = "0" + numRoom;
     } else {
         numberRoom.textContent = numRoom;
     }
@@ -146,19 +149,33 @@ const renderDataSearch = (nameCity, numGuest, numRoom) => {
     inputNameCity.value = nameCity
 }
 
-// khi vừa vào trang thì render ra dữ liệu
-window.addEventListener('load', () => {
-    // data hotel
-    renderListHotel(hotelList);
-    // data input tìm kiếm
-    renderDataSearch(nameCity, valueNumberGuest, valueNumberRoom);
-})
+
+
 
 // thẻ chứa phần caard của  hotel đề xuất
 const containerParent = document.querySelector('.container-parent');
 
 
-let data = hotelList.slice();
+
+const searchByNameHotel = document.querySelector('.input-name-hotel');
+searchByNameHotel.addEventListener('keydown',(event)=>{
+    console.log(event)
+
+    if (event.key === 'Enter'){
+        let keyWord = searchByNameHotel.value.trim();
+        if (keyWord){
+            const  data = hotels.filter(hotel =>
+                hotel.name.toLowerCase().includes(keyWord.toLowerCase()))
+            renderListHotel(data)
+
+        }else {
+            renderListHotel(hotels);
+        }
+
+    }
+
+})
+let data = hotels.slice();
 let sortHeightRating = () => {
     data.sort((hotel1, hotel2) => hotel2.rating - hotel1.rating);
     functionFilter(options,data)
@@ -168,29 +185,64 @@ let sortHeightStar = () => {
     functionFilter(options,data)
 }
 let dataDefault = () => {
-    functionFilter(options,hotelList);
+    functionFilter(options,hotels);
 }
 
-const searchByNameHotel = document.querySelector('.input-name-hotel');
-searchByNameHotel.addEventListener('keydown',(event)=>{
-    console.log(event)
-
-    if (event.key === 'Enter'){
-        let keyWord = searchByNameHotel.value.trim();
-        console.log(keyWord+'tên khách sạn tìm kiếm')
-
-        if (keyWord){
-            const  data = hotelList.filter(hotel =>
-                hotel.name.toLowerCase().includes(keyWord.toLowerCase()))
-            renderListHotel(data)
-
-        }else {
-            renderListHotel(hotelList);
-        }
-
+const getHotel = (page) =>{
+    console.log(page);
+    axios.get("/api/hotel?pageNumber="+page,)
+        .then((response) =>{
+            hotels= response.data.content;
+            totalPage= response.data.totalPages;
+            data = hotels.slice();
+            renderListHotel(hotels);
+            renderPagination(totalPage);
+        })
+        .catch((error)=>{
+            console.log(error)
+            // toastr.error(error.response.data.message);
+        })
+}
+const    renderPagination = (totalPage) =>{
+    console.log(totalPage)
+    let html = '';
+    for (let i = 1; i <= totalPage; i++) {
+        html+=` <li class="page-item ${i === currentPage ? 'active' : ''}">
+              <a class="page-link" onclick="choosePage(${i})">${i}</a>
+            </li>`
     }
-
-})
+    document.querySelector('.pagination-container').innerHTML = `
+        ${totalPage > 1 ? `
+            <nav aria-label="...">
+              <ul class="pagination">
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                  <a class="page-link" onclick="previousPage()"><i class="fa-solid fa-angle-left"></i></a>
+                </li>
+                ${html}
+                <li class="page-item ${currentPage === totalPage ? 'disabled' : ''}">
+                  <a class="page-link" onclick="nextPage()"><i class="fa-solid fa-angle-right"></i></a>
+                </li>
+              </ul>
+            </nav>
+        ` : ""}
+    `;
+}
+const choosePage =(pageNumber)=>{
+    currentPage=pageNumber
+    getHotel(currentPage);
+}
+const nextPage =()=>{
+    if (currentPage < totalPage) {
+        currentPage++;
+        getHotel(currentPage);
+    }
+}
+const previousPage =()=>{
+    if (currentPage>1){
+        currentPage--;
+        getHotel(currentPage)
+    }
+}
 
 
 // filter cho khách sạn
@@ -215,7 +267,7 @@ checkBoxList.forEach(checkBox => {
             filterUnChecked(checkBox)
         }
         // gọi hàm lọc dữ liệu khách sạn
-        functionFilter(options, hotelList);
+        functionFilter(options, hotels);
     });
 });
 function filterChecked(checkBox) {
@@ -283,12 +335,14 @@ const functionFilter = (options,hotelList) => {
 const renderListHotel = (hotelList) => {
     let newContent = '';
     if (hotelList.length===0){
+        document.querySelector('.pagination-container').classList.add("d-none");
         containerParent.innerHTML = ` <h5 class="d-flex justify-content-center" >Chúng tôi không thể tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng thử tìm lại.</h5>`;
         return;
     }
+    else {
+        document.querySelector('.pagination-container').classList.remove("d-none");
+    }
     hotelList.forEach((hotel) => {
-
-
         let htmlStar = '';
         for (let i = 0; i < hotel.star; i++) {
             htmlStar += `<i class="fa-solid fa-star" style="color: #CF2061;"></i>`
@@ -352,51 +406,78 @@ const renderListHotel = (hotelList) => {
     })
     containerParent.innerHTML = newContent;
 
-
-    const listIdHotel = hotelsFavourite.map(hotel => Number(hotel.id));
-    console.log(listIdHotel)
-
-    // xủ lý khi người dùng click vào nút yêu thích
-    let btnHeart = document.querySelectorAll('.btn-favourite')
-    btnHeart.forEach((heart) => {
-        let idHotelAtButtton = Number(heart.value)
-        if (listIdHotel.includes(idHotelAtButtton)){
-            heart.classList.add("style-heart")
-            heart.setAttribute("type-button","delete")
-        }
-        heart.addEventListener('click', () => {
-            if (!heart.classList.contains('style-heart')) {
-                axios.post("/api/hotel/favourite/"+heart.value)
-                    .then(()=>{
-                        toastr.success("Đã thêm khách sạn vào danh sách yêu thích.")
-                        heart.classList.add("style-heart")
-                        heart.setAttribute("type-button","delete")
-                    })
-                    .catch((err)=>{
-                        if (err.response.status===401){
-                            toastr.error("Vui lòng đăng nhập");
-                        }
-                    })
-
-            } else {
-                axios.delete("/api/hotel/favourite/"+heart.value)
-                    .then(()=>{
-                        toastr.success("Đã xóa khách sạn khỏi danh sách yêu thích.")
-                        heart.classList.remove("style-heart");
-                        heart.setAttribute("type-button","add")
-                    })
-                    .catch((err)=>{
-                       if (err.response.status===401){
-                           toastr.error("Vui lòng đăng nhập");
-                       }
-                    })
-
+    if (hotelsFavourite!=null){
+        const listIdHotel = hotelsFavourite.map(hotel => Number(hotel.id));
+        // xủ lý khi người dùng click vào nút yêu thích
+        let btnHeart = document.querySelectorAll('.btn-favourite')
+        btnHeart.forEach((heart) => {
+            let idHotelAtButtton = Number(heart.value)
+            if (listIdHotel.includes(idHotelAtButtton)){
+                heart.classList.add("style-heart")
+                heart.setAttribute("type-button","delete")
             }
-        })
+            heart.addEventListener('click', () => {
+                if (heart.getAttribute("type-button")==="add") {
+                    axios.post("/api/hotel/favourite/"+heart.value)
+                        .then(()=>{
+                            toastr.success("Đã thêm khách sạn vào danh sách yêu thích.")
+                            heart.classList.add("style-heart")
+                            heart.setAttribute("type-button","delete")
+                        })
+                        .catch((err)=>{
+                            if (err.response.status===401){
+                                toastr.error("Vui lòng đăng nhập");
+                            }
+                        })
 
-    })
+                } else {
+                    axios.delete("/api/hotel/favourite/"+heart.value)
+                        .then(()=>{
+                            toastr.success("Đã xóa khách sạn khỏi danh sách yêu thích.")
+                            heart.classList.remove("style-heart");
+                            heart.setAttribute("type-button","add")
+                        })
+                        .catch((err)=>{
+                            if (err.response.status===401){
+                                toastr.error("Vui lòng đăng nhập");
+                            }
+                        })
+
+                }
+            })
+
+        })
+    }
 }
-console.log(hotelsFavourite);
+
+// xử lý validation dữ liệu
+$('#form-search').validate({
+    rules: {
+        nameCity: {
+            required: true,
+        },
+    },
+    messages: {
+        nameCity: {
+            required: "Vui lòng nhập địa chỉ tên thành phố mà bạn muốn tìm kiếm",
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    }
+});
+
+getHotel(currentPage);
+renderDataSearch(nameCity, valueNumberGuest, valueNumberRoom);
+
 
 
 

@@ -47,7 +47,7 @@ public class ImageService {
                // tạo thư mục
                Files.createDirectory(path);
            }catch (IOException e){
-               throw new RuntimeException("canot creat director");
+               throw new RuntimeException("Không thể tạo được file");
            }
         }
     }
@@ -55,7 +55,7 @@ public class ImageService {
 
     public ImageUser uploadImageForUser(MultipartFile file) {
 
-        User user = userRepository.findByEmail(session.getAttribute("MY_SESSION").toString()).orElseThrow(()->new UsernameNotFoundException("Canot find user"));
+        User user = userRepository.findByEmail(session.getAttribute("MY_SESSION").toString()).orElseThrow(()->new UsernameNotFoundException("Không tìm thấy người dùng trên "));
 
         // upload file vào folder
         // tạo một id image
@@ -72,7 +72,7 @@ public class ImageService {
             // sao chép dữ liệu từ input vào 1 pathfile đã được tạo đường dẫn trước đó
             Files.copy(file.getInputStream(),filePath);
         } catch (IOException e) {
-            throw new RuntimeException("cannot upload file " + imageId);
+            throw new RuntimeException("Không thể upload file " + imageId);
         }
 
         ImageUser imageUser = new ImageUser();
@@ -91,10 +91,10 @@ public class ImageService {
         if (imageUserOld!=null){
             // lấy đường dẫn đến avt được tìm thấy
             Path filePathDelete = Paths.get(uploadDir).resolve(imageUserOld.getId());
-            Path fisllld = Paths.get(imageUserOld.getUrl());
-
-            System.out.println("----------------------------------------------------------------------------"+filePathDelete);
-            System.out.println("----------------------------------------------------------------------------"+fisllld);
+//            Path fisllld = Paths.get(imageUserOld.getUrl());
+//
+//            System.out.println("----------------------------------------------------------------------------"+filePathDelete);
+//            System.out.println("----------------------------------------------------------------------------"+fisllld);
             try {
                 // xóa file đó đi
                 Files.deleteIfExists(filePathDelete);
@@ -113,11 +113,11 @@ public class ImageService {
 
          if (Objects.equals(user.getId(), imageUserOld.getUser().getId())){
              Path filePathDelete = Paths.get(uploadDir).resolve(id);
-             Path fisllld = Paths.get(imageUserOld.getUrl());
 
-             System.out.println("----------------------------------------------------------------------------"+filePathDelete);
-             System.out.println("----------------------------------------------------------------------------"+fisllld);
-             try{
+             try{  Path fisllld = Paths.get(imageUserOld.getUrl());
+
+                 System.out.println("----------------------------------------------------------------------------"+filePathDelete);
+                 System.out.println("----------------------------------------------------------------------------"+fisllld);
                  Files.deleteIfExists(filePathDelete);
                  user.setAvatar("/web/assets/image/avatar-default.jpg");
                  imageUserRepository.delete(imageUserOld);

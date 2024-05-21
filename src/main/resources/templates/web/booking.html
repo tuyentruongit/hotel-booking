@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
-    <title>Đặt chỗ và chuyến đi</title>
+    <title>WebFindTravel.com</title>
     <th:block id="css">
         <link rel="stylesheet" href="/web/assets/css/style-list-booking.css">
     </th:block>
@@ -60,11 +60,11 @@
                         </div>
 
                         <div class="list-booking">
-                            <h1 th:if="${bookingList.size()==0}">
+                            <h1 th:if="${page.getContent().size()==0}">
                                 Chưa có đơn nào được đặt
                             </h1>
                             <ul class="list-unstyled " >
-                                <li class="w-100" th:each="booking : ${bookingList}">
+                                <li class="w-100" th:each="booking : ${page.getContent()}">
                                     <a class="card-booking" th:href="@{/chi-tiet-booking/{id} (id=${booking.id})}">
                                         <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
                                         <div class="infor-booking">
@@ -81,6 +81,20 @@
                                     </a>
                                 </li>
                             </ul>
+                            <div class="d-flex justify-content-center " th:classappend="${page.getTotalPages()==1?'d-none':'d-block'}">
+                                <ul class="pagination">
+                                    <li class="page-item" th:classappend="${currentPage}==1?'disabled':''">
+                                        <a class="page-link" th:href="@{/danh-sach-dat-phong/{id} (id = ${#authentication.principal.getUser().getId()},pageNumber=${currentPage}-1)}"><i class="fa-solid fa-angle-left"></i></a>
+                                    </li>
+                                    <li class="page-item" th:each=" index : ${#numbers.sequence(1,page.getTotalPages())}"
+                                        th:classappend="${currentPage==index}?'active':''">
+                                        <a class="page-link" th:href="@{/danh-sach-dat-phong/{id} (id = ${#authentication.principal.getUser().getId()},pageNumber=${index})}" th:text="${index}"></a>
+                                    </li>
+                                    <li class="page-item"  th:classappend="${currentPage == page.getTotalPages()}?'disabled':''">
+                                        <a class="page-link"  th:href="@{/danh-sach-dat-phong/{id} (id = ${#authentication.principal.getUser().getId()},pageNumber=${currentPage+1})}"><i class="fa-solid fa-angle-right"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,7 +108,7 @@
 <th:block id="js">
 
     <script th:inline="javascript">
-        const bookingList = [[${bookingList}]];
+        const bookingList = [[${page.getContent}]];
         console.log(bookingList)
     </script>
     <script src="/web/assets/js/booking.js"></script>

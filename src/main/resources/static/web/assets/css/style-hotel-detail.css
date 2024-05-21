@@ -7,15 +7,20 @@
 .inputdata-search{
     border: none;
     border-radius: 10px;
-    background-color: #E9ECEF
+    background-color: #E9ECEF;
 }
 
 
 .inputdata-search input{
 
+    border-radius: 10px;
+    background-color: #E9ECEF;
+
+}
+.inputdata-search #date-range{
     border: none;
     border-radius: 10px;
-    background-color: #E9ECEF
+    background-color: #E9ECEF;
 
 }
 .inputdata-search input:focus{
@@ -25,6 +30,7 @@
     outline: none;
 
 }
+
 
 .btn-search{
     background-color:#9DB2BF;
@@ -92,6 +98,9 @@
 .button-room-number .num-room{
     pointer-events: none;
 }
+.style-heart i{
+    color: #F16767 !important;
+}
 
 /* style image hotel */
 body {
@@ -131,7 +140,7 @@ body {
 
 
 
-.btn-list-favorite{
+.btn-favourite{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -371,6 +380,10 @@ body {
     border-radius: 10px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
+.age-user-review{
+    margin-left: 10px !important;
+}
+
 
 .creatAt-review{
     font-size: 14px;
@@ -619,4 +632,12 @@ padding: 0;
 }
 .original-price-modal{
     font-size: 13px;
+}
+#submitReview{
+    background-color: #526D82;
+    color: #F5F5F5;
+}
+.warp-button-edit{
+    margin-top: 5px;
+    margin-left: 10px;
 }

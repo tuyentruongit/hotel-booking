@@ -228,12 +228,10 @@ class BookingAppApplicationTests {
         for (int i = 0; i < 1000; i++) {
 
             Bed bed = Bed.builder()
-                    .numberBed(faker.number().numberBetween(1, 5)) // Số lượng giường từ 1 đến 5
                     .bedType(BedType.values()[random.nextInt(BedType.values().length)]) // Loại giường ngẫu nhiên từ enum BedType
                     .bedSize(BedSize.values()[random.nextInt(BedSize.values().length)]) // Kích thước giường ngẫu nhiên từ enum BedSize
                     .createAt(LocalDate.now())
                     .updateAt(LocalDate.now())
-                    .room(roomList.get(random.nextInt(roomList.size())))
                     .build();
 
 
@@ -295,4 +293,3 @@ class BookingAppApplicationTests {
 
 
 }
-

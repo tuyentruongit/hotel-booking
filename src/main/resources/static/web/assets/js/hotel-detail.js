@@ -122,6 +122,7 @@ const btnSearch = document.getElementById('btn-search');
 let inputNameCity = document.getElementById('input-name-city');
 
 btnSearch.addEventListener('click', () => {
+    if (!$('#form-search').valid()) return;
 
 
     const date = document.getElementById('date-range');
@@ -156,6 +157,10 @@ const renderDataSearch = (nameCity, numGuest, numRoom) => {
     }
 
     inputNameCity.value = nameCity
+    if (hotel.id === parseInt(btnHeart.value)){
+        btnHeart.setAttribute("type-button","delete");
+        btnHeart.classList.add("style-heart")
+    }
 }
 
 // khi vừa vào trang thì render ra dữ liệu
@@ -175,6 +180,7 @@ const reviewContent = document.getElementById("reviewContent");
 const btnSubmitReview = document.getElementById("submitReview");
 btnSubmitReview.addEventListener('click', (e) => {
     e.preventDefault();
+    if (!$('#form-review').valid())return;
 
     if (currentRating === 0) {
         alert("Vui lòng chọn số sao")
@@ -188,12 +194,14 @@ btnSubmitReview.addEventListener('click', (e) => {
     console.log(dataReview);
     axios.put("/api/reviews/update/" + idReviewUpdate, dataReview)
         .then((res) => {
-            renderReview(reviewLists);
-            console.log("Thành công")
+            toastr.success("Cập nhật thành công")
             modalReviewConfig.hide();
+            const index = reviewLists.findIndex(review => review.id === idReviewUpdate)
+            reviewLists[index] = res.data;
+            renderReview(reviewLists);
         })
         .catch((err) => {
-            console.log("Thất công")
+            toastr.error("Cập nhật thất bại")
         })
 })
 
@@ -226,8 +234,9 @@ const deleteReview = id => {
 
     axios.delete("/api/reviews/delete/" + id)
         .then((res) => {
+            reviewLists = reviewLists.filter(review => review.id !== id)
             renderReview(reviewLists);
-            console.log("Thành công")
+            toastr.success("Xóa thành công.");
         })
         .catch((err) => {
             console.log("Thất công")
@@ -270,10 +279,10 @@ const renderReview = (reviews) => {
                                         
                                           ${inforUser && inforUser.id === review.user.id ? `
                                              <div class="warp-button-edit" >
-                                            <button class=" btn-edit-review btn " type="button"
+                                            <button class=" btn-edit-review btn text-primary" type="button"
                                                     data-bs-toggle="modal" data-bs-target="#myModal" onclick="renderDataReview(${review.id})">Chỉnh sửa
                                             </button>
-                                            <button class=" btn-delete-review btn " onclick="deleteReview(${review.id})" >Xóa</button>
+                                            <button class=" btn-delete-review btn text-danger " onclick="deleteReview(${review.id})" >Xóa</button>
                                                </div>
                                             ` : ''}
                                         
@@ -284,6 +293,90 @@ const renderReview = (reviews) => {
     });
     reviewListEL.innerHTML = html;
 };
+
+$('#form-search').validate({
+    rules: {
+        nameCity: {
+            required: true,
+        },
+    },
+    messages: {
+        nameCity: {
+            required: "Vui lòng nhập địa chỉ tên thành phố mà bạn muốn tìm kiếm",
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    }
+});
+
+//
+// $('#form-review').validate({
+//     rules: {
+//         content: {
+//             required: true,
+//         },
+//     },
+//     content: {
+//         content: {
+//             required: "Nội dung không được để trống",
+//         },
+//     },
+//     errorElement: 'span',
+//     errorPlacement: function (error, element) {
+//         error.addClass('invalid-feedback');
+//         element.closest('.form-group').append(error);
+//     },
+//     highlight: function (element, errorClass, validClass) {
+//         $(element).addClass('is-invalid');
+//     },
+//     unhighlight: function (element, errorClass, validClass) {
+//         $(element).removeClass('is-invalid');
+//     }
+// });
+
+// xủ lý khi người dùng click vào nút yêu thích
+let btnHeart = document.querySelector('.btn-favourite');
+
+btnHeart.addEventListener('click',()=>{
+    if (btnHeart.getAttribute("type-button")==="add") {
+        axios.post("/api/hotel/favourite/"+btnHeart.value)
+            .then(()=>{
+                toastr.success("Đã thêm khách sạn vào danh sách yêu thích.")
+                btnHeart.classList.add("style-heart")
+                btnHeart.setAttribute("type-button","delete")
+            })
+            .catch((err)=>{
+                if (err.response.status===401){
+                    toastr.error("Vui lòng đăng nhập");
+                }
+            })
+
+    } else {
+        axios.delete("/api/hotel/favourite/"+btnHeart.value)
+            .then(()=>{
+                toastr.success("Đã xóa khách sạn khỏi danh sách yêu thích.")
+                btnHeart.classList.remove("style-heart");
+                btnHeart.setAttribute("type-button","add")
+            })
+            .catch((err)=>{
+                if (err.response.status===401){
+                    toastr.error("Vui lòng đăng nhập");
+                }
+            })
+
+    }
+})
+
+
 
 
 renderReview(reviewLists);

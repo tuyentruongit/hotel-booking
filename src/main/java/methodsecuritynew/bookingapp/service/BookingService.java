@@ -10,6 +10,10 @@ import methodsecuritynew.bookingapp.model.statics.StatusBooking;
 import methodsecuritynew.bookingapp.repository.BookingRepository;
 import methodsecuritynew.bookingapp.repository.HotelRepository;
 import methodsecuritynew.bookingapp.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,21 +30,20 @@ public class BookingService {
     private final HotelService hotelService;
     private final RoomService roomService;
 
-    public List<Booking> getAllBookingByIdUer(Integer id) {
-      return   bookingRepository.findAllByUser_IdOrderByCreateAtDesc(id);
-
+    public Page<Booking> getAllBookingByIdUer(Integer id , Integer pageNumber , Integer limit) {
+        Pageable pageable = PageRequest.of(pageNumber-1,limit, Sort.by("createAt").descending());
+        return bookingRepository.findAllByUser_IdOrderByCreateAtDesc(id,pageable);
     }
 
     public Booking bookingHotel(UpsertBookingRequest bookingRequest) {
 
-
         String strPaymentMethod = bookingRequest.getPaymentMethod().trim();
         PaymentMethod paymentMethod = PaymentMethod.valueOf(strPaymentMethod);
-       User user = authService.getUserCurrent();
+        User user = authService.getUserCurrent();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate checkIn = LocalDate.parse(bookingRequest.getCheckIn(),dateTimeFormatter);
         LocalDate checkOut = LocalDate.parse(bookingRequest.getCheckOut(),dateTimeFormatter);
-       Booking booking = Booking.builder()
+         Booking booking = Booking.builder()
                 .user(user)
                 .hotel(hotelService.getHotelById(bookingRequest.getIdHotel()))
                 .room(roomService.getRoomById(bookingRequest.getIdRoom()))
@@ -60,13 +63,13 @@ public class BookingService {
     }
 
     public List<Booking> getBookingById(Integer id) {
-        return List.of(bookingRepository.findById(id).get());
+        return List.of(bookingRepository.findById(id).orElseThrow(()-> new RuntimeException("Không thấy booking nào có id như trên ")));
     }
      public Booking getBooking(Integer id) {
-        return bookingRepository.findById(id).get();
+        return bookingRepository.findById(id).orElseThrow(()-> new RuntimeException("Không thể tìm thấy booking như trên "));
     }
 
-    public void deleteBooking(Integer id) {
+    public void cancelBooking(Integer id) {
         Booking booking= getBooking(id);
         booking.setStatusBooking(StatusBooking.CANCELLED);
         bookingRepository.save(booking);

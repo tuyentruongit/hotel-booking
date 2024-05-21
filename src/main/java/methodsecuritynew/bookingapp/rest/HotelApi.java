@@ -1,14 +1,13 @@
 package methodsecuritynew.bookingapp.rest;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.Hotel;
-import methodsecuritynew.bookingapp.security.CustomUserDetail;
 import methodsecuritynew.bookingapp.security.CustomUserDetailService;
+import methodsecuritynew.bookingapp.service.HotelService;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.List;
 public class HotelApi {
 
     private final CustomUserDetailService customUserDetailService;
-    private final HttpSession session;
+    private final HotelService hotelService;
 
 
 
@@ -33,4 +32,11 @@ public class HotelApi {
         customUserDetailService.deleteHotelFavourite(id);
         return ResponseEntity.ok().build();
     }
+    @GetMapping()
+    public ResponseEntity<?> getPaginationHotel(@RequestParam(required = false , defaultValue = "1") Integer pageNumber ,
+                                                          @RequestParam(required = false , defaultValue = "10") Integer limit){
+        Page<Hotel> paginationHotel= hotelService.getPaginationHotel(pageNumber,limit);
+        return new ResponseEntity<>(paginationHotel, HttpStatus.OK);
+    }
+
 }

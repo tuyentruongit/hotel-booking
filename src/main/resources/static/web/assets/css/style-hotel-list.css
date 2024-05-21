@@ -14,6 +14,11 @@
 
 .inputdata-search input{
 
+    border-radius: 10px;
+    background-color: #E9ECEF;
+
+}
+.inputdata-search #date-range{
     border: none;
     border-radius: 10px;
     background-color: #E9ECEF;
@@ -497,3 +502,4 @@ input[type="range"]::-moz-range-thumb {
 
 }
 
+/*style phân trang*/

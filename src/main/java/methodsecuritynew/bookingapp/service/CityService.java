@@ -20,7 +20,4 @@ public class CityService {
                .toList();
     }
 
-    public CityRepository cityRepository(){
-        return cityRepository;
-    }
 }

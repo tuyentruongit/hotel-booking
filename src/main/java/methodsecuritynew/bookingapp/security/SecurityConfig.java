@@ -1,6 +1,7 @@
 package methodsecuritynew.bookingapp.security;
 
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import methodsecuritynew.bookingapp.security.error.CustomAccessDeniedHandler;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -34,6 +36,8 @@ public class SecurityConfig {
     private final CustomFilter customFilter;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final HttpSession httpSession;
+
 
 
     @Bean
@@ -61,7 +65,10 @@ public class SecurityConfig {
         );
 
         httpSecurity.logout(logout -> {
-            logout.logoutSuccessUrl("/account/login");
+            logout.logoutSuccessUrl("/");
+//            SecurityContextHolder.clearContext();
+//            httpSession.setAttribute("MY_SESSION",null);
+//            httpSession.invalidate();
             logout.permitAll();
         });
 

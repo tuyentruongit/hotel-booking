@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
-    <title>Hủy đặt chỗ</title>
+    <title>WebFindTravel.com</title>
     <th:block id="css">
         <link rel="stylesheet" href="/web/assets/css/style-cancel-booking.css">
     </th:block>
@@ -113,12 +113,13 @@
             let con = confirm("Bạn có chắc rằng muốn hủy đơn đặt phòng này");
             if (con===true){
 
-                axios.delete('/api/booking/'+btnConfirm.value)
+                axios.put('/api/booking/'+btnConfirm.value)
                     .then((res) =>{
-                        console.log("Thành công")
+                        toasr.success("Hủy đặt phòng thành công ")
+                        window.location.href = "/chi-tiet-booking/"+btnConfirm.value
                     })
                     .catch((err)=>{
-                        console.log("That công")
+                        toastr.error(err.data.message);
                     })
 
             }

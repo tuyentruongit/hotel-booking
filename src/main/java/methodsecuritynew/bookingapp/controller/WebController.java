@@ -9,6 +9,7 @@ import methodsecuritynew.bookingapp.model.statics.*;
 import methodsecuritynew.bookingapp.repository.BookingRepository;
 import methodsecuritynew.bookingapp.service.*;
 
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -58,18 +59,18 @@ public class WebController {
                                @RequestParam(required = false, defaultValue = "1") Integer numberRoom,
                                Model model) {
 
-        List<Hotel> hotelList = hotelService.getHotelBySearch(nameCity, checkIn, checkOut, numberGuest, numberRoom);
+       hotelService.getHotelBySearch(nameCity, checkIn, checkOut, numberGuest, numberRoom);
         if (session.getAttribute("MY_SESSION")!= null) {
             List<Hotel> hotelFavourite = hotelService.getAllHotelFavourite((String) session.getAttribute("MY_SESSION"));
             model.addAttribute("hotelFavourite", hotelFavourite);
         }
-
         model.addAttribute("nameCity", nameCity);
         model.addAttribute("checkIn", checkIn);
         model.addAttribute("checkOut", checkOut);
         model.addAttribute("numberGuest", numberGuest);
         model.addAttribute("numberRoom", numberRoom);
-        model.addAttribute("hotelList", hotelList);
+//        model.addAttribute("hotelList", hotelList);
+
 
         return "web/hotel-list";
     }
@@ -144,9 +145,13 @@ public class WebController {
 
     @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
     @GetMapping("/danh-sach-dat-phong/{id}")
-    public String getHistoryBooking(Model model, @PathVariable Integer id) {
-        List<Booking> bookingList = bookingService.getAllBookingByIdUer(id);
-        model.addAttribute("bookingList" , bookingList);
+    public String getHistoryBooking(Model model,
+                                    @RequestParam(required = false , defaultValue = "1") Integer pageNumber ,
+                                    @RequestParam(required = false , defaultValue = "10") Integer limit,
+                                    @PathVariable Integer id) {
+        Page<Booking> page = bookingService.getAllBookingByIdUer(id,pageNumber,limit);
+        model.addAttribute("page" , page);
+        model.addAttribute("currentPage" , pageNumber);
         return "web/booking";
     }
     @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
@@ -173,9 +178,13 @@ public class WebController {
 
     @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
     @GetMapping("/danh-sach-yeu-thich/{id}/{city}")
-    public String getFavouriteList(Model model, @PathVariable Integer id ,@PathVariable String city) {
-        List<Hotel> hotelList = hotelService.findHotelFavouriteByCity(id,city);
-        model.addAttribute("hotelsFavouriteBuCity",hotelList);
+    public String getFavouriteList( @RequestParam(required = false , defaultValue = "1") Integer pageNumber,
+                                    @RequestParam(required = false , defaultValue = "8") Integer limit,
+                                    Model model, @PathVariable Integer id ,@PathVariable String city) {
+        Page<Hotel> hotelPage = hotelService.findHotelFavouriteByCity(id,city,pageNumber,limit);
+        model.addAttribute("hotelPage",hotelPage);
+        model.addAttribute("indexPage",pageNumber);
+        model.addAttribute("city",city);
         return "web/favourite-list";
     }
 

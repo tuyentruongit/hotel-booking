@@ -24,9 +24,9 @@ public class BookingApi {
     public ResponseEntity<?> getBookingById(@PathVariable Integer id){
        return ResponseEntity.ok(bookingService.getBookingById(id));
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBookingById(@PathVariable Integer id){
-        bookingService.deleteBooking(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> cancelBooking(@PathVariable Integer id){
+        bookingService.cancelBooking(id);
         return ResponseEntity.ok().build();
     }
 }

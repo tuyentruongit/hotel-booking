@@ -52,7 +52,7 @@ public class Hotel {
     RentalType rentalType;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "amenity_hotel",
             joinColumns = @JoinColumn(name = "id_hotel"),
@@ -61,7 +61,7 @@ public class Hotel {
     )
     List<AmenityHotel> amenityHotelList;
 
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL ,fetch = FetchType.EAGER )
     private List<PriceRoom> priceRoomList;
 
 //    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)

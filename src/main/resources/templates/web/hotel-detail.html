@@ -5,7 +5,7 @@
 <head>
 
 
-    <title>Chi Tiết khách sạn</title>
+    <title>WebFindTravel.com </title>
     <th:block id="css">
         <link rel="stylesheet" href="/web/lib/OwlCarousel/dist/assets/owl.carousel.min.css">
         <link rel="stylesheet" href="/web/lib/OwlCarousel/dist/assets/owl.theme.default.min.css">
@@ -20,25 +20,28 @@
         <div class="container">
             <div class="row">
 
-                <div class="col-4">
-                    <div class="inputdata-search d-flex align-items-center p-1">
-                        <i style="font-size: 20px;" class="fa-solid fa-location-dot"></i>
-                        <input id="input-name-city" type="text" class=" w-100 p-2  "
-                               placeholder="Tìm địa điểm, khách sạn, v.v.">
+                <div class="col-4 ">
+                    <form action="" id ="form-search">
+                        <div class="form-group">
+                            <div class="inputdata-search d-flex align-items-center p-1">
+                                <i style="font-size: 20px;" class="fa-solid fa-location-dot"></i>
+                                <input name="nameCity" id="input-name-city" type="text" class=" w-100 p-2 form-control" placeholder="Tìm địa điểm, khách sạn, v.v.">
+                            </div>
 
-                    </div>
+                        </div>
+                    </form>
                 </div>
+
                 <div class="col-3">
                     <div class="inputdata-search d-flex align-items-center p-1">
                         <i style="font-size: 15px;" class="fa-solid fa-calendar-days"></i>
-                        <input id="date-range" type="text" class=" w-100 p-2  "
-                               placeholder="Chọn ngày đến và đi của bạn">
+                        <input id="date-range" type="text" class=" w-100 p-2  " placeholder="Chọn ngày đến và đi của bạn">
 
                     </div>
                 </div>
                 <div class="col-2">
-                    <div class="button-guest-number w-100 h-100 border shadow d-flex justify-content-between align-items-center">
-                        <i style="font-size: 20px;" class="fa-solid fa-user-check"></i>
+                    <div class="button-guest-number border shadow d-flex justify-content-between align-items-center" >
+                        <i style="font-size: 20px;"  class="fa-solid fa-user-check"></i>
                         <label class="">Số người</label>
                         <div class="w-50 d-flex justify-content-between">
                             <button id="minus-guest" class="minus-guest"><i class="fa-solid fa-minus"></i></button>
@@ -49,8 +52,8 @@
                     </div>
 
                 </div>
-                <div class="col-2">
-                    <div class="button-room-number w-100 h-100 border shadow d-flex justify-content-between align-items-center">
+                <div class="col-2" >
+                    <div class="button-room-number border shadow d-flex justify-content-between align-items-center">
                         <i style="font-size: 15px;" class="fa-solid fa-house"></i>
                         <label class="label">Số phòng</label>
                         <div class="w-50 d-flex justify-content-between ">
@@ -61,8 +64,8 @@
 
                     </div>
                 </div>
-                <div class="col-1">
-                    <button type="submit" id="btn-search" class="btn-search w-100 h-100 py-2">
+                <div class="col-1 d-flex align-items-center">
+                    <button type="submit" id="btn-search" class="btn-search w-100 py-2 ">
                         <i class="fa-solid fa-magnifying-glass" style="color: #f7f9fc; font-size: 20px;"></i>
                     </button>
                 </div>
@@ -79,7 +82,7 @@
                            <i class="fa-solid fa-angle-left text-primary"></i>
                            <a class="text-decoration-none ms-1" href="">Xem tất cả nơi lưu trú</a>
                        </div>
-                        <button class="btn-list-favorite ">
+                        <button class="btn-favourite " type-button="" th:value="${hotel.id}">
                             <i style="font-size: 20px;color: #0a58ca" class="fa-regular fa-heart"></i>
                         </button>
 
@@ -100,7 +103,7 @@
                         <img src="/web/assets/image/city.jpg"
                              alt="architecture">
                     </button>
-                    <div class="nav-bar w-50 d-flex p-1">
+                    <div class="nav-bar d-flex p-1">
 
                         <div class="nav-item">
                             <button class="nav-link">
@@ -113,8 +116,7 @@
                             </button>
                         </div>
                         <div class="nav-item">
-                            <button class="nav-link">
-                                Giá
+                            <button class="nav-link">Phòng
                             </button>
                         </div>
                         <div class="nav-item">
@@ -351,7 +353,7 @@
 <!--                                        </a>-->
                                         <a th:href="@{/thanh-toan/{id_hotel}/{id_room}(id_hotel=${hotel.id},id_room=${room.id}, checkIn=${checkIn}, checkOut=${checkOut},numberGuest = ${numberGuest},numberRoom=${numberRoom})}"
                                            class="text-reset text-decoration-none btn-booking">
-                                           <span>Đặt</span> <span th:if="${numberRoom>1}"><th:block th:text="${numberRoom}"></th:block> phòng</span>
+                                           <span>Đặt <span th:if="${numberRoom>1}"> <th:block th:text="${numberRoom}"></th:block> phòng</span></span>
                                         </a>
                                     </div>
                                 </div>
@@ -655,16 +657,18 @@
                                 <form id="form-review">
                                     <div class="modal-body">
                                         <div class="form-group">
-                                                      <textarea id="reviewContent"
-                                                                class="w-100 rounded overflow-hidden  my-2"
-                                                                type="text" placeholder="Viết bình luận . . . ."
-                                                                name="content"></textarea>
+
+                                            <textarea id="reviewContent"
+                                                      class="w-100 rounded overflow-hidden  my-2"
+                                                      type="text" placeholder="Viết bình luận . . . ."
+                                                      name="content">
+                                            </textarea>
                                         </div>
                                     </div>
                                     <div class="modal-footer" >
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng
+                                        <button type="button" class="btn text-reset" data-bs-dismiss="modal">Đóng
                                         </button>
-                                        <button id="submitReview" type="button" class="btn btn-primary">Cập nhật
+                                        <button id="submitReview" type="button" class="btn">Cập nhật
                                         </button>
 
                                     </div>
@@ -711,6 +715,7 @@
 <th:block id="js">
     <script src="/web/lib/OwlCarousel/dist/owl.carousel.min.js"></script>
     <script th:inline="javascript">
+        let hotel = [[${hotel}]]
         let nameCity = [[${nameCity}]];
         let checkIn = [[${checkIn}]];
         let checkOut = [[${checkOut}]];
@@ -718,10 +723,6 @@
         let valueNumberRoom = [[${numberRoom}]];
         let reviewLists = [[${reviewList}]]
         let inforUser = [[${user}]]
-
-        console.log(inforUser)
-
-
     </script>
     <script src="/web/assets/js/hotel-detail.js"></script>
 

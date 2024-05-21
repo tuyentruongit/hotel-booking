@@ -1,9 +1,11 @@
 package methodsecuritynew.bookingapp.service;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.TokenConfirm;
 import methodsecuritynew.bookingapp.entity.User;
+import methodsecuritynew.bookingapp.exception.BadRequestException;
 import methodsecuritynew.bookingapp.model.request.*;
 
 import methodsecuritynew.bookingapp.model.response.VerifyAccountResponse;
@@ -13,8 +15,10 @@ import methodsecuritynew.bookingapp.model.statics.UserRole;
 import methodsecuritynew.bookingapp.repository.TokenConfirmRepository;
 import methodsecuritynew.bookingapp.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,7 +51,6 @@ public class AuthService {
                 loginRequest.getEmail(),
                 loginRequest.getPassword());
 
-
         try {
             // Tiến hành xác tực
             Authentication authentication = authenticationManager.authenticate(token);
@@ -56,16 +59,19 @@ public class AuthService {
             // lưu vào session
             httpSession.setAttribute("MY_SESSION",authentication.getName());
 
-        }catch (Exception e){
-           throw new RuntimeException(e.getMessage());
         }
-
-
+        catch(DisabledException disabledException){
+            throw new DisabledException("Tài khoản chưa được xác thực");
+        }
+        catch (AuthenticationException  e){
+           throw new RuntimeException ("Tài khoản hoặc mật khẩu không đúng");
+        }
     }
 
+    @Transactional
     public String register(RegisterRequest registerRequest) {
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()){
-            throw new RuntimeException("Email đã tồn tại");
+            throw new BadRequestException("Email đã tồn tại");
         }
         User user = User.builder()
                 .name(registerRequest.getName())
@@ -104,6 +110,8 @@ public class AuthService {
 
     }
 
+
+    @Transactional
     public VerifyAccountResponse verifyAccount(String token) {
         Optional<TokenConfirm> optionalTokenConfirm = tokenConfirmRepository
                 .findByNameTokenAndTokenType(token, TokenType.REGISTRATION);
@@ -124,7 +132,7 @@ public class AuthService {
         if (tokenConfirm.getConfirmedAt()!=null){
             return VerifyAccountResponse.builder()
                     .success(false)
-                    .message("Link xác thực đã được xác thực trước đó")
+                    .message("Link xác thực đã được sử dụng trước đó")
                     .build();
         }
         tokenConfirm.getUser().setEnable(true);
@@ -132,8 +140,6 @@ public class AuthService {
 
         tokenConfirm.setConfirmedAt(LocalDateTime.now());
         tokenConfirmRepository.save(tokenConfirm);
-
-
             return VerifyAccountResponse.builder()
                     .success(true)
                     .message("Xác thực tài khoản thành công")
@@ -143,13 +149,17 @@ public class AuthService {
 
 
     public void updateUser(Integer id, ChangeInformationUserRequest changeInformationUserRequest) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user") );
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không thể tìm thấy user trên ") );
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
         LocalDate birthday = LocalDate.parse(changeInformationUserRequest.getBirthDay(),dateTimeFormatter);
         user.setAddress(changeInformationUserRequest.getAddress());
-        user.setAddress(changeInformationUserRequest.getAddress());
         user.setName(changeInformationUserRequest.getName());
-        user.setPhoneNumber(changeInformationUserRequest.getPhone());
+        String regex = "^0([0-9]{9})";
+        if (changeInformationUserRequest.getPhone().matches(regex)){
+            user.setPhoneNumber(changeInformationUserRequest.getPhone());
+        }else {
+            throw new BadRequestException("Số điện thoại của bạn không hợp lệ ");
+        }
         user.setUpdateAt(LocalDate.now());
         user.setBirthDay(birthday);
         Gender gender  = Gender.valueOf(changeInformationUserRequest.getGender());
@@ -160,22 +170,30 @@ public class AuthService {
     public void changePassword(Integer id, ChangePasswordRequest changePasswordRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user") );
 
+
+
         // kiểm tra xem mật khẩu có đúng với mật khẩu được lưu trong db không
         if (passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())){
-            user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
-            userRepository.save(user);
+            // kiểm tra xem 2 mật khẩu có giống nhau hay không
+            if (changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())){
+                user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+                userRepository.save(user);
+            }
+            else {
+                throw new BadRequestException("Mật khẩu không trùng khớp");
+            }
+
         }else {
-            throw new RuntimeException("Mật khẩu không chính xác");
+            throw new BadRequestException("Mật khẩu không chính xác");
         }
 
     }
-    public void changePassword(UpsertPasswordRetrieval upsertPasswordRetrieval) {
+    public void changePasswordForForgetPassword(UpsertPasswordRetrieval upsertPasswordRetrieval) {
         TokenConfirm tokenConfirm = tokenConfirmRepository
-                .findByNameTokenAndTokenType(upsertPasswordRetrieval.getNameToken(), TokenType.FORGOT_PASSWORD).get();
+                .findByNameTokenAndTokenType(upsertPasswordRetrieval.getNameToken(), TokenType.FORGOT_PASSWORD).orElseThrow(()-> new BadRequestException("Không tìm thấy token trên "));
         tokenConfirm.getUser().setPassword(passwordEncoder.encode(upsertPasswordRetrieval.getPassword()));
         tokenConfirm.setConfirmedAt(LocalDateTime.now());
         userRepository.save(tokenConfirm.getUser());
-
     }
 
 
@@ -187,9 +205,7 @@ public class AuthService {
                 .tokenType(TokenType.FORGOT_PASSWORD)
                 .createdAt(LocalDateTime.now())
                 .expiredAt(LocalDateTime.now().plusHours(1))
-
                 .user(user)
-
                 .build();
         tokenConfirmRepository.save(tokenConfirm);
         String link = "http://localhost:9000/account/quen-mat-khau?token=" + tokenConfirm.getNameToken();
@@ -224,7 +240,7 @@ public class AuthService {
     }
 
     public User getUserCurrent (){
-        return userRepository.findByEmail(httpSession.getAttribute("MY_SESSION").toString()).orElseThrow(()->new UsernameNotFoundException("Không tìm thấy"));
+        return userRepository.findByEmail(httpSession.getAttribute("MY_SESSION").toString()).orElseThrow(()->new UsernameNotFoundException("Không tìm thấy user hiện tại "));
     }
 
 }
