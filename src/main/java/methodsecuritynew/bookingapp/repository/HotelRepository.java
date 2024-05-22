@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface HotelRepository extends JpaRepository<Hotel,Integer> {
     List<Hotel> findHotelByCity_NameIgnoreCase(String name);
+    Hotel findHotelByName(String name);
 
 }
 

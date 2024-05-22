@@ -19,7 +19,6 @@ import java.util.List;
 @Getter
 @Setter
 public class Hotel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
@@ -40,9 +39,13 @@ public class Hotel {
     City city;
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "policyHotel_id" )
     PolicyHotel policyHotel;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id" )
+    User user;
 
     Integer star;
     String hotline;
@@ -61,13 +64,12 @@ public class Hotel {
     )
     List<AmenityHotel> amenityHotelList;
 
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL ,fetch = FetchType.EAGER )
-    private List<PriceRoom> priceRoomList;
+
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL ,fetch = FetchType.EAGER, orphanRemoval = true )
+     List<PriceRoom> priceRoomList;
 
 //    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
 //    private List<Image> images;
-
-
 
     public String getRatingText() {
         if (rating == null) {

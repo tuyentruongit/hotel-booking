@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface SupportRepository extends JpaRepository<Support,Integer> {
 
-
-
     List<Support> findBySupportType(SupportType supportTypeValue);
 }
 

@@ -344,37 +344,37 @@ $('#form-search').validate({
 // });
 
 // xủ lý khi người dùng click vào nút yêu thích
-let btnHeart = document.querySelector('.btn-favourite');
+// let btnHeart = document.querySelector('.btn-favourite');
 
-btnHeart.addEventListener('click',()=>{
-    if (btnHeart.getAttribute("type-button")==="add") {
-        axios.post("/api/hotel/favourite/"+btnHeart.value)
-            .then(()=>{
-                toastr.success("Đã thêm khách sạn vào danh sách yêu thích.")
-                btnHeart.classList.add("style-heart")
-                btnHeart.setAttribute("type-button","delete")
-            })
-            .catch((err)=>{
-                if (err.response.status===401){
-                    toastr.error("Vui lòng đăng nhập");
-                }
-            })
-
-    } else {
-        axios.delete("/api/hotel/favourite/"+btnHeart.value)
-            .then(()=>{
-                toastr.success("Đã xóa khách sạn khỏi danh sách yêu thích.")
-                btnHeart.classList.remove("style-heart");
-                btnHeart.setAttribute("type-button","add")
-            })
-            .catch((err)=>{
-                if (err.response.status===401){
-                    toastr.error("Vui lòng đăng nhập");
-                }
-            })
-
-    }
-})
+// btnHeart.addEventListener('click',()=>{
+//     if (btnHeart.getAttribute("type-button")==="add") {
+//         axios.post("/api/hotel/favourite/"+btnHeart.value)
+//             .then(()=>{
+//                 toastr.success("Đã thêm khách sạn vào danh sách yêu thích.")
+//                 btnHeart.classList.add("style-heart")
+//                 btnHeart.setAttribute("type-button","delete")
+//             })
+//             .catch((err)=>{
+//                 if (err.response.status===401){
+//                     toastr.error("Vui lòng đăng nhập");
+//                 }
+//             })
+//
+//     } else {
+//         axios.delete("/api/hotel/favourite/"+btnHeart.value)
+//             .then(()=>{
+//                 toastr.success("Đã xóa khách sạn khỏi danh sách yêu thích.")
+//                 btnHeart.classList.remove("style-heart");
+//                 btnHeart.setAttribute("type-button","add")
+//             })
+//             .catch((err)=>{
+//                 if (err.response.status===401){
+//                     toastr.error("Vui lòng đăng nhập");
+//                 }
+//             })
+//
+//     }
+// })
 
 
 

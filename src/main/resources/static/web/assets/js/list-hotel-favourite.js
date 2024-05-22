@@ -51,15 +51,29 @@ const renderData = (list) =>{
 }
 
 const deleteHotelFavourite = (id) =>{
-    axios.delete("/api/hotel/favourite/"+id)
+    axios.delete("/api/hotel/favourite/"+id+"?pageNumber="+currentPage)
         .then((response)=>{
-            console.log(response);
+            console.log(response.data.numberOfElements)
+            console.log(response)
+            let index = response.data.pageable.pageNumber;
             toastr.success("Đã xóa khách sạn ra khỏi danh sách yêu thích")
-            hotelList = hotelList.filter(review => review.id !== id)
+            if (response.data.numberOfElements === 0 && index>0){
+                window.location.href=window.location.pathname+'?pageNumber='+index
+            }
+            else if(response.data.numberOfElements === 0 && index===0){
+                // document.querySelector('.container-body').innerHTML =
+               // window.location.reload();
+               console.log(document.querySelector('.title-page'))
+               console.log(document.querySelector('.wrap-pagination'))
+                document.querySelector('.title-page').innerHTML = `<h1>Chưa có khách sạn nào được thêm vào mục yêu thích</h1>`
+                document.querySelector('.pagination').style.display = 'none';
+            }
+            hotelList = response.data.content
             renderData(hotelList);
         })
         .catch((err)=>{
-            toastr.error("Đã xóa khách sạn ra khỏi danh sách yêu thích");
+            console.log(err)
+            toastr.error(err);
         })
 }
 

@@ -204,15 +204,10 @@ public class WebController {
         LocalDate end = LocalDate.parse(checkOut,dateTimeFormatter);
         Hotel hotel = hotelService.getHotelById(idHotel);
         Room room = roomService.getRoomById(idRoom);
-
         Locale locale = new Locale("vi","VN");
-
-
         String startDayOfWeek = start.getDayOfWeek().getDisplayName(TextStyle.SHORT, locale);
         String endDayOfWeek = end.getDayOfWeek().getDisplayName(TextStyle.SHORT, locale);
         Period period = Period.between(start,end);
-
-
         model.addAttribute("startDayOfWeek",startDayOfWeek);
         model.addAttribute("listPaymentMethod", PaymentMethod.values());
         model.addAttribute("endDayOfWeek",endDayOfWeek);

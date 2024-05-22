@@ -5,6 +5,7 @@ import methodsecuritynew.bookingapp.entity.City;
 import methodsecuritynew.bookingapp.repository.CityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -20,4 +21,10 @@ public class CityService {
                .toList();
     }
 
+    public List<City> getAllCity() {
+            return cityRepository.findAll().stream().sorted(Comparator.comparing(City::getName)).toList();
+    }
+    public City getCityById (Integer id){
+        return  cityRepository.findById(id).orElseThrow(()->new RuntimeException("Không tìm thấy thành phố nào có id : " + id));
+    }
 }

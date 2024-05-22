@@ -4,20 +4,29 @@ import jakarta.persistence.EntityNotFoundException;
 
 
 import lombok.RequiredArgsConstructor;
+import methodsecuritynew.bookingapp.entity.City;
 import methodsecuritynew.bookingapp.entity.Hotel;
 import methodsecuritynew.bookingapp.entity.Room;
 import methodsecuritynew.bookingapp.entity.User;
+import methodsecuritynew.bookingapp.exception.BadRequestException;
+import methodsecuritynew.bookingapp.model.request.UpsertHotelRequest;
+import methodsecuritynew.bookingapp.model.statics.RentalType;
+import methodsecuritynew.bookingapp.model.statics.UserRole;
+import methodsecuritynew.bookingapp.repository.AmenityHotelRepository;
 import methodsecuritynew.bookingapp.repository.HotelRepository;
 import methodsecuritynew.bookingapp.repository.RoomRepository;
 import methodsecuritynew.bookingapp.repository.UserRepository;
+import methodsecuritynew.bookingapp.security.CustomUserDetailService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -26,6 +35,10 @@ public class HotelService {
     private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final AuthService authService;
+    private final CityService cityService;
+    private final PasswordEncoder passwordEncoder;
+
     public List<Hotel> hotelListSearch = new ArrayList<>();
 
     public void getHotelBySearch(String nameCity, String checkIn, String checkOut, Integer numberGuest, Integer numberRoom) {
@@ -100,8 +113,77 @@ public class HotelService {
     }
 
     public List<Hotel> getAllHotelFavourite(String email) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
-        return optionalUser.get().getHotelList();
+        User optionalUser = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("Không tìm thấy người dùng nào có email như :" + email ));
+        return optionalUser.getHotelList();
 
+    }
+
+    public List<Hotel> getAllHotel() {
+        return hotelRepository.findAll().stream()
+                .sorted((ht1, ht2)-> ht2.getCreatedAt().compareTo(ht1.getCreatedAt()))
+                .toList();
+    }
+
+    public Hotel updateHotelAdmin(Integer id, UpsertHotelRequest request) {
+        Hotel hotel = hotelRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Không tìm thấy khách sạn nào có id : " + id ));
+        City city = cityService.getCityById(request.getIdCity());
+        RentalType rentalType = RentalType.valueOf(request.getRentalType());
+        hotel.setUpdatedAt(LocalDate.now());
+        hotel.setCity(city);
+        hotel.setAddress(request.getAddressHotel());
+        hotel.setHotline(request.getPhoneHotel());
+        hotel.setEmail(request.getEmail());
+        hotel.setName(request.getName());
+        hotel.setRentalType(rentalType);
+        hotel.setDescription(request.getDescription());
+        hotel.setStatus(request.getStatus());
+        String regex = "^0([0-9]{9})";
+        if (request.getPhoneHotel().matches(regex)){
+            hotel.setHotline(request.getPhoneHotel());
+        }else {
+            throw new BadRequestException("Số điện thoại của bạn không hợp lệ ");
+        }
+
+        return hotelRepository.save(hotel);
+
+    }
+
+    public Hotel createHotelAdmin( UpsertHotelRequest request) {
+        User user =  authService.createUserHotel(request);
+        String regex = "^0([0-9]{9})";
+        String phone = "";
+        if (request.getPhoneHotel().matches(regex)){
+            phone = request.getPhoneHotel();
+        }else {
+            throw new BadRequestException("Số điện thoại của bạn không hợp lệ ");
+        }
+        if (hotelRepository.findHotelByName(request.getName())!=null){
+           throw new RuntimeException("Tên khách sạn trên đã tồn tại");
+        }
+        City city = cityService.getCityById(request.getIdCity());
+        RentalType rentalType = RentalType.valueOf(request.getRentalType());
+        Hotel hotel = Hotel.builder()
+                .name(request.getName())
+                .status(request.getStatus())
+                .city(city)
+                .rentalType(rentalType)
+                .email(request.getEmail())
+                .description(request.getDescription())
+                .address(request.getAddressHotel())
+                .createdAt(LocalDate.now())
+                .hotline(phone)
+                .user(user)
+                .build();
+        return hotelRepository.save(hotel);
+    }
+
+    public void deleteHotel(Integer id) {
+        Hotel hotel = hotelRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Không tìm thấy khách sạn nào có id : " + id ));
+
+        List<Room> roomList = roomRepository.findReviewByHotel_Id(id);
+        roomRepository.deleteAll(roomList);
+        hotelRepository.delete(hotel);
     }
 }

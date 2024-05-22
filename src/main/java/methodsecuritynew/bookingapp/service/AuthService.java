@@ -147,14 +147,14 @@ public class AuthService {
     }
 
 
-
+    @Transactional
     public void updateUser(Integer id, ChangeInformationUserRequest changeInformationUserRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không thể tìm thấy user trên ") );
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
         LocalDate birthday = LocalDate.parse(changeInformationUserRequest.getBirthDay(),dateTimeFormatter);
         user.setAddress(changeInformationUserRequest.getAddress());
         user.setName(changeInformationUserRequest.getName());
-        String regex = "^0([0-9]{9})";
+        String regex = "^0([0-9]{8})";
         if (changeInformationUserRequest.getPhone().matches(regex)){
             user.setPhoneNumber(changeInformationUserRequest.getPhone());
         }else {
@@ -169,8 +169,6 @@ public class AuthService {
 
     public void changePassword(Integer id, ChangePasswordRequest changePasswordRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user") );
-
-
 
         // kiểm tra xem mật khẩu có đúng với mật khẩu được lưu trong db không
         if (passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())){
@@ -241,6 +239,32 @@ public class AuthService {
 
     public User getUserCurrent (){
         return userRepository.findByEmail(httpSession.getAttribute("MY_SESSION").toString()).orElseThrow(()->new UsernameNotFoundException("Không tìm thấy user hiện tại "));
+    }
+    public User createUserHotel(UpsertHotelRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()){
+            throw new BadRequestException("Email đã tồn tại");
+        }
+        if (userRepository.findByPhoneNumber(request.getPhoneHotel()).isPresent()){
+            throw new BadRequestException("Số điện thoại đã tồn tại");
+        }
+        String regex = "^0([0-9]{9})";
+        String phone = "";
+        if (request.getPhoneHotel().matches(regex)){
+            phone = request.getPhoneHotel();
+        }else {
+            throw new BadRequestException("Số điện thoại của bạn không hợp lệ ");
+        }
+        User user = User.builder()
+                .name(request.getName())
+                .userRole(UserRole.ROLE_HOTEL)
+                .password(passwordEncoder.encode("12345678"))
+                .email(request.getEmail())
+                .createdAt(LocalDate.now())
+                .avatar("/web/assets/image/avatar-default.jpg")
+                .enable(true)
+                .phoneNumber(phone)
+                .build();
+        return userRepository.save(user);
     }
 
 }
