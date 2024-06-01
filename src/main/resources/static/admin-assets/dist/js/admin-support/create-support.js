@@ -12,11 +12,7 @@ easyMDE.codemirror.on('change', function () {
 // tạo bài viết
 saveSupport.addEventListener('click',(e)=>{
     e.preventDefault();
-    if (!$("#form-suppor").valid()) return;
-    if (contentSupportEl.value===''){
-        alert("Vui lòng nhập nội dung");
-        return;
-    }
+    if (!$("#form-support").valid()) return;
     let status = false ;
     if (statusSupportEl.value==="1"){
         status = true;
@@ -42,7 +38,7 @@ saveSupport.addEventListener('click',(e)=>{
 
 })
 
-$('#form-suppor').validate({
+$('#form-support').validate({
     rules: {
         title: {
             required: true,

@@ -36,9 +36,6 @@ public class SecurityConfig {
     private final CustomFilter customFilter;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-    private final HttpSession httpSession;
-
-
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -55,9 +52,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-
-
-
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests(authorization -> {
             authorization.anyRequest().permitAll();

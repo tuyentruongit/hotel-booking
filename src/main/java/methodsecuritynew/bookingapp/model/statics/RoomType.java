@@ -14,7 +14,5 @@ public enum RoomType {
     SUITE("Phòng Suite"),
     DELUXE("Phòng Cao Cấp"),
     EXECUTIVE("Phòng Hạng Cao Cấp");
-
-
     private final String value;
 }

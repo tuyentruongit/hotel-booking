@@ -39,7 +39,7 @@ public class AuthApi {
     }
     @PutMapping("/password-retrieval")
     public ResponseEntity<?> changePasswordForForgetPassword(@RequestBody UpsertPasswordRetrieval upsertPasswordRetrieval){
-      authService.changePasswordForForgetPassword(upsertPasswordRetrieval);
+        authService.changePasswordForForgetPassword(upsertPasswordRetrieval);
         return ResponseEntity.ok().build();
 
     }

@@ -1,11 +1,10 @@
 package methodsecuritynew.bookingapp.service;
 
 import jakarta.servlet.http.HttpSession;
-import methodsecuritynew.bookingapp.entity.Image;
-import methodsecuritynew.bookingapp.entity.ImageUser;
-import methodsecuritynew.bookingapp.entity.User;
-import methodsecuritynew.bookingapp.repository.ImageUserRepository;
-import methodsecuritynew.bookingapp.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import methodsecuritynew.bookingapp.entity.*;
+import methodsecuritynew.bookingapp.repository.*;
+import methodsecuritynew.bookingapp.untils.FileUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,11 +28,17 @@ public class ImageService {
 
     private final UserRepository userRepository;
     private final HttpSession session;
+    private final HotelRepository hotelRepository;
+    private final ImageHotelRepository imageHotelRepository;
+    private final CityRepository cityRepository;
 
-    public ImageService( ImageUserRepository imageUserRepository, UserRepository userRepository, HttpSession session) {
+    public ImageService(ImageUserRepository imageUserRepository, UserRepository userRepository, HttpSession session, HotelRepository hotelRepository, ImageHotelRepository imageHotelRepository, CityRepository cityRepository) {
         this.imageUserRepository = imageUserRepository;
         this.userRepository = userRepository;
         this.session = session;
+        this.hotelRepository = hotelRepository;
+        this.imageHotelRepository = imageHotelRepository;
+        this.cityRepository = cityRepository;
         createDirector(uploadDir);
     }
 
@@ -49,6 +54,44 @@ public class ImageService {
            }catch (IOException e){
                throw new RuntimeException("Không thể tạo được file");
            }
+        }
+    }
+
+    @Transactional
+    public ImageHotel uploadImageHotel (Integer idHotel , MultipartFile multipartFile){
+        Hotel hotel = hotelRepository.findById(idHotel).orElseThrow(()-> new RuntimeException("Không tìm thấy khách sạn nào có id :"+idHotel));
+        // tạo một id image
+         String imageId = UUID.randomUUID().toString();
+
+        // tìm đường dẫn tới folder lưu ảnh
+        Path rootPath = Paths.get(uploadDir).resolve("image_hotel");
+        creatFolder(rootPath);
+        // tạo đường dẫn file mới với tên là  idImage;
+        Path filePath = rootPath.resolve(imageId);
+        try {
+            // sao chép dữ liệu từ input vào 1 pathfile đã được tạo đường dẫn trước đó
+            Files.copy(multipartFile.getInputStream(),filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Không thể upload file " + imageId);
+        }
+        ImageHotel imageHotel = new ImageHotel();
+        imageHotel.setId(imageId);
+        // set tên của file được upload
+        imageHotel.setName(multipartFile.getOriginalFilename());
+        imageHotel.setType(multipartFile.getContentType());
+        imageHotel.setSize(multipartFile.getSize() / 1048576.0);
+        imageHotel.setUrl("/"+uploadDir+"/image_hotel/"+imageId);
+        imageHotel.setHotel(hotel);
+        return imageHotelRepository.save(imageHotel);
+    }
+    public void creatFolder(Path path){
+        if (!Files.exists(path)){
+            try{
+                // tạo thư mục
+                Files.createDirectory(path);
+            }catch (IOException e){
+                throw new RuntimeException("Không thể tạo được ");
+            }
         }
     }
 
@@ -91,10 +134,55 @@ public class ImageService {
         if (imageUserOld!=null){
             // lấy đường dẫn đến avt được tìm thấy
             Path filePathDelete = Paths.get(uploadDir).resolve(imageUserOld.getId());
-//            Path fisllld = Paths.get(imageUserOld.getUrl());
-//
-//            System.out.println("----------------------------------------------------------------------------"+filePathDelete);
-//            System.out.println("----------------------------------------------------------------------------"+fisllld);
+            try {
+                // xóa file đó đi
+                Files.deleteIfExists(filePathDelete);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            // xóa đối tượng image user khỏi db
+            imageUserRepository.delete(imageUserOld);
+        }
+        return imageUserRepository.save(imageUser);
+    }
+    public ImageUser uploadImageForUser(Integer id ,MultipartFile file) {
+
+        User user = userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("Không tìm thấy người dùng trên "));
+
+        // upload file vào folder
+        // tạo một id image
+        String imageId = UUID.randomUUID().toString();
+
+        // tìm đường dẫn tới folder lưu ảnh
+        Path rootPath = Paths.get(uploadDir);
+
+        // tạo đường dẫn file mới với tên là  idImage;
+        Path filePath = rootPath.resolve(imageId);
+
+
+        try {
+            // sao chép dữ liệu từ input vào 1 pathfile đã được tạo đường dẫn trước đó
+            Files.copy(file.getInputStream(),filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Không thể upload file " + imageId);
+        }
+
+        ImageUser imageUser = new ImageUser();
+        imageUser.setId(imageId);
+        // set tên của file được upload
+        imageUser.setName(file.getOriginalFilename());
+        imageUser.setType(file.getContentType());
+        imageUser.setSize(file.getSize() / 1048576.0);
+        imageUser.setUrl("/"+uploadDir+"/"+imageId);
+        imageUser.setUser(user);
+        user.setAvatar("/"+uploadDir+"/"+imageId);
+
+
+        // lấy ra avatar trươc đây người dùng dã lưu, sau đó xóa avt đó ra khỏi folder
+        ImageUser imageUserOld =  imageUserRepository.findAllByUser_Id(user.getId());
+        if (imageUserOld!=null){
+            // lấy đường dẫn đến avt được tìm thấy
+            Path filePathDelete = Paths.get(uploadDir).resolve(imageUserOld.getId());
             try {
                 // xóa file đó đi
                 Files.deleteIfExists(filePathDelete);
@@ -114,10 +202,8 @@ public class ImageService {
          if (Objects.equals(user.getId(), imageUserOld.getUser().getId())){
              Path filePathDelete = Paths.get(uploadDir).resolve(id);
 
-             try{  Path fisllld = Paths.get(imageUserOld.getUrl());
+             try{
 
-                 System.out.println("----------------------------------------------------------------------------"+filePathDelete);
-                 System.out.println("----------------------------------------------------------------------------"+fisllld);
                  Files.deleteIfExists(filePathDelete);
                  user.setAvatar("/web/assets/image/avatar-default.jpg");
                  imageUserRepository.delete(imageUserOld);
@@ -132,5 +218,43 @@ public class ImageService {
 
     public ImageUser getImageCurrentUser(Integer id) {
         return  imageUserRepository.findAllByUser_Id(id);
+    }
+
+    public List<ImageHotel> getAllImageByIdHotel(int i) {
+      return imageHotelRepository.findAllByHotel_Id(i);
+    }
+
+    public void deleteImageHotel(String id) {
+        ImageHotel imageHotel = imageHotelRepository.findById(id).orElseThrow(()->new RuntimeException("Không tìm thấy image"));
+        Path filePathDelete = Paths.get(uploadDir).resolve("image_hotel").resolve(id);
+        try{
+            Files.deleteIfExists(filePathDelete);
+            imageHotelRepository.delete(imageHotel);
+        }catch (IOException ioException){
+            throw new RuntimeException(ioException);
+        }
+
+    }
+
+    public City uploadImageCity(MultipartFile file, Integer id) {
+
+        City city = cityRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy thành phố nào có id " + id));
+        String imageId = UUID.randomUUID().toString();
+
+        Path rootPath = Paths.get(uploadDir).resolve("image_city");
+        creatFolder(rootPath);
+        Path filePath = rootPath.resolve(imageId);
+
+       if (city.getImageCity()!=null){
+           FileUtils.deleteFile(city.getImageCity());
+       }
+        try {
+            Files.copy(file.getInputStream(),filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Không thể upload file " + imageId);
+        }
+        city.setImageCity("/"+uploadDir+"/image_city/"+imageId);
+        return cityRepository.save(city);
     }
 }

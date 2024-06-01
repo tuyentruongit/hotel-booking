@@ -11,8 +11,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
-@Entity
-@Table(name = "paycards")
 public class PayCard {
 
     @Id

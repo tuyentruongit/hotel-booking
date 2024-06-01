@@ -15,5 +15,6 @@ public class UpsertHotelRequest {
     String email ;
     String addressHotel;
     Integer idCity ;
+    Integer star ;
     Boolean status;
 }

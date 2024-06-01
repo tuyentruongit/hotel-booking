@@ -34,6 +34,8 @@ public class Hotel {
 
     String address;
 
+    String poster;
+
     @ManyToOne
     @JoinColumn(name = "city_id")
     City city;
@@ -48,28 +50,17 @@ public class Hotel {
     User user;
 
     Integer star;
+
     String hotline;
+
     Float rating;
 
     @Enumerated(EnumType.STRING)
     RentalType rentalType;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "amenity_hotel",
-            joinColumns = @JoinColumn(name = "id_hotel"),
-            inverseJoinColumns = @JoinColumn(name = "id_amenity")
-
-    )
-    List<AmenityHotel> amenityHotelList;
-
-
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL ,fetch = FetchType.EAGER, orphanRemoval = true )
      List<PriceRoom> priceRoomList;
-
-//    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL)
-//    private List<Image> images;
 
     public String getRatingText() {
         if (rating == null) {

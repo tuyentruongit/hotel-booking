@@ -21,8 +21,6 @@ public class Review {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     Integer id;
 
-
-
     @ManyToOne
     @JoinColumn(name = "id_user")
     User user;

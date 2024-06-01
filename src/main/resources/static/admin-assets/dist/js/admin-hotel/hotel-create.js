@@ -6,11 +6,11 @@ const btnSave = document.getElementById("btn-create-hotel");
 const  phoneHotelEl = document.getElementById("phoneHotel");
 const emailHotelEl = document.getElementById("emailHotel");
 const rentalHotelEl = document.getElementById("rentalType");
+const starEl = document.getElementById("star");
 const addressHotelEl = document.getElementById("addressHotel");
 
 
-
-
+// tạo khách sạn mới
 btnSave.addEventListener('click' ,(e)=>{
     e.preventDefault();
     if (!$('#form-create-hotel').valid()) return;
@@ -27,6 +27,7 @@ btnSave.addEventListener('click' ,(e)=>{
         email : emailHotelEl.value,
         addressHotel : addressHotelEl.value,
         idCity :  parseInt(cityEl.value),
+        star : parseInt(starEl.value)
     }
     console.log(data);
     axios.post("/api/hotel/admin/create",data)
@@ -42,60 +43,56 @@ btnSave.addEventListener('click' ,(e)=>{
 })
 
 
-// $('#form-create-hotel').validate({
-//     rules: {
-//         title: {
-//             required: true,
-//         },
-//         director: {
-//             required: true,
-//         },
-//         description: {
-//             required: true
-//         },
-//         actor: {
-//             required: true
-//         },
-//         genre: {
-//             required: true
-//         },
-//         relishedAt: {
-//             required: true
-//         },
-//         thumbnail: {
-//             required: true
-//         }
-//     }, messages: {
-//         title: {
-//             required: "Vui lòng nhập tiêu đề phim",
-//
-//         }, director: {
-//             required: "Vui lòng nhập đạo diễn bộ phim",
-//
-//         }, description: {
-//             required: "Vui lòng nhập mô tả cho phim"
-//         }
-//         , actor: {
-//             required: "Vui lòng nhập diễn viên"
-//         }
-//         , genre: {
-//             required: "Vui lòng nhập thể loại "
-//         }
-//         , relishedAt: {
-//             required: "Vui lòng nhập năm sản xuất"
-//         }
-//         , thumbnail: {
-//             required: "Vui lòng chọn hình ảnh"
-//         }
-//     }, errorElement: 'span', errorPlacement: function (error, element) {
-//         error.addClass('invalid-feedback');
-//         element.closest('.form-group').append(error);
-//     }, highlight: function (element, errorClass, validClass) {
-//         $(element).addClass('is-invalid');
-//     }, unhighlight: function (element, errorClass, validClass) {
-//         $(element).removeClass('is-invalid');
-//     }
-// });
+$('#form-create-hotel').validate({
+    rules: {
+        nameHotel: {
+            required: true,
+        },
+        city: {
+            required: true,
+        },
+        description: {
+            required: true
+        },
+        address: {
+            required: true
+        },
+        phoneHotel: {
+            required: true
+        },
+        emailHotel: {
+            required: true,
+            email : true
+        },
+
+    }, messages: {
+        nameHotel: {
+            required: "Vui lòng nhập tên khách sạn",
+
+        }, city: {
+            required: "Vui lòng chọn thành phố ",
+
+        }, description: {
+            required: "Vui lòng thêm mô tả"
+        }
+        , address: {
+            required: "Vui lòng nhập địa chỉ cho khách sạn"
+        }
+        , phoneHotel: {
+            required: "Vui lòng nhập số điện thoại"
+        }
+        , emailHotel: {
+            required: "Vui lòng nhập email"
+        }
+    }, errorElement: 'span', errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    }, highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    }, unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    }
+});
 
 
 

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.TokenConfirm;
 import methodsecuritynew.bookingapp.entity.User;
 import methodsecuritynew.bookingapp.exception.BadRequestException;
+import methodsecuritynew.bookingapp.exception.ResourceNotFoundException;
 import methodsecuritynew.bookingapp.model.request.*;
 
 import methodsecuritynew.bookingapp.model.response.VerifyAccountResponse;
@@ -27,8 +28,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -58,13 +61,20 @@ public class AuthService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             // lưu vào session
             httpSession.setAttribute("MY_SESSION",authentication.getName());
+//            if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_HOTEL"))) {
+//                // Nếu vai trò là khách sạn, chuyển hướng đến trang của khách sạn
+//                return "redirect:/hotel-page"; // Thay đổi đường dẫn tới trang của khách sạn
+//            } else {
+//                // Nếu không phải là khách sạn, có thể chuyển hướng đến trang mặc định hoặc trang chính của người dùng
+//                return "redirect:/default-page"; // Thay đổi đường dẫn tới trang mặc định
+//            }
 
         }
         catch(DisabledException disabledException){
             throw new DisabledException("Tài khoản chưa được xác thực");
         }
         catch (AuthenticationException  e){
-           throw new RuntimeException ("Tài khoản hoặc mật khẩu không đúng");
+           throw new RuntimeException ("Tài khoản hoặc mật khẩu không chính xác");
         }
     }
 
@@ -155,6 +165,7 @@ public class AuthService {
         user.setAddress(changeInformationUserRequest.getAddress());
         user.setName(changeInformationUserRequest.getName());
         String regex = "^0([0-9]{8})";
+
         if (changeInformationUserRequest.getPhone().matches(regex)){
             user.setPhoneNumber(changeInformationUserRequest.getPhone());
         }else {
@@ -267,4 +278,51 @@ public class AuthService {
         return userRepository.save(user);
     }
 
+    public List<User> getAllUserRoleUser() {
+        return userRepository.findAllByUserRole(UserRole.ROLE_USER);
+    }
+
+    public User getUserById(Integer id) {
+        return userRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("Không tìm thấy user nào có id :"+id));
+    }
+
+
+
+//    public void resetPassword(String email) {
+//        // check email exist
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy email"));
+//
+//        // Create token confirm
+//        TokenConfirm tokenConfirm = new TokenConfirm();
+//        tokenConfirm.setNameToken(UUID.randomUUID().toString());
+//        tokenConfirm.setUser(user);
+//        tokenConfirm.setType(TokenType.PASSWORD_RESET);
+//        // set expiry date after 1 day
+//        tokenConfirm.setExpiryDate(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000));
+//        tokenConfirmRepository.save(tokenConfirm);
+//
+//        // send email
+//        log.info("Send email");
+//        Map<String, String> data = new HashMap<>();
+//        data.put("email", user.getEmail());
+//        data.put("username", user.getName());
+//        data.put("token", tokenConfirm.getToken());
+//
+//        mailService.sendMailResetPassword(data);
+//
+//        log.info("Send mail success");
+//    }
+
+
+//    public void submitReasonDelete(Integer id, String reason) {
+//        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user"));
+//        UserDelete userDelete = UserDelete.builder()
+//                .user(user)
+//                .reason(reason)
+//                .createdAt(LocalDate.now())
+//                .status(false)
+//                .build();
+//        userDeleteRepository.save(userDelete);
+//    }
 }

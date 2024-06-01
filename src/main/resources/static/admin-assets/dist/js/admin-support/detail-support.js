@@ -46,13 +46,13 @@ saveSupport.addEventListener('click', (e) => {
     }
     axios.put("/api/support/admin/update/" + idSupportAdmin, dataSupport)
         .then((res) => {
-            // toastr.success("Lưu thành công ");
+            toastr.success("Cập nhật thành công");
             setTimeout(() => {
                 window.location.href = "/admin/support";
             }, 1500);
         })
         .catch((err) => {
-            // toastr.error(err.response.data.message);
+            toastr.error(err.response.data.message);
         })
 
 })

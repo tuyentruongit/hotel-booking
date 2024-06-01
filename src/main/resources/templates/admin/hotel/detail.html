@@ -83,7 +83,7 @@
                                     <div class="col-md-8">
                                         <div class="form-group">
                                             <label>Tên Khách sạn</label>
-                                            <input name="title" type="text" class="form-control" id="nameHotel"/>
+                                            <input name="nameHotel" type="text" class="form-control" id="nameHotel"/>
                                         </div>
 
                                         <div class="form-group">
@@ -94,7 +94,7 @@
                                         <div class="form-group">
                                             <label>Thành phố</label>
                                             <div class="select2-purple">
-                                                <select name="actor" class=" form-control" id="city">
+                                                <select name="city" class=" form-control" id="city">
                                                     <option th:each="city : ${cityList}" th:value="${city.id}"
                                                             th:text="${city.name}"></option>
                                                 </select>
@@ -109,11 +109,11 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="col-5">Số điện thoại</label>
-                                            <input id="phoneHotel" class="col-7 phone-hotel" type="text" placeholder="Số điện thoại">
+                                            <input name="phoneHotel" id="phoneHotel" class="col-7 phone-hotel" type="text" placeholder="Số điện thoại">
                                         </div>
                                         <div class="form-group">
                                             <label  class="col-5">Email</label>
-                                            <input id="emailHotel" class="col-7 email-hotel" type="text" placeholder="Email">
+                                            <input name="emailHotel" id="emailHotel" class="col-7 email-hotel" type="text" placeholder="Email">
                                         </div>
 
                                         <div class="form-group">
@@ -133,6 +133,19 @@
                                                 <option th:each="rentalType : ${rentalTypes}" th:value="${rentalType}"
                                                         th:text="${rentalType.value}"></option>
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Xếp hạng sao</label>
+                                            <div class="">
+                                                <select name="city" class=" form-control" id="star">
+                                                    <option value="0">Khác</option>
+                                                    <option value="1">1 sao</option>
+                                                    <option value="2">2 sao</option>
+                                                    <option value="3">3 sao</option>
+                                                    <option value="4">4 sao</option>
+                                                    <option value="5">5 sao</option>
+                                                </select>
+                                            </div>
                                         </div>
 
                                     </div>

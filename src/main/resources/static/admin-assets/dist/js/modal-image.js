@@ -89,7 +89,6 @@ const  renderPagination = (images) =>{
         }
     })
 }
-
 renderPagination(imageList);
 
 

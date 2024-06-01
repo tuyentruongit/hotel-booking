@@ -8,7 +8,6 @@ const inputAddress = document.querySelector('.address');
 const inputMonth = document.querySelectorAll('.month')
 const inputDay = document.querySelectorAll('.day');
 const inputYear = document.querySelectorAll('.year');
-
 const date = document.getElementById('date-birth-day');
 const listGender = document.querySelectorAll('.gender-option');
 
@@ -107,8 +106,6 @@ const formatDate = (dateString) => {
     console.log( 'đầu vào'+dateString)
     const date = new Date(dateString);
     console.log( 'tạo date'+date)
-
-
 
     const day = `0${date.getDate()}`.slice(-2); // `05` -> 05 , '015' -> 15
     console.log( 'ngày'+day)
@@ -217,7 +214,6 @@ inputImage.addEventListener('input',(e)=>{
     // lưu vào đối tượng form data
     formData.append('file',file);
     saveImage.disabled=false;
-    console.log(formData)
 })
 
 
@@ -245,12 +241,13 @@ const btnDeleteImageUser = document.getElementById('btn-delete-image-user');
 // xử lý khi click vaào button xóa image
 btnDeleteImageUser.addEventListener('click',(e)=>{
     e.preventDefault();
-    // gọi api để đẩy dữ liệu ảnh lên
+    // gọi api để xóa dữ liệu ảnh lên
     axios.delete('api/images/delete/user/'+imageUser.id)
         .then((response)=>{
             btnDeleteImageUser.classList.add('d-none')
             modalUploadImage.hide()
             toastr.success("Xóa avatar thành công")
+            btnDeleteImageUser.disabled=true;
 
         })
         .catch((err)=>{

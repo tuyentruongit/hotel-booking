@@ -5,16 +5,10 @@
 
 <head>
 
-    <title>AdminLTE 3 | Dashboard</title>
+    <title>Chi tiết bài viết</title>
     <th:block id="css">
-        <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css" />
-
         <link rel="stylesheet" href="/admin-assets/plugins/select2/css/select2.min.css" />
         <link rel="stylesheet" href="/admin-assets/dist/css/style.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css"
-              integrity="sha512-K1k7jSn9RDKEcn/ugqVVvWYu0bcS3q1w6m/5pQSnrj0bCfIqF6Wk49lkmckSb4wglvTP9V17LtS0q0XxYccXbg=="
-              crossorigin="anonymous" referrerpolicy="no-referrer"/>
         <style>
             .modal-dialog {
                 max-width: 1000px;
@@ -58,15 +52,14 @@
                     <div class="col-sm-12">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="#">Dashboard</a>
+                                <a th:href="@{/admin/dashboard}">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="#">Bài viết</a>
+                                <a th:href="@{/admin/support}">Support</a>
                             </li>
-<!--                            <li class="breadcrumb-item active">-->
-<!--                                Thực hành làm ứng dụng Meal Finder API-->
-<!--                                với Javascript (Phần 2)-->
-<!--                            </li>-->
+                            <li class="breadcrumb-item active">
+                                Chi tiết bài viết
+                            </li>
                         </ol>
                     </div>
                 </div>
@@ -78,9 +71,9 @@
             <div class="container-fluid">
                 <div class="row py-2">
                     <div class="col-6">
-                        <button type="button" class="btn btn-default">
-                            <i class="fas fa-chevron-left"></i> Quay lại
-                        </button>
+<!--                        <button type="button" class="btn btn-default">-->
+<!--                            <i class="fas fa-chevron-left"></i> Quay lại-->
+<!--                        </button>-->
                         <button id="update" type="button" class="btn btn-info px-4">
                             Lưu
                         </button>
@@ -168,9 +161,6 @@
     <<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
              integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
              crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js"
-            integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script th:src="@{/admin-assets/dist/js/notify-admin.js}"></script>
 
 

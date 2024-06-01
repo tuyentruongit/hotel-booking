@@ -10,8 +10,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "discount")
 @Builder
 public class Discount {
 
@@ -21,9 +19,11 @@ public class Discount {
 
     LocalDate startDate;
     LocalDate endDate;
+
     @Enumerated(EnumType.STRING)
     RoomType roomType;
     Double discountPercentage; // phần trăm giảm giá
+
     @ManyToOne
     @JoinColumn(name = "hotel_id")
     Hotel hotel;

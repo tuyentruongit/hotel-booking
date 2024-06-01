@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{hotel-management/layout/layout.html :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
+
+<head>
+    <title>AdminLTE 3 | Dashboard</title>
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+              integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <link rel="stylesheet" href="/admin-assets/plugins/select2/css/select2.min.css" />
+        <link rel="stylesheet" href="/admin-assets/dist/css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css"
+              integrity="sha512-K1k7jSn9RDKEcn/ugqVVvWYu0bcS3q1w6m/5pQSnrj0bCfIqF6Wk49lkmckSb4wglvTP9V17LtS0q0XxYccXbg=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <style>
+            input[type=number]::-webkit-outer-spin-button,
+            input[type=number]::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+           .input-area, .input-number-guest{
+               width: 70px;
+               border-radius: 10px;
+               border: 1px #2c3034 solid;
+               padding: 5px;
+           }
+
+            .image-item img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        </style>
+
+    </th:block>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper" id="main-content">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <!--            <li class="breadcrumb-item">-->
+                        <!--              <a href="#">Dashboard</a>-->
+                        <!--            </li>-->
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/hotel-manager/room}">Phòng</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Tạo bài viết
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default">
+                        <i class="fas fa-chevron-left"></i> Quay lại
+                    </button>
+                    <button id="save" type="button" class="btn btn-info px-4">
+                        Lưu
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8" >
+                                    <form id="form-support">
+                                        <div class="form-group">
+                                            <i style="min-width: 3%" class="fa-solid fa-monument"></i>
+                                            <label>Tên phòng</label>
+                                            <input  name="title" type="text" class="form-control" id="title" />
+                                        </div>
+                                        <div class="form-group">
+                                            <i class="fa-solid fa-bath"></i>
+                                            <label>Tiện ích về phòng tắm</label>
+                                            <div class="select2-purple">
+                                                <select name="genre" class="select2 form-control" multiple="multiple" id="bathroom">
+                                                    <option th:each="amenity : ${amenityRoom}" th:value="${amenity.id}"
+                                                            th:text="${amenity.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                         <div class="form-group">
+                                             <i class="fa-solid fa-person-shelter"></i>
+                                            <label>Tiện ích về phòng ngủ</label>
+                                            <div class="select2-purple">
+                                                <select name="genre" class="select2 form-control" multiple="multiple" id="bedroom">
+                                                    <option th:each="amenity : ${amenityRoom}" th:value="${amenity.id}"
+                                                            th:text="${amenity.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                         <div class="form-group">
+                                             <i class="fa-solid fa-gamepad"></i>
+                                            <label>Tiện ích về giải trí</label>
+                                            <div class="select2-purple">
+                                                <select name="genre" class="select2 form-control" multiple="multiple" id="entertainment">
+                                                    <option th:each="amenity : ${amenityRoom}" th:value="${amenity.id}"
+                                                            th:text="${amenity.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <i class="fa-solid fa-kitchen-set"></i>
+                                            <label>Tiện ích về phòng bếp </label>
+                                            <div class="select2-purple">
+                                                <select name="genre" class="select2 form-control" multiple="multiple" id="kitchen">
+                                                    <option th:each="amenity : ${amenityRoom}" th:value="${amenity.id}"
+                                                            th:text="${amenity.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <i class="fa-solid fa-wifi"></i>
+                                            <label>Tiện ích internet </label>
+                                            <div class="select2-purple">
+                                                <select name="genre" class="select2 form-control" multiple="multiple" id="internet">
+                                                    <option th:each="amenity : ${amenityRoom}" th:value="${amenity.id}"
+                                                            th:text="${amenity.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <i class="fa-solid fa-ellipsis"></i>
+
+                                            <label>Tiện ích khác</label>
+                                            <div class="select2-purple">
+                                                <select name="genre" class="select2 form-control" multiple="multiple" id="others">
+                                                    <option th:each="amenity : ${amenityRoom}" th:value="${amenity.id}"
+                                                            th:text="${amenity.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button name="thumbnail" type="button" class="btn btn-info btn-flat" data-toggle="modal"
+                                                    data-target="#modal-image">
+                                               Danh sách hình ảnh
+                                            </button>
+                                        </div>
+
+<!--                                        <div class="form-group d-flex justify-content-start align-items-center">-->
+<!--                                            <button id="amenity" type="button" class="btn btn-info px-4">-->
+<!--                                                Thêm tiện ích-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+
+
+                                    </form>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <form id="form-hotel-detail">
+                                        <div class="form-group">
+                                            <i style="min-width: 3%" class="fa-solid fa-audio-description"></i>
+                                            <label>Mô tả ngắn</label>
+
+                                            <textarea th:text="${room.description}" name="description" id="description" class="form-control" rows="6"></textarea>
+                                        </div>
+                                    </form>
+                                    <div class="form-group">
+                                        <label>Loại phòng</label>
+                                        <select id="room-type" class="form-control">
+                                            <option class="option-room-type" th:value="${type}" th:each="type : ${listRoomType}">
+                                                <th:block th:text="${type.value}"></th:block>
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group d-flex justify-content-start align-items-center">
+                                      <div class="wrap-area mr-3">
+                                          <label>Diện tích : </label>
+                                          <input name="area"  class="input-area" type="number" placeholder="Diện tích">
+                                      </div>
+                                        <span>mét vuông</span>
+                                    </div>
+
+                                    <div class="form-group d-flex justify-content-start align-items-center">
+                                        <div class="wrap-number-guest mr-3">
+                                            <label> Sức chứa : </label>
+                                            <input name="area"  class="input-number-guest" type="number" placeholder="Số người">
+                                        </div>
+                                        <span>người</span>
+                                    </div>
+
+                                    <div class="form-group d-flex justify-content-start align-items-center">
+                                        <div class="wrap-number-guest mr-3">
+                                            <label> Số lượng phòng : </label>
+                                            <input name="area"  class="input-number-guest" type="number" placeholder="Số người">
+                                        </div>
+                                        <span>phòng </span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Loại giường </label>
+                                        <div class="select2-purple">
+                                            <select name="genre" class="select2 form-control" multiple="multiple" id="bed-type">
+                                                <option th:each="amenity : ${amenityRoom}" th:value="${amenity.id}"
+                                                        th:text="${amenity.name}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                        <label>Trạng thái</label>
+                                        <select id="status" class="form-control">
+                                            <option value="0">
+                                                Riêng tư
+                                            </option>
+                                            <option value="1">
+                                                Công khai
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal fade" id="modal-image" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Danh sách ảnh</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button class="btn btn-success" id="btn-chose-image" disabled>Chọn ảnh</button>
+                                <label for="avatar" class="btn btn-warning mb-0">Upload ảnh</label>
+                                <input type="file" id="avatar" class="d-none">
+                            </div>
+                            <div>
+                                <button class="btn btn-danger" id="btn-delete-image" disabled>Xóa ảnh</button>
+                            </div>
+                        </div>
+                        <!-- Hiển thị danh sách ảnh -->
+                        <div class="image-container mt-4 mb-4">
+                        </div>
+
+                        <!-- Hiển thị phần phân trang -->
+                        <div id="image-pagination" class="pagination-container d-flex justify-content-center">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+<th:block id="js">
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
+    <script src="/admin-assets/plugins/select2/js/select2.full.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+            integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+            integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+             integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js"
+            integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script th:inline="javascript">
+        let room = [[${room}]];
+
+        // Initialize Select2 Elements
+        $(".select2").select2();
+
+        // // Initialize editor
+        // const easyMDE = new EasyMDE({
+        //     element: document.getElementById("editor"),
+        //     spellChecker: false,
+        //     maxHeight: "400px",
+        //     renderingConfig: {
+        //         codeSyntaxHighlighting: true,
+        //     },
+        // });
+
+    </script>
+    <script th:src="@{/admin-assets/dist/js/notify-admin.js}"></script>
+    <script src="/admin-assets/dist/js/admin-support/create-support.js"></script>
+</th:block>
+</body>
+
+</html>

@@ -22,7 +22,9 @@ public class Bed {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "hotel_id")
+    Hotel hotel;
 
     @Column(columnDefinition = "TEXT")
     @Enumerated(EnumType.STRING)

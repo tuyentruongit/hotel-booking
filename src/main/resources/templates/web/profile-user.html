@@ -217,9 +217,9 @@
                             <div class="col-2">
                                 <span class="name w-100">Xóa tài khoản</span>
                             </div>
-                            <div class="col-7">Xóa tài khoản STAYESEA vĩnh viễn</div>
+                            <div class="col-7">Xóa tài khoản WebFindTravel vĩnh viễn</div>
                             <div class="col-3 d-flex justify-content-center">
-                                <button class="">Xóa tài khoản</button>
+                                <button  data-bs-toggle="modal" data-bs-target="#modalConfirmDeleteUser" class="">Xóa tài khoản</button>
                             </div>
                         </div>
                     </div>
@@ -298,6 +298,35 @@
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="modalConfirmDeleteUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa Tài khoản</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                   <div class="modal-body">
+                       <span>Bạn có chắc rằng muốn xóa tài khoản? </span>
+                       <span>Vui lòng chọn những lý do dưới đây để tiến hành yêu xầu xóa tài khoản</span>
+                   </div>
+                    <div class="modal-body">
+                        <select class="w-100" id="reasonDeleteUser">
+                            <option>Tôi có trải nghiệm đặt phòng không tốt</option>
+                            <option>Chuyến đi của tôi đã kết thúc nên tôi không cần tài khoản này nữa</option>
+                            <option>Tôi có tài khoản với một email khác</option>
+                            <option>Tôi nhận được quá nhiều email và thông báo</option>
+                            <option>Khác</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn text-primary " data-bs-dismiss="modal">Đóng</button>
+                        <button style="background-color: #526D82; color: white" type="button" class="btn " th:onclick="'deleteUser('+${#authentication.principal.getUser().getId()}+')'">Gửi xác nhận</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </section>
@@ -366,6 +395,22 @@
                 $(element).removeClass('is-invalid');
             }
         });
+
+        const deleteUser = (id) =>{
+            const reason = document.getElementById('reasonDeleteUser');
+            const data = reason.value
+            axios.post("/api/auth/delete/user/"+id , data,{
+                headers: {
+                    'Content-Type': 'text/plain'  // Đảm bảo đúng Content-Type nếu API yêu cầu
+                }
+                 })
+                .then((response) =>{
+                    toastr.success("Yêu cầu của bạn đã được gửi")
+                })
+                .catch((err) =>{
+                    toastr.success(err)
+                })
+        }
 
 
     </script>

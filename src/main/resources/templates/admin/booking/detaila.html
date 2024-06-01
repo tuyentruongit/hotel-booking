@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Booking Index</title>
+  <th:block id="css">
+    <link rel="stylesheet" href="/admin-assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="/admin-assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="/admin-assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+          integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="/admin-assets/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/admin-assets/dist/css/style-detail-booking.css">
+    <style>
+      .hotel-img{
+        object-fit: cover;
+        height: 250px;
+        width: 100%;
+        border-radius: 10px;
+      }
+      .name-hotel, .name-room{
+        margin: 10px 0 0 10px;
+      }
+      .address-hotel{
+        margin: 0 0 0 10px;
+        font-size: 15px;
+      }
+      .date-check-in , .date-check-out{
+        border-radius: 10px !important;
+        border: 1px #2e3439 solid !important;
+        padding: 5px 10px;
+      }
+      .info-customer{
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+      }
+      .info-customer input{
+        border-radius: 10px !important;
+        border: 1px #2e3439 solid !important;
+        padding: 5px 10px;
+        width: 300px;
+      }
+    </style>
+  </th:block>
+</head>
+
+<body class="hold-transition sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper" id="main-content">
+
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-12">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="/admin/dashboard">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/orders">Danh sách đơn hàng</a>
+            </li>
+            <li class="breadcrumb-item active" th:text="|Đơn hàng ${bo.id}|">
+              Đơn hàng 1
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row py-2">
+        <div class="col-6">
+          <a href="/admin/orders" type="button" class="btn btn-default">
+            <i class="fas fa-chevron-left"></i> Quay lại
+          </a>
+          <button type="button" class="btn btn-info px-4" id="btn-update">
+            Cập nhật
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-8">
+                  <div class="info-div">
+                    <label>Thông tin người đặt</label>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i
+                                                                class="fas fa-user"></i></span>
+                          </div>
+                          <input type="text" class="form-control" readonly=""
+                                 th:value="${booking.nameCustomer}">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
+                          </div>
+                          <input type="text" class="form-control" readonly=""
+                                 th:value="${booking.phoneCustomer}">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-3">
+                      <div class="col-md-6">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i
+                                                                class="fas fa-envelope"></i></span>
+                          </div>
+                          <input type="text" class="form-control" readonly=""
+                                 th:value="${booking.emailCustomer}">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i
+                                                                class="far fa-calendar-alt"></i></span>
+                          </div>
+                          <input type="text" class="form-control" readonly=""
+                                 th:value="${#temporals.format(booking.createAt, 'dd/MM/yyyy hh:mm')}">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="info-div mt-4">
+                    <div class="d-flex align-items-center mb-2">
+                      <label class="mb-0">Chi tiết đơn hàng</label>
+
+                      <button type="button" class="btn mx-1 my-0" data-toggle="modal"
+                              data-target="#modal-chose-film">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                    </div>
+
+                    <div class="table-responsive">
+                      <table class="table table-bordered" id="table-film">
+                        <thead>
+                        <tr>
+                          <th>Phim</th>
+                          <th>Loại phim</th>
+                          <th>Giá tiền</th>
+                          <th>Thành tiền</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                          <td>
+                            <a th:href="@{/admin/bookings/detail/{id} (id=${order.film.id})}"
+                               th:text="${order.film.title}">Avengers: Endgame</a>
+                          </td>
+                          <td th:text="${order.film.type.getType()}"></td>
+                          <td th:text="|${#numbers.formatInteger(order.amount,3,'COMMA')}đ|"></td>
+                          <td th:text="|${#numbers.formatInteger(order.amount,3,'COMMA')}đ|"></td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div style="background-color: #eeeeee; padding: 10px">
+                    <div class="form-group">
+                      <label>Hình thức thanh toán</label>
+                      <select class="form-control" id="user-payment-method" name="paymentMethod">
+                        <option th:each="paymentMethod : ${paymentMethods}"
+                                th:value="${paymentMethod}"
+                                th:text="${paymentMethod.getValue()}"
+                                th:selected="${paymentMethod == order.paymentMethod}"></option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Trạng thái đơn hàng</label>
+                      <select name="status" class="form-control mb-3" id="status">
+                        <option value="PENDING"
+                                th:selected="${order.status.toString() == 'PENDING'}">Chờ xử lý
+                        </option>
+                        <option value="SUCCESS"
+                                th:selected="${order.status.toString() == 'SUCCESS'}">Thành công
+                        </option>
+                        <option value="CANCEL"
+                                th:selected="${order.status.toString() == 'CANCEL'}">
+                          Đã hủy
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                                            <textarea name="note" id="note" rows="5" placeholder="Ghi chú"
+                                                      class="form-control" th:text="${order.note}"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade" id="modal-chose-film">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Chi tiết đơn hàng</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Bộ phim</label>
+            <div class="select2-purple">
+              <select class="select2 form-control" id="film-select" style="width: 100%">
+                <option th:each="film : ${films}" th:value="${film.id}"
+                        th:text="${film.title}"></option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <span>Giá tiền</span>
+              <span class="text-price badge badge-primary" id="film-price"
+                    style="font-size: 1.5rem">0</span>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+              <span>Thành tiền</span>
+              <span class="text-price badge badge-success" id="total-price"
+                    style="font-size: 1.5rem">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer end">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+          <button type="button" class="btn btn-primary" id="btn-chose-film">Lưu thay đổi</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Content Wrapper. Contains page content -->
+<!--  <div class="content-wrapper">-->
+<!--    &lt;!&ndash; Content Header (Page header) &ndash;&gt;-->
+<!--    <section class="content-header">-->
+<!--      <div class="container-fluid">-->
+<!--        <div class="row mb-2">-->
+<!--          <div class="col-sm-6">-->
+<!--            <h1>Chi tiết đặt phòng</h1>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>&lt;!&ndash; /.container-fluid &ndash;&gt;-->
+<!--    </section>-->
+
+<!--    &lt;!&ndash; Main content &ndash;&gt;-->
+<!--    <section class="content">-->
+<!--      <div class="container-fluid">-->
+<!--        <div class="row">-->
+<!--          <div class="col-md-4">-->
+
+<!--            &lt;!&ndash; Profile Image &ndash;&gt;-->
+<!--            <div class="wrap-hotel">-->
+<!--              <h4 class="title-wrap">Khách sạn</h4>-->
+<!--              <div class="body-wrap">-->
+<!--                <div class="">-->
+<!--                  <img class="hotel-img" th:src="${booking.hotel.poster}">-->
+<!--                </div>-->
+
+<!--                <h5 class=" name-hotel w-100" th:text="${booking.hotel.name}"></h5>-->
+
+<!--                <span class="address-hotel w-100" ><i class="fa-solid fa-location-dot"></i> <th:block th:text="${booking.hotel.address}"></th:block> </span>-->
+<!--              </div>-->
+<!--              &lt;!&ndash; /.card-body &ndash;&gt;-->
+<!--            </div>-->
+
+<!--            <hr>-->
+<!--            &lt;!&ndash; /.card &ndash;&gt;-->
+
+<!--            <div class="wrap-room">-->
+<!--              <h4 class="title-wrap">Phòng</h4>-->
+<!--              &lt;!&ndash; /.card-header &ndash;&gt;-->
+<!--              <div class="body-wrap">-->
+<!--                <div class="">-->
+<!--                  <img class="hotel-img" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg">-->
+<!--                </div>-->
+
+<!--                <h5 class=" w-100 name-room " th:text="${booking.room.name}"></h5>-->
+<!--              </div>-->
+<!--              &lt;!&ndash; /.card-body &ndash;&gt;-->
+<!--            </div>-->
+<!--            <hr>-->
+
+<!--            &lt;!&ndash; /.card &ndash;&gt;-->
+<!--          </div>-->
+<!--          <div class="modal fade" id="modal-edit-booking" aria-hidden="true">-->
+<!--            <div class="modal-dialog modal-lg">-->
+<!--              <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                  <h4 class="modal-title">Chỉnh sửa booking</h4>-->
+<!--                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">×</span>-->
+<!--                  </button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+
+<!--                 <div class="w-100 d-flex justify-content-start">-->
+<!--                   <div class="w-50">-->
+<!--                     <span class="w-50">Check In : </span>-->
+<!--                   </div>-->
+<!--                   <div class="w-50">-->
+<!--                     <span class="w-50">Check Out : </span>-->
+<!--                   </div>-->
+<!--                 </div>-->
+<!--                  <div class="w-100 d-flex justify-content-start">-->
+<!--                    <div class="w-50">-->
+<!--                      <input id="edit-checkIn" class="date-check-in" type="text" name="birthday" value="23/10/2023" />-->
+<!--                    </div>-->
+
+<!--                    <div class="w-50">-->
+<!--                      <input  id="edit-checkOut" class="date-check-out" type="text" name="birthday"  th:value="${booking.checkOut}" />-->
+<!--                    </div>-->
+<!--                  </div>-->
+
+<!--                  <div class="info-customer">-->
+<!--                    <span>Tên khách hàng :</span>-->
+<!--                    <input class="name-edit" type="text" placeholder="Tên ">-->
+<!--                  </div>-->
+<!--                  <div class="info-customer">-->
+<!--                    <span>Email :</span>-->
+<!--                    <input class="email-edit" type="text" placeholder="email ">-->
+<!--                  </div>-->
+<!--                  <div class="info-customer">-->
+<!--                    <span>Số điện thoại</span>-->
+<!--                    <input class="phone-edit" type="text" placeholder="số điện thoại">-->
+<!--                  </div>-->
+
+
+
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                  <div class="d-flex justify-content-end">-->
+<!--                    <button class="btn btn-success" id="btn-save-booking" >Lưu</button>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          &lt;!&ndash; /.col &ndash;&gt;-->
+<!--          <div class="col-md-8">-->
+<!--            <div class=" d-flex justify-content-end " >-->
+<!--              <button th:classappend="${booking.statusBooking.value == 'Đã xác nhận'?'d-block':'d-none'}"-->
+<!--                      name="edit-booking" type="button" class="btn btn-info btn-flat rounded mx-4" data-toggle="modal"-->
+<!--                      data-target="#modal-edit-booking">-->
+<!--                <i class="fa-solid fa-pencil mr-2"></i>Chỉnh sửa-->
+<!--              </button>-->
+<!--              <button th:classappend="${booking.statusBooking.value == 'Đã xác nhận'?'d-block':'d-none'}"-->
+<!--                      name="edit-booking" type="button" class="btn btn-info btn-danger rounded" >-->
+<!--                <i class="fa-solid fa-trash-can"></i>Hủy-->
+<!--              </button>-->
+<!--            </div>-->
+
+<!--            <div class="card">-->
+<!--              <div class="p-2">-->
+<!--                <h4>Thông tin chi tiết</h4>-->
+<!--                 <div class="card-body">-->
+<!--                   <h5>Đơn đặt</h5>-->
+<!--                    <div class="status-booking">-->
+<!--                      <h6>Trạng thái :</h6>-->
+<!--                      <span th:text="${booking.statusBooking.value}"></span>-->
+<!--                    </div>-->
+
+<!--                   <div class="checkIn-checkOut">-->
+
+<!--                     <div class="check-in-out">-->
+<!--                       <h6>Nhận phòng :</h6>-->
+<!--                       <span th:text="${booking.checkIn}">23/10/2001</span>-->
+<!--                     </div>-->
+
+<!--                     <div class="check-in-out">-->
+<!--                       <h6>Trả phòng :</h6>-->
+<!--                       <span th:text="${booking.checkOut}">23/10/2001</span>-->
+<!--                     </div>-->
+
+<!--                   </div>-->
+<!--                   <div class="time-number">-->
+<!--                     <div class="time">-->
+<!--                       <h6>Thời gian lưu trú :</h6>-->
+<!--                       <span ><th:block th:text="${booking.checkOut.dayOfMonth - booking.checkIn.dayOfMonth}"></th:block> đêm</span>-->
+<!--                     </div>-->
+<!--                     <div class="number-room-guest">-->
+<!--                       <h6>Số lượng người và phòng :</h6>-->
+<!--                       <span><th:block th:text="${booking.guests}"></th:block> người <th:block th:text="${booking.numberRoom}"></th:block> phòng</span>-->
+<!--                     </div>-->
+<!--                   </div>-->
+<!--                   <div class="created-updated">-->
+<!--                    <div class="created">-->
+<!--                      <h6>Ngày đặt :</h6>-->
+<!--                      <span th:text="${#temporals.format(booking.checkIn,'dd/MM/yyyy')}"></span>-->
+<!--                    </div>-->
+<!--                     <div class="updated">-->
+<!--                       <h6>Ngày cập nhật :</h6>-->
+<!--                       <span th:text="${#temporals.format(booking.checkIn,'dd/MM/yyyy')}"></span>-->
+<!--                     </div>-->
+<!--                   </div>-->
+<!--                   <div class="payment">-->
+<!--                     <h6>Hình thức thanh toán:</h6>-->
+<!--                     <span th:text="${booking.paymentMethod.value}"></span>-->
+<!--                   </div>-->
+<!--                 </div>-->
+<!--                <hr>-->
+<!--                <div class="card-body">-->
+<!--                  <h5>Thông tin khách hàng</h5>-->
+<!--                  <div class="name-user">-->
+<!--                    <h6>Tên :</h6>-->
+<!--                    <span th:text="${booking.nameCustomer}"></span>-->
+<!--                  </div>-->
+<!--                  <div class="email-user">-->
+<!--                    <h6>Email :</h6>-->
+<!--                    <span th:text="${booking.emailCustomer}">abcdefgh@gmial.com</span>-->
+<!--                  </div>-->
+<!--                  <div class="phone">-->
+<!--                    <h6>Số điện thoại :</h6>-->
+<!--                    <span th:text="${booking.phoneCustomer}">028832994722</span>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+
+
+<!--              <div class="card-footer">-->
+<!--                <h5> Chi tiết giá</h5>-->
+<!--                <div class="original-price">-->
+<!--                    <h6>Giá phòng</h6>-->
+<!--                  <span>123456đ</span>-->
+<!--                </div>-->
+<!--                <div class="room-price">-->
+<!--                    <h6>Số lượng phòng</h6>-->
+<!--                  <span>x2</span>-->
+<!--                </div>-->
+<!--                <hr>-->
+<!--                <div class="total-room">-->
+<!--                    <h3>Tổng</h3>-->
+<!--                  <span th:text="${booking.price}">123456đ</span>-->
+<!--                </div>-->
+
+<!--              </div>-->
+
+<!--            </div>-->
+
+
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--    </section>-->
+<!--  </div>-->
+</div>
+
+<th:block id="js">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+          integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <script th:inline="javascript" >
+    let booking  = [[${booking}]];
+
+    let checkInJs = new Date(booking.checkIn + 'T00:00:00'); // Thêm 'T00:00:00' để chuyển đổi đúng định dạng ISO
+    let checkOutJS = new Date(booking.checkOut + 'T00:00:00'); // Thêm 'T00:00:00' để chuyển đổi đúng định dạng ISO
+
+    $(function () {
+      $('#edit-checkIn').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 2023,
+        maxYear: 2033,
+        startDate:checkInJs,
+        locale: {
+          format: 'DD/MM/YYYY' // Định dạng ngày
+        }
+      });
+
+    });
+
+
+    $(function () {
+      $('#edit-checkOut').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 2023,
+        maxYear: 2033,
+        startDate:checkOutJS,
+        locale: {
+          format: 'DD/MM/YYYY' // Định dạng ngày
+        }
+      });
+    });
+
+
+
+    let checkInUpdate = booking.checkIn;
+    let checkOutUpdate = booking.checkOut;
+    $('#edit-checkOut').on('hide.daterangepicker', function(ev, picker) {
+      checkOutUpdate = (picker.startDate.format('YYYY-MM-DD'));
+      console.log("ngày nhận" + checkOutUpdate)
+    });
+    $('#edit-checkIn').on('hide.daterangepicker', function(ev, picker) {
+      checkInUpdate = (picker.startDate.format('YYYY-MM-DD'));
+      console.log("ngày nhận" + checkInUpdate)
+    });
+
+    let inputNameEl = document.querySelector('.name-edit');
+    let inputEmailEl = document.querySelector('.email-edit');
+    let inputPhoneEl = document.querySelector('.phone-edit');
+
+    let renderData = ()=>{
+      inputNameEl.value = booking.nameCustomer
+      inputEmailEl.value = booking.emailCustomer
+      inputPhoneEl.value = booking.phoneCustomer
+
+    }
+    const btnSaveBooking = document .getElementById('btn-save-booking');
+    btnSaveBooking.addEventListener('click' , ()=>{
+      const data = {
+        idHotel: booking.hotel.id,
+        idRoom: booking.room.id,
+        nameCustomer: inputNameEl.value,
+        emailCustomer: inputEmailEl.value,
+        phoneCustomer: inputPhoneEl.value,
+        guest: booking.guests,
+        numberRoom: booking.numberRoom,
+        checkIn: checkInUpdate,
+        checkOut: checkOutUpdate,
+        price : booking.price,
+        paymentMethod : booking.paymentMethod,
+      }
+      console.log(data)
+      console.log(booking.paymentMethod)
+      axios.put("/api/booking/update/"+booking.id, data)
+              .then((response) => {
+                toastr.success("Cập nhật thành công")
+                console.log("Thành công");
+              })
+              .catch((error) => {
+                toastr.error(error.response.data.message)
+                console.log(error)
+              })
+    })
+    renderData();
+
+
+  </script>
+  <script th:src="@{/admin-assets/dist/js/notify-admin.js}"></script>
+</th:block>
+</body>
+</html>

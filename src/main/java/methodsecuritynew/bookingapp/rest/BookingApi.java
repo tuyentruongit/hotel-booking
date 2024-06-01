@@ -29,4 +29,9 @@ public class BookingApi {
         bookingService.cancelBooking(id);
         return ResponseEntity.ok().build();
     }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateBooking(@PathVariable Integer id,@RequestBody UpsertBookingRequest bookingRequest){
+        bookingService.updateBooking(id, bookingRequest);
+        return ResponseEntity.ok().build();
+    }
 }

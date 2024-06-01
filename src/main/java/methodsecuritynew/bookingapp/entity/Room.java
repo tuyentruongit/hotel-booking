@@ -37,8 +37,6 @@ public class Room {
     @Enumerated(EnumType.STRING)
     RoomType roomType;
 
-
-
     Integer area;
 
     Integer quantity;
@@ -50,21 +48,16 @@ public class Room {
     )
     List<AmenityRoom> amenityRoomList ;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "bed_room",
             joinColumns = @JoinColumn(name = "id_room"),
             inverseJoinColumns = @JoinColumn(name = "id_bed")
     )
-    List<Bed> bedList ;
-
-
+    List<Bed> bedList;
 
     Boolean status;
     LocalDate createdAt;
     LocalDate updatedAt;
-
-
-
 
 }

@@ -1,15 +1,15 @@
 package methodsecuritynew.bookingapp.service;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.Booking;
 import methodsecuritynew.bookingapp.entity.User;
+import methodsecuritynew.bookingapp.model.dto.RevenueDayDto;
+import methodsecuritynew.bookingapp.model.dto.RevenueMonthDto;
 import methodsecuritynew.bookingapp.model.request.UpsertBookingRequest;
 import methodsecuritynew.bookingapp.model.statics.PaymentMethod;
 import methodsecuritynew.bookingapp.model.statics.StatusBooking;
 import methodsecuritynew.bookingapp.repository.BookingRepository;
-import methodsecuritynew.bookingapp.repository.HotelRepository;
-import methodsecuritynew.bookingapp.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +57,7 @@ public class BookingService {
                 .numberRoom(bookingRequest.getNumberRoom())
                 .paymentMethod(paymentMethod)
                .statusBooking(StatusBooking.COMPLETE)
-               .createAt(LocalDateTime.now())
+               .createAt(LocalDate.now())
                 .build();
        return bookingRepository.save(booking);
     }
@@ -74,4 +74,130 @@ public class BookingService {
         booking.setStatusBooking(StatusBooking.CANCELLED);
         bookingRepository.save(booking);
     }
+
+    public Page<Booking> getBookingAdmin(Integer page, Integer limit) {
+        Pageable pageable = PageRequest.of(page-1,limit , Sort.by("createAt").descending());
+        return bookingRepository.findAll(pageable);
+    }
+
+    public List<Booking> getBookingByIdHotel(Integer id) {
+        return bookingRepository.findByHotel_Id(id);
+    }
+
+    @Transactional
+    public void updateBooking(Integer id, UpsertBookingRequest bookingRequest) {
+        Booking booking= bookingRepository.findById(id).orElseThrow(()-> new RuntimeException("Không thể tìm thấy booking có id :"+id));
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate checkIn = LocalDate.parse(bookingRequest.getCheckIn(),dateTimeFormatter);
+        LocalDate checkOut  = LocalDate.parse(bookingRequest.getCheckOut(),dateTimeFormatter);
+        String strPaymentMethod = bookingRequest.getPaymentMethod().trim();
+        PaymentMethod paymentMethod = PaymentMethod.valueOf(strPaymentMethod);
+        booking.setRoom(roomService.getRoomById(bookingRequest.getIdRoom()));
+        booking.setNameCustomer(bookingRequest.getNameCustomer());
+        booking.setEmailCustomer(bookingRequest.getEmailCustomer());
+        booking.setPhoneCustomer(bookingRequest.getPhoneCustomer());
+        booking.setGuests(bookingRequest.getGuest());
+        booking.setCheckIn(checkIn);
+        booking.setCheckOut(checkOut);
+        booking.setPrice(bookingRequest.getPrice());
+        booking.setNumberRoom(bookingRequest.getNumberRoom());
+        booking.setPaymentMethod(paymentMethod);
+        booking.setStatusBooking(StatusBooking.CONFIRMED);
+        booking.setUpdateAt(LocalDate.now());
+        bookingRepository.save(booking);
+    }
+
+    public List<Booking> getBookingNew() {
+
+        LocalDate star = LocalDate.now().withDayOfMonth(1);
+        LocalDate end = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        return  bookingRepository.findBookingByCreateAtBetweenAndStatusBookingOrderByCreateAtDesc(star,end,StatusBooking.CONFIRMED);
+    }
+
+    public List<RevenueDayDto> getRevenueByDay(Integer year , Integer month){
+        List<RevenueDayDto> revenueDtoList = bookingRepository.getTotalRevenueDay();
+        List<RevenueDayDto> result = new ArrayList<>();
+        LocalDate dateSelect = LocalDate.of(year,month,1);
+
+        for (int i = 0; i < dateSelect.lengthOfMonth(); i++) {
+            LocalDate localDate = dateSelect.plusDays(i);
+            boolean check = false;
+            for (RevenueDayDto revenueDto1 : revenueDtoList) {
+                if (    revenueDto1.getMonth() == localDate.getMonthValue() &&
+                        revenueDto1.getDay() == localDate.getDayOfMonth() &&
+                        revenueDto1.getYear() == localDate.getYear()) {
+
+                    result.add(revenueDto1);
+                    check=true;
+                    break;
+
+                }
+            }
+           if (!check){
+               RevenueDayDto revenueDto = new RevenueDayDto();
+               revenueDto.setMonth(localDate.getMonthValue());
+               revenueDto.setDay(localDate.getDayOfMonth());
+               revenueDto.setYear(localDate.getYear());
+               revenueDto.setTotalPrice(0);
+               result.add(revenueDto);
+           }
+        }
+        return result;
+    }
+
+    public List<RevenueMonthDto> getRevenueByMonth(Integer year) {
+        List<RevenueMonthDto> revenueDtoList = bookingRepository.getTotalRevenueByMonth();
+        List<RevenueMonthDto> result = new ArrayList<>();
+        LocalDate current = LocalDate.of(year,1,1);
+
+        for (int i = 0; i < 12; i++) {
+            LocalDate localDate = current.plusMonths(i);
+            boolean check = false;
+            for (RevenueMonthDto revenueDto1 : revenueDtoList) {
+                if (revenueDto1.getMonth() == localDate.getMonthValue() &&
+                        revenueDto1.getYear() == localDate.getYear()) {
+                    result.add(revenueDto1);
+                    check=true;
+                    break;
+
+                }
+            }
+            if (!check){
+                RevenueMonthDto revenueDto = new RevenueMonthDto();
+                revenueDto.setMonth(localDate.getMonthValue());
+                revenueDto.setYear(year);
+                revenueDto.setTotalPrice(0);
+                result.add(revenueDto);
+            }
+        }
+        return result;
+    }
+
+    public int sumTotalRevenueYear(int year) {
+        List<RevenueMonthDto> result = getRevenueByMonth(year);
+        int sum = 0;
+        for (RevenueMonthDto revenueMonthDto : result){
+            sum+= (int) revenueMonthDto.getTotalPrice();
+        }
+        return sum;
+
+    }
+
+    public int sumTotalMonthCurrent(int year, int monthValue) {
+        List<RevenueDayDto> result = getRevenueByDay(year,monthValue);
+        int sum = 0;
+        for (RevenueDayDto revenueDayDto : result){
+            sum+= (int) revenueDayDto.getTotalPrice();
+        }
+        return sum;
+    }
+//
+//    public List<RevenueDayDto> getRevenueByYear() {
+//        List<RevenueDayDto> revenueDtoList = bookingRepository.getTotalRevenueByYear();
+//        if (revenueDtoList.size()>2){
+//            return revenueDtoList.subList(0,1);
+//        }
+//        return revenueDtoList;
+//    }
+
 }

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "policy_hotel")
+@Table(name = "policy")
 @NoArgsConstructor
 @AllArgsConstructor
 public class PolicyHotel {

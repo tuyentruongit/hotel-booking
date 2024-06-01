@@ -25,6 +25,8 @@ public class City {
 
     String country;
 
+    String imageCity;
+
     LocalDate createdAt;
     LocalDate updatedAt;
 

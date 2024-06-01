@@ -25,6 +25,4 @@ public abstract class Amenity {
 
     LocalDate createdAt;
     LocalDate updateAt;
-
-
 }

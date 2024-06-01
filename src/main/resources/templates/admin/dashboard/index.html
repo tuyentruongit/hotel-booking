@@ -1,198 +1,213 @@
 <!doctype html>
-<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{admin/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Movie Index</title>
+    <title>Dashboard</title>
+
     <th:block id="css">
+        <!-- Google Font: Source Sans Pro -->
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <!-- Font Awesome Icons -->
+        <link rel="stylesheet" href="/admin-assets/plugins/fontawesome-free/css/all.min.css">
+        <!-- IonIcons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <link rel="stylesheet" href="/admin-assets/dist/css/adminlte.min.css">
         <link rel="stylesheet" href="/admin-assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
-        <link rel="stylesheet" href="/admin-assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
-        <link rel="stylesheet" href="/admin-assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"/>
+
+        <style>
+            body{
+                margin-bottom: 100px;
+            }
+        </style>
     </th:block>
 </head>
-<body>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
 
-    <div id="main-content" class="content-wrapper" style="min-height: 494.4px;">
+<body class="hold-transition sidebar-mini">
+<div class="wrapper" id="main-content">
 
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Dashboard</h1>
-                    </div>
+                        <h1 class="m-0">Dashboard </h1>
+                    </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard v1</li>
+                            <li class="breadcrumb-item active">Dashboard</li>
                         </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>
+                                    <th:block th:text="${totalBooking}"></th:block>
+                                </h3>
+
+                                <p>Đơn hàng mới trong tháng</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="/admin/bookings" class="small-box-footer">Xem tất cả <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
                     </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                                <p>Khách sạn mới</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="/admin/hotels" class="small-box-footer">Xem tất cả <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>
+                                    <th:block th:text="${totalUser}"></th:block>
+                                </h3>
+
+                                <p>User đăng ký mới </p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="/admin/user" class="small-box-footer">Xem tất cả  <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>65</h3>
+
+                                <p>Bài viết mới</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">Xem tất cả <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <!-- ./col -->
                 </div>
+                <div class="row">
+                    <div class="col-6">
+                        <table class="table table-bordered table-hover">
+                            <div class="card">
+                                <canvas id="chart-user"></canvas>
+                            </div>
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <table class="table table-bordered table-hover">
+                            <div class="card">
+                                <canvas id="chart-booking"></canvas>
+                            </div>
+                        </table>
+                    </div>
+
+                </div>
+
             </div>
+
+            <!-- /.container-fluid -->
         </div>
 
 
         <section class="content">
             <div class="container-fluid">
-
                 <div class="row">
-                    <div class="col-lg-4 col-6">
-
-                        <div class="small-box bg-blue">
-                            <div class="inner">
-                                <h3><th:block th:text="${movies.size()}"></th:block> <span>/</span> <th:block th:text="${movieAll.size()}"></th:block>  </h3>
-                                <p>Phim mới / Tổng số phim</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-person-add"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">Xem Thêm<i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-6">
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <h3><th:block th:text="${users.size()}"></th:block> <span>/</span> <th:block th:text="${userAll.size()}"></th:block>  </h3>
-                                <p> Tài khoản mới / Tổng số tài khoản</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-person-add"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">Xem Thêm<i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-6">
-
-                        <div class="small-box bg-warning">
-                            <div class="inner">
-                                <h3><th:block th:text="${blogs.size()}"></th:block> <span>/</span> <th:block th:text="${blogAll.size()}"></th:block>  </h3>
-                                <p>Blog mới / Tổng số blog</p>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-person-add"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">Xem Thêm<i class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-
-<!--                    <div class="col-lg-3 col-6">-->
-
-<!--                        <div class="small-box bg-danger">-->
-<!--                            <div class="inner">-->
-<!--                                <h3>65</h3>-->
-<!--                                <p>Unique Visitors</p>-->
-<!--                            </div>-->
-<!--                            <div class="icon">-->
-<!--                                <i class="ion ion-pie-graph"></i>-->
-<!--                            </div>-->
-<!--                            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-                </div>
-
-            </div>
-        </section>
-
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
+                    <div class="col-6">
                         <div class="card">
                             <div class="card-body">
-                                <table class="table table-bordered table-hover dashboard-table" >
-                                  <div class="d-flex justify-content-between">
-                                      <h6>Phim mới cập nhật</h6>
-                                      <a class="mb-1" type="button">Xem tất Cả>></a>
-                                  </div>
-                                    <thead>
-                                    <tr>
-                                        <th>Tên phim</th>
-                                        <th>Loại phim</th>
-                                        <th>Thể loại</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="movie : ${movies}">
-                                        <td th:text="${movie.title}"></td>
-                                        <td th:text="${movie.movieType}"></td>
-                                        <td>
-                                        <span class="badge bg-info mr-1" th:each="genre : ${movie.getGenreList()}"
-                                              th:text="${genre.name}"></span>
-                                        </td>
-                                        <td>
-                                             <span class="badge" th:text="${movie.status ? 'Công khai' : 'Nháp'}"
-                                                   th:classappend="${movie.status ? 'bg-success' : 'bg-secondary'}"></span>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <table class="table table-bordered table-hover dashboard-table">
+                                <table class="table table-bordered table-hover dashboard-table" id="table-user">
                                     <div class="d-flex justify-content-between">
-                                        <h6>Danh sách tài khoản mới đăng ký</h6>
-                                        <a class="mb-1" type="button">Xem tất Cả>></a>
+                                        <label>User đăng ký mới</label>
                                     </div>
                                     <thead>
                                     <tr>
-                                        <th>Tên tài khoản</th>
+                                        <th>Tên người dùng</th>
                                         <th>Email</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="user : ${users}">
-                                        <td th:text="${user.name}"></td>
-                                        <td th:text="${user.email}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <table class="table table-bordered table-hover dashboard-table" >
-                                    <div class="d-flex justify-content-between">
-                                        <h6>Danh sách blog mới</h6>
-                                        <a class="mb-1" type="button">Xem tất Cả>></a>
-                                    </div>
-                                    <thead>
-                                    <tr>
-                                        <th>Tiêu đề blog</th>
-                                        <th>Người tạo</th>
                                         <th>Trạng thái</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="blog : ${blogs}">
-                                        <td th:text="${blog.title}"></td>
-                                        <td th:text="${blog.user.name}"></td>
-                                        <td th:text="${blog.status}"></td>
+                                        <tr th:each="user : ${userList}">
+                                        <td >
+                                            <a  th:href="@{/admin/user/detail/{id} (id= ${user.id})}" th:text="${user.name}"></a>
+                                        </td>
+                                            <td th:text="${user.email}"></td>
+                                            <td>
+                                             <span class="badge"
+                                                   th:text="${user.enable ? 'Đã xác thực' : 'Chưa xác thực'}"
+                                                   th:classappend="${user.enable ? 'bg-success' : 'bg-secondary'}"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table table-bordered table-hover dashboard-table" id="table-booking">
+                                    <div class="d-flex justify-content-between">
+                                        <label>Đơn đặt phòng mới</label>
+                                    </div>
+                                    <thead>
+                                    <tr>
+                                        <th>Tên khách hàng</th>
+                                        <th>Khách sạn</th>
+                                        <th>Phòng</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="booking : ${bookingList}">
+                                        <td>
+                                            <a th:href="@{/admin/bookings/detail/{id} (id = ${booking.id})}"
+                                               th:text="${booking.nameCustomer}"></a>
+                                        </td>
+                                        <td th:text="${booking.hotel.name}"></td>
+                                        <td th:text="${booking.room.name}"></td>
+                                        <td>
+                                             <span class="badge bg-success"
+                                                   th:if="${booking.statusBooking.value.equalsIgnoreCase('Hoàn Tất')}">Hoàn Tất</span>
+                                            <span class="badge bg-warning"
+                                                  th:if="${booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận')}">Chờ xác nhận</span>
+                                            <span class="badge bg-danger"
+                                                  th:if="${booking.statusBooking.value.equalsIgnoreCase('Đã Hủy')}">Đã Hủy</span>
+                                            <span class="badge bg-success"
+                                                  th:if="${booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận')}">Đã xác nhận</span>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -203,49 +218,115 @@
                 </div>
             </div>
         </section>
-
+        <!-- /.content -->
     </div>
-
 </div>
+
 <th:block id="js">
-    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
-    <script src="/admin-assets/plugins/select2/js/select2.full.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-            integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
-            integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
-             integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
-             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js"
-            integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>>
     <script src="/admin-assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/admin-assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="/admin-assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="/admin-assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="/admin-assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="/admin-assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script>
-        $('.dashboard-table').DataTable({
+
+
+    <script th:inline="javascript">
+        let userRegisterByMonth = [[${userRegisterByMonth}]];
+        let totalBookingMonth = [[${totalBookingMonth}]];
+
+        $('#table-user').DataTable({
             "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": false,
-            "pageLength": 5,
-            "info": false,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
             "autoWidth": false,
             "responsive": true,
             "order": []
         });
+        $('#table-booking').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "order": []
+        });
+
+
+        const userChart = document.getElementById('chart-user');
+        const bookingChart = document.getElementById('chart-booking');
+        // Tính giá trị cao nhất trong mảng userRegisterByMonth
+        const maxUserRegister = Math.max(...userRegisterByMonth.map(item => item.totalUser));
+        new Chart(userChart, {
+            type: 'line',
+            data: {
+                labels: userRegisterByMonth.map(item => `Tháng ${item.month}/${item.year}`),
+                datasets: [{
+                    label: 'Lượng người dùng đăng ký mới trong 5 tháng gần nhất',
+                    data: userRegisterByMonth.map(item => item.totalUser),
+                }],
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: maxUserRegister + 10
+                    }
+                },
+                plugins: {
+                    subtitle: {
+                        display: true,
+                        text: ''
+                    }
+                }
+            }
+        });
+
+
+        const maxTotalBooking = Math.max(...totalBookingMonth.map(item => item.totalBooking));
+
+        new Chart(
+            document.getElementById('chart-booking'),
+            {
+                type: 'bar',
+                data: {
+                    labels: totalBookingMonth.map(item => `Tháng ${item.month}/${item.year}`),
+                    datasets: [
+                        {
+                            label: 'Lượng đơn đặt phòng 5 tháng gần nhất trên trang web',
+                            data: totalBookingMonth.map(item => item.totalBooking),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)',
+                                'rgb(153, 102, 255)',
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: maxTotalBooking + 10 // Thêm một giá trị cố định cho giá trị cao nhất
+                        }
+                    }
+                }
+            }
+        );
     </script>
-
 </th:block>
-</body>
-
 </body>
 </html>

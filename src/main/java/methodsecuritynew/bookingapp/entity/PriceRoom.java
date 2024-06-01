@@ -3,6 +3,7 @@ package methodsecuritynew.bookingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import methodsecuritynew.bookingapp.model.statics.DateType;
+import methodsecuritynew.bookingapp.model.statics.RoomType;
 
 import java.time.LocalDate;
 
@@ -21,9 +22,11 @@ public class PriceRoom {
 
 
     @Enumerated(EnumType.STRING)
-    DateType dateType;
+    RoomType roomType;
+
 
     Double price;
+
     @ManyToOne
     @JoinColumn(name = "room_id")
     Hotel hotel;
