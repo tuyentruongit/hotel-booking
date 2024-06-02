@@ -17,9 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AmenityRoom extends Amenity {
-
     @Enumerated(EnumType.STRING)
     AmenityRoomType amenityRoomType;
-
-
 }

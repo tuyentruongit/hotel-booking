@@ -32,7 +32,6 @@ public class HotelService {
     private final UserRepository userRepository;
     private final AuthService authService;
     private final CityService cityService;
-    private final BedRepository bedRepository;
     private final AmenityHotelRepository amenityHotelRepository;
 
 
@@ -221,19 +220,15 @@ public class HotelService {
                 .orElseThrow(()-> new RuntimeException("Không tìm thấy khách sạn nào có id : " + id ));
 
         List<Room> roomList = roomRepository.findReviewByHotel_Id(id);
-        List<Bed> bedList = bedRepository.findByHotel_Id(id);
         List<AmenityHotel> amenityHotelList = amenityHotelRepository.findAllByHotel_Id( id);
-
-
-
         roomRepository.deleteAll(roomList);
 
-        bedRepository.deleteAll(bedList);
         amenityHotelRepository.deleteAll(amenityHotelList);
         hotelRepository.delete(hotel);
     }
 
-    public Hotel getHotelByIdUser() {
+
+    public Hotel getHotelByAccountCurrent() {
 //        User user = userRepository.findByEmail(session.getAttribute("MY_SESSION").toString())
 //                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user trên "));
 

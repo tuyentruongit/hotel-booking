@@ -57,13 +57,10 @@
                 <div class="col-sm-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="#">Dashboard</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="#"></a>
+                            <a href="hotel-manager/dashboard">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            Tạo bài viết
+                            Thông tin
                         </li>
                     </ol>
                 </div>
@@ -76,7 +73,7 @@
         <div class="container-fluid">
             <div class="row py-2">
                 <div class="col-6">
-                    <a href="/admin/movies" class="btn btn-default">
+                    <a href="/hotel-manager/dashboard" class="btn btn-default">
                         <i class="fas fa-chevron-left"></i> Quay lại
                     </a>
                 </div>
@@ -125,30 +122,25 @@
                                             <div  class="thumbnail-preview-container mb-3">
                                                 <img src="" alt="" id="thumbnail" />
                                             </div>
-                                            <button name="thumbnail" type="button" class="btn btn-info btn-flat" data-toggle="modal"
+                                            <button name="thumbnail" type="button" class="rounded btn btn-info btn-flat" data-toggle="modal"
                                                     data-target="#modal-image">
-                                                Chỉnh sửa hình ảnh
+                                                Hình ảnh
                                             </button>
                                         </div>
-
-
-
-
 
                                     </div>
 
                                     <div class="col-md-5">
-                                       <form id="form-hotel-detail">
-                                           <div class="form-group">
-                                               <i style="min-width: 3%" class="fa-solid fa-audio-description"></i>
-                                               <label>Mô tả ngắn</label>
+                                        <form></form>
+                                        <form class="form-description" id="myForm">
+                                            <div class="form-group">
 
-                                               <textarea th:text="${hotel.description}" name="description" id="description" class="form-control" rows="6"></textarea>
-                                               <button type="button" class="btn btn-info px-4 mt-2" id="btn-save">
-                                                   Lưu mô tả
-                                               </button>
-                                           </div>
-                                       </form>
+                                                <textarea th:text="${hotel.description}" name="description" id="description" class="form-control" rows="6"></textarea>
+                                            </div>
+                                            <button type="button" class="btn btn-info px-4" id="btn-save">
+                                                Lưu mô tả
+                                            </button>
+                                        </form>
 
                                     </div>
                                 </div>
@@ -163,18 +155,17 @@
                         <div class="card-body">
                             <div class="row d-flex justify-content-between">
                                 <h4>Danh sách phòng</h4>
-                                <button id="create-room" class="rounded overflow-hidden  btn btn-info mb-2 mr-2"
-                                        type="button"
-                                        th:onclick="|createEpisode()|">
+                                <a th:href="@{/hotel-manager/room/create}"  id="create-room" class="rounded overflow-hidden  btn btn-info mb-2 mr-2"
+                                        >
                                     <span class><i class="fa-solid fa-plus"></i> Thêm Phòng</span>
-                                </button>
+                                </a>
                             </div>
                             <table id="table-director" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
-                                    <th style="width: 5%">#</th>
-                                    <th style="width: 40%">Tên phòng</th>
-                                    <th style="width: 10%">Loại phòng</th>
+                                    <th style="width: 5%">STT</th>
+                                    <th style="width: 30%">Tên phòng</th>
+                                    <th style="width: 20%">Loại phòng</th>
                                     <th style="width: 10%">Số lượng</th>
                                     <th style="width: 10%">Diện tích</th>
                                     <th style="width: 10%">Sức chứa</th>
@@ -182,28 +173,20 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="room : ${roomList}">
-                                    <td th:text="${room.name}">Thứ Tự</td>
+                                <tr th:each="room,start : ${roomList}">
+                                    <td th:text="${start.count}">Thứ Tự</td>
                                     <td>
                                         <a th:href="@{/hotel-manager/room/detail/{id} (id=${room.id})}"
                                            th:text="${room.name}"></a>
                                     </td>
-                                    <td>Loại phòng </td>
-                                    <td >6</td>
+                                    <td th:text="${room.roomType.value}"></td>
+                                    <td th:text="${room.quantity}">6</td>
                                     <td th:text="${room.area}">diện tích</td>
                                     <td th:text="${room.capacity}">sức chứa</td>
-                                    <td th:text="${room.status ? 'Công khai' : 'Riêng tư'}">Trạng thái</td>
-
-<!--                                    <td>-->
-
-<!--                                        <button class="btn btn-success btn-sm"-->
-<!--                                                th:onclick="|editEpisode(${room.id})|"-->
-<!--                                        ><i class="fas fa-pencil-alt"></i>-->
-<!--                                        </button>-->
-<!--                                        <button th:onclick="|deleteEpisode(${room.id})|"-->
-<!--                                                class="btn btn-danger btn-sm">-->
-<!--                                            <i class="fas fa-trash-alt"></i></button>-->
-<!--                                    </td>-->
+                                    <td>
+                                        <span class="badge" th:classappend="${room.status ? 'bg-success':'bg-warning'}"
+                                              th:text="${room.status ? 'Công khai' : 'Riêng tư'}"></span>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -252,10 +235,6 @@
     <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
     <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
     <script src="/admin-assets/plugins/select2/js/select2.full.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-            integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
             integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -265,18 +244,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js"
             integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script >
-        $(".select2").select2();
-    </script>
     <script th:inline="javascript">
+        $(".select2").select2();
         let hotel = [[${hotel}]];
         let imageList = [[${imageHotelList}]];
+        console.log(document.getElementById('myForm'));
 
     </script>
+    <script src="/hotel/informationHotel.js"></script>
 <!--    <script th:src="@{/admin-assets/dist/js/modal-image.js}"></script>-->
     <script th:src="@{/admin-assets/dist/js/notify-admin.js}"></script>
-    <script src="/hotel/informationHotel.js"></script>
-
 </th:block>
 </body>
 

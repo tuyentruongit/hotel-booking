@@ -14,5 +14,5 @@ import lombok.experimental.FieldDefaults;
 public class ImageRoom extends Image {
     @ManyToOne
     @JoinColumn(name = "room_id")
-    private Room room;
+     Room room;
 }

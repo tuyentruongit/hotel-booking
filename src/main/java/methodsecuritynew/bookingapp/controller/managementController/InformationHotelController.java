@@ -26,15 +26,9 @@ public class InformationHotelController {
 
     @GetMapping("/information")
     public String informationHotelDetail(Model model){
-        Hotel hotel  = hotelService.getHotelByIdUser();
+        Hotel hotel  = hotelService.getHotelByAccountCurrent();
         List<ImageHotel> imageHotelList = imageService.getAllImageByIdHotel(2);
         List<Room> roomList  = roomService.getRoomByIdHotel(hotel.getId());
-//        for (int i = 0; i < roomList.size(); i++) {
-//            System.out.println("----------------------------------- nè" + roomList.get(i));
-//        }
-
-//        System.out.println("--------------------------------------- nè " +  roomList.get(1).getRoomType().getValue());
-
         model.addAttribute("roomList" , roomList);
         model.addAttribute("imageHotelList" , imageHotelList);
         model.addAttribute("hotel" , hotel);

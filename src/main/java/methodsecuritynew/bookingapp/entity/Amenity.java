@@ -23,6 +23,11 @@ public abstract class Amenity {
 
     String name;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "hotel_id")
+    Hotel hotel;
+
+
     LocalDate createdAt;
     LocalDate updateAt;
 }

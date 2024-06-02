@@ -2,7 +2,7 @@ package methodsecuritynew.bookingapp.service;
 
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.model.dto.TotalBookingMonthDto;
-import methodsecuritynew.bookingapp.model.dto.UserDto;
+import methodsecuritynew.bookingapp.model.dto.RegisterDto;
 import methodsecuritynew.bookingapp.repository.BookingRepository;
 import methodsecuritynew.bookingapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,8 @@ public class DashboardService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
 
-    public List<UserDto> getUserByMonth (int limit){
-        List<UserDto> userDtos = userRepository.findUserRegistrationsByMonthAndYear();
+    public List<RegisterDto> getUserByMonth (int limit){
+        List<RegisterDto> userDtos = userRepository.findUserRegistrationsByMonthAndYear();
         if (userDtos.size()>limit){
             return userDtos.subList(0,limit);
         }

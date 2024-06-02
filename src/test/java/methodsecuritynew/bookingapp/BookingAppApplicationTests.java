@@ -38,8 +38,6 @@ class BookingAppApplicationTests {
     @Autowired
     private AmenityRoomRepository amenityRoomRepository;
     @Autowired
-    private BedRepository bedRepository;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -208,19 +206,27 @@ class BookingAppApplicationTests {
 //    @Test
 //    void createDataAmenityRoom() {
 //
-//        Faker faker = new Faker();
-//        Random random = new Random();
-//
-//        for (int i = 0; i < 400; i++) {
-//
-//            AmenityRoom amenityRoom = new AmenityRoom();
-//            amenityRoom.setName(faker.company().name());
-//            amenityRoom.setCreatedAt(LocalDate.now());
-//            amenityRoom.setUpdateAt(LocalDate.now());
-//
-//            amenityRoomRepository.save(amenityRoom);
-//        }
+////        Faker faker = new Faker();
+////        Random random = new Random();
+////
+////        for (int i = 0; i < 400; i++) {
+////
+////            AmenityRoom amenityRoom = new AmenityRoom();
+////            amenityRoom.setName(faker.company().name());
+////            amenityRoom.setCreatedAt(LocalDate.now());
+////            amenityRoom.setUpdateAt(LocalDate.now());
+////
+////            amenityRoomRepository.save(amenityRoom);
+////        }
 ////        System.out.println(amenityRoomRepository.findAll());
+//
+//        List<AmenityRoom> amenityRoomList = amenityRoomRepository.findAll();
+//        List<Hotel> hotelList = hotelRepository.findAll();
+//        Random random = new Random();
+//       for (AmenityRoom amenityRoom : amenityRoomList){
+//           amenityRoom.setHotel(hotelList.get(random.nextInt(hotelList.size())));
+//           amenityRoomRepository.save(amenityRoom);
+//       }
 //    }
 
 //    @Test
@@ -342,34 +348,51 @@ class BookingAppApplicationTests {
 //
 
 //
+//    @Test
+//    void createDataBooking(){
+//
+//        Faker faker = new Faker();
+//        Random random = new Random();
+//        List<User> userList = userRepository.findAllByUserRole(UserRole.ROLE_USER);
+//        Hotel hotel = hotelRepository.findById(300).get();
+//        List<Room> roomList = roomRepository.findRoomByHotel_Id(hotel.getId());
+//
+//        for (int i = 0; i < 20; i++) {
+//            Booking booking  = Booking.builder()
+//                    .user(userList.get(random.nextInt(userList.size())))
+//                    .hotel(hotel)
+//                    .room(roomList.get(2))
+//                    .nameCustomer(faker.name().name())
+//                    .emailCustomer(faker.internet().emailAddress())
+//                    .phoneCustomer(faker.phoneNumber().phoneNumber())
+//                    .guests(random.nextInt(1,4))
+//                    .numberRoom(random.nextInt(1,3))
+//                    .price(random.nextInt(100000, 1000000))
+//                    .checkIn(LocalDate.now().plusDays(2))
+//                    .checkOut(LocalDate.now().plusDays(4))
+//                    .paymentMethod(PaymentMethod.PAY_AT_ACCOMMODATION)
+//                    .statusBooking(StatusBooking.COMPLETE)
+//                    .createAt(LocalDateTime.now())
+//                    .build();
+//
+//            bookingRepository.save(booking);
+//        }
+//
+//    }
+
     @Test
-    void createDataBooking(){
-
-        Faker faker = new Faker();
+    void abchdh (){
+        List<AmenityRoom> amenityRoomList = amenityRoomRepository.findAmenityRoomByHotel_Id(2);
+        List<Room> roomList = roomRepository.findRoomByHotel_Id(2);
         Random random = new Random();
-        List<User> userList = userRepository.findAllByUserRole(UserRole.ROLE_USER);
-        Hotel hotel = hotelRepository.findById(300).get();
-        List<Room> roomList = roomRepository.findRoomByHotel_Id(hotel.getId());
 
-        for (int i = 0; i < 20; i++) {
-            Booking booking  = Booking.builder()
-                    .user(userList.get(random.nextInt(userList.size())))
-                    .hotel(hotel)
-                    .room(roomList.get(2))
-                    .nameCustomer(faker.name().name())
-                    .emailCustomer(faker.internet().emailAddress())
-                    .phoneCustomer(faker.phoneNumber().phoneNumber())
-                    .guests(random.nextInt(1,4))
-                    .numberRoom(random.nextInt(1,3))
-                    .price(random.nextInt(100000, 1000000))
-                    .checkIn(LocalDate.now().plusDays(2))
-                    .checkOut(LocalDate.now().plusDays(4))
-                    .paymentMethod(PaymentMethod.PAY_AT_ACCOMMODATION)
-                    .statusBooking(StatusBooking.COMPLETE)
-                    .createAt(LocalDateTime.now())
-                    .build();
-
-            bookingRepository.save(booking);
+        for (Room room : roomList){
+            List<AmenityRoom> amenityRoomList1 = new ArrayList<>();
+            for (int i = 0; i < 7; i++) {
+                amenityRoomList1.add(amenityRoomList.get(random.nextInt(amenityRoomList.size())));
+            }
+            room.setAmenityRoomList(amenityRoomList1);
+            roomRepository.save(room);
         }
 
     }

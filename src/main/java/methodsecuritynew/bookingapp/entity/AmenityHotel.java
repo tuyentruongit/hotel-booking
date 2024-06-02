@@ -17,11 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AmenityHotel extends Amenity {
+
     @Enumerated(EnumType.STRING)
     AmenityHotelType amenityHotelType;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "hotel_id")
-    Hotel hotel;
-
 }

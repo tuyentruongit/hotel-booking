@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       th:replace="~{hotel-management/layout/layout.html :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
-    <title>AdminLTE 3 | Dashboard</title>
+    <title>Danh sách phòng</title>
 
     <th:block id="css">
         <link rel="stylesheet" href="/admin-assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
@@ -23,7 +23,7 @@
                     <div class="col-sm-12">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="#">Dashboard</a>
+                                <a href="/hotel-manager/dashboard">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item active">
                                 Danh sách phòng
@@ -54,9 +54,9 @@
                                 <table id="table-room" class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th style="width: 5%">#</th>
-                                        <th style="width: 40%">Tên phòng</th>
-                                        <th style="width: 10%">Loại phòng</th>
+                                        <th style="width: 5%">STT</th>
+                                        <th style="width: 30%">Tên phòng</th>
+                                        <th style="width: 20%">Loại phòng</th>
                                         <th style="width: 10%">Số lượng</th>
                                         <th style="width: 10%">Diện tích</th>
                                         <th style="width: 10%">Sức chứa</th>
@@ -64,28 +64,21 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="room : ${roomList}">
-                                        <td th:text="${room.name}">Thứ Tự</td>
+                                    <tr th:each="room,star : ${roomList}">
+                                        <td th:text="${star.count}">Thứ Tự</td>
                                         <td>
                                             <a th:href="@{/hotel-manager/room/detail/{id} (id=${room.id})}"
                                                th:text="${room.name}"></a>
                                         </td>
-                                        <td>Loại phòng </td>
-                                        <td >6</td>
-                                        <td th:text="${room.area}">Link</td>
-                                        <td th:text="${room.capacity}">Thời lượng</td>
-                                        <td th:text="${room.status ? 'Công khai' : 'Riêng tư'}">Trạng thái</td>
-
-                                        <!--                                    <td>-->
-
-                                        <!--                                        <button class="btn btn-success btn-sm"-->
-                                        <!--                                                th:onclick="|editEpisode(${room.id})|"-->
-                                        <!--                                        ><i class="fas fa-pencil-alt"></i>-->
-                                        <!--                                        </button>-->
-                                        <!--                                        <button th:onclick="|deleteEpisode(${room.id})|"-->
-                                        <!--                                                class="btn btn-danger btn-sm">-->
-                                        <!--                                            <i class="fas fa-trash-alt"></i></button>-->
-                                        <!--                                    </td>-->
+                                        <td th:text="${room.roomType.value}"></td>
+                                        <td  th:text="${room.quantity}"></td>
+                                        <td th:text="${room.area}"></td>
+                                        <td th:text="${room.capacity}"></td>
+                                        <td >
+                                            <span class="badge"
+                                                  th:text="${room.status ? 'Công khai' : 'Riêng tư'}"
+                                                  th:classappend="${room.status ? 'bg-success' : 'bg-warning'}"></span>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -120,7 +113,7 @@
         });
         const  btnCreate = document.querySelector('.btn-create-support');
         btnCreate.addEventListener('click' , ()=>{
-            window.location.href = "/admin/support/create"
+            window.location.href = "/hotel-manager/room/create"
         })
         const  btnRefresh = document.querySelector('.btn-refresh');
         btnRefresh.addEventListener('click' , ()=>{

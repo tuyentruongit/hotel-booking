@@ -18,11 +18,15 @@ public class AmenityService {
     private final AmenityHotelRepository amenityHotelRepository;
     private final AmenityRoomRepository amenityRoomRepository;
     private final HotelService hotelService;
-    private final RoomService roomService;
 
-    public List<AmenityHotel> getAllAmenityHotelByHotel (Integer idHotel){
-       return amenityHotelRepository.findAllByHotel_Id(idHotel);
+    public List<AmenityHotel> getAllAmenityHotelByHotel (){
+        Hotel hotel = hotelService.getHotelByAccountCurrent();
+       return amenityHotelRepository.findAllByHotel_Id(hotel.getId());
     }
 
 
+    public List<AmenityRoom> getAllAmenityRoomByHotel() {
+        Hotel hotel = hotelService.getHotelByAccountCurrent();
+        return amenityRoomRepository.findAmenityRoomByHotel_Id(hotel.getId());
+    }
 }

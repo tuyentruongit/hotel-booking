@@ -8,9 +8,10 @@ const btnDeleteImage = document.getElementById("btn-delete-image");
 const inputImage = document.getElementById("avatar");
 const thumbnailPreview = document.getElementById("thumbnail");
 
+
 btnSave.addEventListener('click', (e) => {
     e.preventDefault();
-    // if (!$("#form-hotel-detail").valid()) return;
+    if (!$('#myForm').valid()) return;
 
 
     axios.put("/api/hotel/update/" + hotel.id, descriptionEl.value,{
@@ -21,34 +22,38 @@ btnSave.addEventListener('click', (e) => {
     })
         .then((res) => {
             toastr.success("Lưu thành công ");
-            // setTimeout(() => {
-            //     window.location.href = "/admin/blogs/owns-blog";
-            // }, 1500);
         })
         .catch((err) => {
+            console.log(err)
             toastr.error(err.response.data.message);
         })
 
 })
 
-// $('#form-hotel-detail').validate({
-//     rules: {
-//         description: {
-//             required: true,
-//         }
-//     }, messages: {
-//         description: {
-//             required: "Vui lòng nhập mô tả về khách sạn",
-//         }
-//     }, errorElement: 'span', errorPlacement: function (error, element) {
-//         error.addClass('invalid-feedback');
-//         element.closest('.form-group').append(error);
-//     }, highlight: function (element, errorClass, validClass) {
-//         $(element).addClass('is-invalid');
-//     }, unhighlight: function (element, errorClass, validClass) {
-//         $(element).removeClass('is-invalid');
-//     }
-// });
+$('#myForm').validate({
+    rules: {
+        description: {
+            required: true,
+        },
+        abcde: {
+            required: true,
+        }
+    }, messages: {
+        description: {
+            required: "Vui lòng nhập mô tả về khách sạn",
+        },
+        abcde: {
+            required: "Vui lòng nhập mô tả về khách sạn",
+        }
+    }, errorElement: 'span', errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    }, highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    }, unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    }
+});
 
 
 
