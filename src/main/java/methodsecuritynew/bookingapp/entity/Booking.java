@@ -3,11 +3,10 @@ package methodsecuritynew.bookingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import methodsecuritynew.bookingapp.model.statics.PaymentMethod;
-import methodsecuritynew.bookingapp.model.statics.StatusBooking;
+import methodsecuritynew.bookingapp.model.enums.PaymentMethod;
+import methodsecuritynew.bookingapp.model.enums.StatusBooking;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,16 +23,16 @@ public class Booking {
     Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "id_user")
     User user;
 
 
     @ManyToOne
-    @JoinColumn(name = "hotel")
+    @JoinColumn(name = "id_hotel")
     Hotel hotel;
 
     @ManyToOne
-    @JoinColumn(name = "room")
+    @JoinColumn(name = "id_room")
     Room room;
 
     String nameCustomer;

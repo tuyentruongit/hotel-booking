@@ -3,9 +3,7 @@ package methodsecuritynew.bookingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import methodsecuritynew.bookingapp.model.statics.ImageType;
-
-import java.time.LocalDate;
+import methodsecuritynew.bookingapp.model.enums.ImageType;
 
 @Getter
 @Setter

@@ -1,11 +1,8 @@
 package methodsecuritynew.bookingapp.rest;
 
 import lombok.RequiredArgsConstructor;
-import methodsecuritynew.bookingapp.entity.Hotel;
 import methodsecuritynew.bookingapp.entity.Support;
 import methodsecuritynew.bookingapp.model.request.UpsertSupportRequest;
-import methodsecuritynew.bookingapp.model.statics.SupportType;
-import methodsecuritynew.bookingapp.service.HotelService;
 import methodsecuritynew.bookingapp.service.SupportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

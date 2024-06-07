@@ -4,7 +4,7 @@ import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.Support;
 import methodsecuritynew.bookingapp.model.request.UpsertSupportRequest;
-import methodsecuritynew.bookingapp.model.statics.SupportType;
+import methodsecuritynew.bookingapp.model.enums.SupportType;
 import methodsecuritynew.bookingapp.repository.SupportRepository;
 import org.springframework.stereotype.Service;
 

@@ -6,13 +6,12 @@ import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.TokenConfirm;
 import methodsecuritynew.bookingapp.entity.User;
 import methodsecuritynew.bookingapp.exception.BadRequestException;
-import methodsecuritynew.bookingapp.exception.ResourceNotFoundException;
 import methodsecuritynew.bookingapp.model.request.*;
 
 import methodsecuritynew.bookingapp.model.response.VerifyAccountResponse;
-import methodsecuritynew.bookingapp.model.statics.Gender;
-import methodsecuritynew.bookingapp.model.statics.TokenType;
-import methodsecuritynew.bookingapp.model.statics.UserRole;
+import methodsecuritynew.bookingapp.model.enums.Gender;
+import methodsecuritynew.bookingapp.model.enums.TokenType;
+import methodsecuritynew.bookingapp.model.enums.UserRole;
 import methodsecuritynew.bookingapp.repository.TokenConfirmRepository;
 import methodsecuritynew.bookingapp.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,7 +30,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor

@@ -9,4 +9,5 @@ public interface AmenityRoomRepository extends JpaRepository<AmenityRoom, Intege
 
     List<AmenityRoom> findAmenityRoomByHotel_Id(int id);
 
+    AmenityRoom findByName(String name);
 }

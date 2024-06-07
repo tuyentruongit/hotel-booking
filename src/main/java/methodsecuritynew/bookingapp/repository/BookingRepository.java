@@ -3,12 +3,14 @@ package methodsecuritynew.bookingapp.repository;
 import methodsecuritynew.bookingapp.entity.Booking;
 import methodsecuritynew.bookingapp.model.dto.RevenueDayDto;
 import methodsecuritynew.bookingapp.model.dto.RevenueMonthDto;
+import methodsecuritynew.bookingapp.model.dto.TotalBookingByRoomTypeDto;
 import methodsecuritynew.bookingapp.model.dto.TotalBookingMonthDto;
-import methodsecuritynew.bookingapp.model.statics.StatusBooking;
+import methodsecuritynew.bookingapp.model.enums.StatusBooking;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
     Page<Booking> findAllByUser_IdOrderByCreateAtDesc(Integer id, Pageable pageable);
 
-    List<Booking> findByHotel_Id(Integer hotelId);
+    List<Booking> findAllByHotel_Id(Integer hotelId);
 
     @Query(value = "SELECT new  methodsecuritynew.bookingapp.model.dto.TotalBookingMonthDto(MONTH(o.createAt), YEAR(o.createAt), COUNT(o.id))" +
             " FROM Booking o WHERE o.statusBooking = 'COMPLETE'" +
@@ -36,12 +38,33 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "ORDER BY YEAR(o.createAt) DESC, MONTH(o.createAt) DESC")
     List<RevenueMonthDto> getTotalRevenueByMonth();
 
+    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.RevenueDayDto(DAY(o.createAt), MONTH(o.createAt), YEAR(o.createAt), SUM(o.price)) " +
+            "FROM Booking o WHERE o.hotel.id = :id AND o.statusBooking = 'COMPLETE' " +
+            "GROUP BY YEAR(o.createAt), MONTH(o.createAt), DAY(o.createAt) " +
+            "ORDER BY YEAR(o.createAt) DESC, MONTH(o.createAt) DESC, DAY(o.createAt) DESC")
+    List<RevenueDayDto> getTotalRevenueByMonth(@Param("id") Integer id);
 
-//    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.RevenueDto(YEAR(o.createAt),YEAR(o.createAt), SUM(o.price)) " +
-//            "FROM Booking o WHERE o.statusBooking = 'COMPLETE' " +
-//            "GROUP BY YEAR(o.createAt) " +
-//            "ORDER BY YEAR(o.createAt) DESC")
-//    List<RevenueDto> getTotalRevenueByYear();
+
+    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.TotalBookingByRoomTypeDto(o.room.name, count(o.id)) " +
+            "FROM Booking o WHERE o.hotel.id = :id AND YEAR(o.createAt) = :year AND o.statusBooking = 'COMPLETE' " +
+            "GROUP BY o.room.name " +
+            "ORDER BY count(o.id) DESC")
+    List<TotalBookingByRoomTypeDto> getTotalBookingByRoomTypeAndYear(@Param("id") Integer id, @Param("year") int year);
+
+    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.RevenueMonthDto(MONTH(o.createAt),YEAR(o.createAt), SUM(o.price)) " +
+            "FROM Booking o WHERE o.hotel.id = :id AND YEAR(o.createAt) = :year AND  o.statusBooking = 'COMPLETE'" +
+            "GROUP BY YEAR(o.createAt), MONTH(o.createAt) " +
+            "ORDER BY YEAR(o.createAt) DESC, MONTH(o.createAt) DESC")
+    List<RevenueMonthDto> getTotalRevenueByMonthAndHotelId(@Param("id") Integer id, @Param("year") int year);
+
+    @Query(value = "SELECT new  methodsecuritynew.bookingapp.model.dto.TotalBookingMonthDto(MONTH(o.createAt), YEAR(o.createAt), COUNT(o.id))" +
+            " FROM Booking o WHERE o.statusBooking = 'COMPLETE' AND o.hotel.id = :id AND YEAR(o.createAt) = :year AND MONTH(o.createAt) = :month"   +
+            " GROUP BY MONTH(o.createAt), YEAR(o.createAt)")
+    TotalBookingMonthDto findTotalBookingMonthByHotel(@Param("id") Integer id , @Param("month") int month , @Param("year") int year);
+    @Query(value = "SELECT new  methodsecuritynew.bookingapp.model.dto.TotalBookingMonthDto(MONTH(o.createAt), YEAR(o.createAt), COUNT(o.id))" +
+            " FROM Booking o WHERE o.statusBooking = 'PENDING' AND o.hotel.id = :id"+
+            " GROUP BY MONTH(o.createAt), YEAR(o.createAt)")
+    TotalBookingMonthDto findTotalBookingPendingMonthByHotel(@Param("id") Integer id );
 
     List<Booking> findBookingByCreateAtBetweenAndStatusBookingOrderByCreateAtDesc(LocalDate star, LocalDate end, StatusBooking statusBooking);
 

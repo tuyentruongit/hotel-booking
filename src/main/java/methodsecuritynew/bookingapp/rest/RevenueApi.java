@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.model.dto.RevenueDayDto;
 import methodsecuritynew.bookingapp.model.dto.RevenueMonthDto;
 import methodsecuritynew.bookingapp.service.BookingService;
+import methodsecuritynew.bookingapp.service.HotelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RevenueApi {
     private final BookingService bookingService;
+    private final HotelService hotelService;
 
     @GetMapping("/day/{year}/{month}")
     public ResponseEntity<List<RevenueDayDto>> getRevenueDayByMonth (@PathVariable Integer year, @PathVariable Integer month){

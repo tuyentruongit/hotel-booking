@@ -2,7 +2,7 @@ package methodsecuritynew.bookingapp.repository;
 
 import methodsecuritynew.bookingapp.entity.User;
 import methodsecuritynew.bookingapp.model.dto.RegisterDto;
-import methodsecuritynew.bookingapp.model.statics.UserRole;
+import methodsecuritynew.bookingapp.model.enums.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

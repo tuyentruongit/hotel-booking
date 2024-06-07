@@ -3,12 +3,12 @@ package methodsecuritynew.bookingapp.service;
 import jakarta.persistence.EntityNotFoundException;
 
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.*;
 import methodsecuritynew.bookingapp.exception.BadRequestException;
+import methodsecuritynew.bookingapp.model.dto.RevenueMonthDto;
 import methodsecuritynew.bookingapp.model.request.UpsertHotelRequest;
-import methodsecuritynew.bookingapp.model.statics.RentalType;
+import methodsecuritynew.bookingapp.model.enums.RentalType;
 import methodsecuritynew.bookingapp.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,8 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -33,6 +31,7 @@ public class HotelService {
     private final AuthService authService;
     private final CityService cityService;
     private final AmenityHotelRepository amenityHotelRepository;
+    private final ReviewRepository reviewRepository;
 
 
     public List<Hotel> hotelListSearch = new ArrayList<>();
@@ -219,10 +218,11 @@ public class HotelService {
         Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Không tìm thấy khách sạn nào có id : " + id ));
 
-        List<Room> roomList = roomRepository.findReviewByHotel_Id(id);
+        List<Room> roomList = roomRepository.findRoomByHotel_Id(id);
+        List<Review> reviewList = reviewRepository.findReviewByHotel_Id(id);
+        reviewRepository.deleteAll(reviewList);
         List<AmenityHotel> amenityHotelList = amenityHotelRepository.findAllByHotel_Id( id);
         roomRepository.deleteAll(roomList);
-
         amenityHotelRepository.deleteAll(amenityHotelList);
         hotelRepository.delete(hotel);
     }
@@ -236,14 +236,16 @@ public class HotelService {
         return  hotelRepository.findById(2).orElseThrow(()-> new RuntimeException("Không tìm thấy hotel trên ") );
     }
 
-    public Hotel updateHotel(Integer id, String description) {
+    public Hotel updateHotel(Integer id, UpsertHotelRequest request) {
         Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Không tìm thấy khách sạn nào có id : " + id ));
-        hotel.setDescription(description);
+        hotel.setDescription(request.getDescription());
+        hotel.setStatus(request.getStatus());
         return hotelRepository.save(hotel);
     }
 
     public List<Hotel> getAllHotelByCity(Integer id) {
         return  hotelRepository.findHotelByCity_Id(id);
     }
+
 }

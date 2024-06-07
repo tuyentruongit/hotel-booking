@@ -25,6 +25,7 @@ public class DashboardController {
     public String getPageDashBoard(Model model){
         List<User> userList = userService.getUserNew();
         List<Booking> bookingList = bookingService.getBookingNew();
+
         model.addAttribute("userRegisterByMonth" , dashboardService.getUserByMonth(5));
         model.addAttribute("totalBookingMonth" , dashboardService.getBookingByMonth(5));
         model.addAttribute("userList" , userList);

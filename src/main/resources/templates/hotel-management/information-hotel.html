@@ -3,16 +3,11 @@
       th:replace="~{hotel-management/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
 
 <head>
-    <title>Detail Movie</title>
+    <title>Thông tin khách sạn</title>
 
     <th:block id="css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
-              integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
-              crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
         <link rel="stylesheet" href="/admin-assets/plugins/select2/css/select2.min.css" />
         <link rel="stylesheet" href="/admin-assets/dist/css/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css"
@@ -57,7 +52,7 @@
                 <div class="col-sm-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="hotel-manager/dashboard">Dashboard</a>
+                            <a href="/hotel-manager/dashboard">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item active">
                             Thông tin
@@ -137,8 +132,21 @@
 
                                                 <textarea th:text="${hotel.description}" name="description" id="description" class="form-control" rows="6"></textarea>
                                             </div>
+                                            <div class="form-group">
+                                                <label>Trạng thái</label>
+                                                <select id="status" class="form-control">
+                                                    <option value="0"
+                                                    th:selected="${!hotel.status}">
+                                                        Riêng tư
+                                                    </option>
+                                                    <option value="1"
+                                                            th:selected="${hotel.status}">
+                                                        Công khai
+                                                    </option>
+                                                </select>
+                                            </div>
                                             <button type="button" class="btn btn-info px-4" id="btn-save">
-                                                Lưu mô tả
+                                                Lưu
                                             </button>
                                         </form>
 
@@ -232,7 +240,6 @@
 </div>
 
 <th:block id="js">
-    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
     <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
     <script src="/admin-assets/plugins/select2/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"

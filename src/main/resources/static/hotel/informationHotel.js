@@ -12,14 +12,18 @@ const thumbnailPreview = document.getElementById("thumbnail");
 btnSave.addEventListener('click', (e) => {
     e.preventDefault();
     if (!$('#myForm').valid()) return;
+     let statusHotel = false
+    if (document.getElementById('status').value === '1'){
+        statusHotel=true;
+    }
+
+    const data ={
+        description : descriptionEl.value,
+        status :statusHotel
+    }
 
 
-    axios.put("/api/hotel/update/" + hotel.id, descriptionEl.value,{
-        headers: {
-            'Content-Type': 'text/plain'  // Đảm bảo đúng Content-Type nếu API yêu cầu
-        }
-
-    })
+    axios.put("/api/hotel/update/" + hotel.id, data)
         .then((res) => {
             toastr.success("Lưu thành công ");
         })
@@ -35,16 +39,11 @@ $('#myForm').validate({
         description: {
             required: true,
         },
-        abcde: {
-            required: true,
-        }
     }, messages: {
         description: {
             required: "Vui lòng nhập mô tả về khách sạn",
         },
-        abcde: {
-            required: "Vui lòng nhập mô tả về khách sạn",
-        }
+
     }, errorElement: 'span', errorPlacement: function (error, element) {
         error.addClass('invalid-feedback');
         element.closest('.form-group').append(error);
@@ -77,7 +76,6 @@ inputImage.addEventListener('change' ,(e)=>{
     axios.post("/api/images/upload-hotel/"+2,formData)
         .then((res)=>{
             imageList.unshift(res.data);
-            renderImage(imageList);
             renderPagination(imageList);
             toastr.success("Upload ảnh thành công ");
             console.log("Thanhf coong")
@@ -122,7 +120,6 @@ btnDeleteImage.addEventListener('click',()=>{
     axios.delete(`/api/images/delete/hotel/${imageId}`)
         .then((res)=>{
             imageList = imageList.filter(image => image.id!==imageId);
-            renderImage(imageList)
             renderPagination(imageList);
             btnChoseImage.disabled=true;
             btnDeleteImage.disabled = true;

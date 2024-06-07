@@ -3,10 +3,7 @@ package methodsecuritynew.bookingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import methodsecuritynew.bookingapp.model.statics.AmenityHotelType;
-import methodsecuritynew.bookingapp.model.statics.AmenityRoomType;
-
-import java.util.List;
+import methodsecuritynew.bookingapp.model.enums.AmenityRoomType;
 
 @Entity
 @Getter

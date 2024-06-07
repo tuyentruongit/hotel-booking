@@ -3,8 +3,8 @@ package methodsecuritynew.bookingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import methodsecuritynew.bookingapp.model.statics.Gender;
-import methodsecuritynew.bookingapp.model.statics.UserRole;
+import methodsecuritynew.bookingapp.model.enums.Gender;
+import methodsecuritynew.bookingapp.model.enums.UserRole;
 
 import java.time.LocalDate;
 import java.util.List;

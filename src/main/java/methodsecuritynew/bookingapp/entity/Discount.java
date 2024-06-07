@@ -2,7 +2,7 @@ package methodsecuritynew.bookingapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import methodsecuritynew.bookingapp.model.statics.RoomType;
+import methodsecuritynew.bookingapp.model.enums.RoomType;
 
 import java.time.LocalDate;
 

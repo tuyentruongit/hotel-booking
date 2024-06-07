@@ -1,6 +1,6 @@
 
 
-.profile-menu{
+.profile-menu, .registration{
     display: flex;
     align-content: center;
     justify-content: space-between;
@@ -12,12 +12,12 @@
     background-color: #DDE6ED;
 
 }
-.profile-menu span{
+.profile-menu span , .registration span{
     font-size: 16px ;
     padding: 0 0;
     font-weight: 350;
 }
-.profile-menu i{
+.profile-menu i , .registration i{
     padding: 0 0;
     margin-right: 10px;
     margin-left: 5px;

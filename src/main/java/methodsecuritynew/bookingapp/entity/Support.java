@@ -3,7 +3,7 @@ package methodsecuritynew.bookingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import methodsecuritynew.bookingapp.model.statics.SupportType;
+import methodsecuritynew.bookingapp.model.enums.SupportType;
 
 import java.time.LocalDate;
 

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{hotel-management/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title>Thông tin khách sạn</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css" />
+        <link rel="stylesheet" href="/admin-assets/plugins/select2/css/select2.min.css" />
+        <link rel="stylesheet" href="/admin-assets/dist/css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.css"
+              integrity="sha512-K1k7jSn9RDKEcn/ugqVVvWYu0bcS3q1w6m/5pQSnrj0bCfIqF6Wk49lkmckSb4wglvTP9V17LtS0q0XxYccXbg=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <style>
+            .content-policy{
+                min-height: 100px;
+                border-radius: 10px;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/hotel-manager/dashboard">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Chính sách khách sạn
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-6">
+                    <button type="button" class="btn btn-default">
+                        <i class="fas fa-chevron-left"></i> Quay lại
+                    </button>
+                    <button id="update" type="button" class="btn btn-info px-4">
+                        Lưu
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6" >
+                                    <form id="form-policy-left">
+                                        <div class="form-group w-100">
+                                            <label>Nhận phòng </label>
+                                            <div >
+                                                <textarea th:value="${policy.checkIn}"
+                                                        th:text="${policy.checkIn}" name="checkIn" class="form-control w-100 content-policy" id="editor-check-in"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group w-100">
+                                            <label>Trả phòng </label>
+                                            <div >
+                                                <textarea th:text="${policy.checkOut}" th:value="${policy.checkOut}"
+                                                          class="w-100 content-policy form-control" id="editor-check-out"
+                                                          name="checkOut"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Chính sách hủy</label>
+                                            <div >
+                                                <textarea th:text="${policy.cancelPolicy}" th:value="${policy.cancelPolicy}"
+                                                          class="w-100 content-policy form-control" id="editor-cancel"
+                                                          name="cancel"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Dịch vụ</label>
+                                            <textarea class="d-none" name="content" ></textarea>
+                                            <div >
+                                                <textarea th:text="${policy.service}" th:value="${policy.service}"
+                                                          class="w-100 content-policy form-control" id="editor-service-hotel"
+                                                          name="service"></textarea>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <form id="form-policy-right">
+                                        <div class="form-group">
+                                            <label>Vật nuôi</label>
+                                            <div >
+                                                <textarea th:text="${policy.animal}" th:value="${policy.animal}"
+                                                          class="w-100 content-policy form-control" id="editor-animal"
+                                                          name="animal"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Độ tuổi</label>
+                                            <div >
+                                                <textarea th:text="${policy.ageLimit}" th:value="${policy.ageLimit}"
+                                                          class="w-100 content-policy form-control" id="editor-age"
+                                                          name="age"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Khác</label>
+                                            <div >
+                                                <textarea th:text="${policy.note}" th:value="${policy.note}"
+                                                          class="w-100 content-policy form-control" id="editor-other"
+                                                          name="other"></textarea>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+<th:block id="js">
+    <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
+    <script src="/admin-assets/plugins/select2/js/select2.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+            integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+             integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paginationjs/2.6.0/pagination.min.js"
+            integrity="sha512-GzbaI5EsNzdEUq6/2XLYpr1y9CUZRIVsUeWTAFgULtQa5jZ3Nug8i0nZKM6jp9NffBCZhymPPQFcF0DK+JkRpw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script th:src="@{/admin-assets/dist/js/notify-admin.js}"></script>
+
+    <script th:inline="javascript">
+        $('#form-policy-left').validate({
+            rules: {
+                checkIn: {
+                    required: true,
+                },checkOut: {
+                    required: true,
+                },
+                cancel: {
+                    required: true,
+                },
+                service: {
+                    required: true,
+                },
+            }, messages: {
+                checkIn: {
+                    required: "Nội dung không được để trống",
+                },checkOut: {
+                    required: "Nội dung không được để trống",
+                },service: {
+                    required: "Nội dung không được để trống",
+                },cancel: {
+                    required: "Nội dung không được để trống",
+                },
+            }, errorElement: 'span', errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            }, highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            }, unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+        $('#form-policy-right').validate({
+            rules: {
+                animal: {
+                    required: true,
+                }, age: {
+                    required: true,
+                }, other: {
+                    required: true,
+                },
+            }, messages: {
+                animal: {
+                    required: "Nội dung không được để trống",
+                }, age: {
+                    required: "Nội dung không được để trống",
+                }, other: {
+                    required: "Nội dung không được để trống",
+                }, quantity: {
+                    required: "Nội dung không được để trống",
+                },
+            }, errorElement: 'span', errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            }, highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            }, unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+        $(".select2").select2();
+
+        const editorCheckInEl = document.getElementById('editor-check-in');
+        const editorCheckOutEl = document.getElementById('editor-check-out');
+        const editorCancelEl = document.getElementById('editor-cancel');
+        const editorServiceInEl = document.getElementById('editor-service-hotel');
+        const editorAnimalInEl = document.getElementById('editor-animal');
+        const editorAgeInEl = document.getElementById('editor-age');
+        const editorOtherInEl = document.getElementById('editor-other');
+
+
+        const updateEl = document.getElementById('update');
+
+        updateEl.addEventListener('click' ,()=>{
+            if ( !$('#form-policy-right').valid() ) return;
+            if ( !$('#form-policy-left').valid() ) return;
+            const data = {
+                checkIn : editorCheckInEl.value,
+                checkOut : editorCheckOutEl.value,
+                service : editorCancelEl.value,
+                cancel :editorServiceInEl.value,
+                animal :editorAnimalInEl.value,
+                age :editorAgeInEl.value,
+                other :editorOtherInEl.value,
+            }
+            axios.post('/api/hotel-manager/update-policy' , data)
+                .then((res) =>{
+                    toastr.success('Cập nhật chính sách thành công');
+                })
+                .catch((err) =>{
+                    console.log(err)
+                    toastr.error('Cập nhật chính sách thất bại');
+                })
+
+        })
+
+
+
+    </script>
+</th:block>
+</body>
+
+</html>

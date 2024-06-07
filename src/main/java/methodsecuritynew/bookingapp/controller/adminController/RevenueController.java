@@ -21,9 +21,10 @@ public class RevenueController {
     @GetMapping
     public String pageRevenue (Model model){
         List<RevenueDayDto> revenueDtoListDay = bookingService.getRevenueByDay(LocalDate.now().getYear(), LocalDate.now().getMonthValue());
-        int revenueYear = bookingService.sumTotalRevenueYear(LocalDate.now().getYear());
-        int revenueMonth = bookingService.sumTotalMonthCurrent(LocalDate.now().getYear(),LocalDate.now().getMonthValue());
-        model.addAttribute("revenueDay" , revenueDtoListDay.get(LocalDate.now().getDayOfMonth()-1));
+        int revenueYear = bookingService.totalRevenueYear(LocalDate.now().getYear());
+        long revenueMonth = bookingService.totalMonthCurrent(LocalDate.now().getYear(),LocalDate.now().getMonthValue());
+        System.out.println(LocalDate.now().getDayOfMonth()-1);
+        model.addAttribute("revenueDay" , revenueDtoListDay.get(LocalDate.now().getDayOfMonth()-1).getTotalPrice());
         model.addAttribute("revenueYear" ,revenueYear);
         model.addAttribute("revenueMonth" ,revenueMonth);
         return "/admin/revenue/index" ;

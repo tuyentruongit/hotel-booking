@@ -3,8 +3,6 @@ package methodsecuritynew.bookingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import methodsecuritynew.bookingapp.model.statics.AmenityRoomType;
-import methodsecuritynew.bookingapp.model.statics.AmenityHotelType;
 
 import java.time.LocalDate;
 

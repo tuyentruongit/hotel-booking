@@ -1,7 +1,7 @@
 package methodsecuritynew.bookingapp.repository;
 
 import methodsecuritynew.bookingapp.entity.TokenConfirm;
-import methodsecuritynew.bookingapp.model.statics.TokenType;
+import methodsecuritynew.bookingapp.model.enums.TokenType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

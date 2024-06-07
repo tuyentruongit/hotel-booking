@@ -53,16 +53,14 @@ public class HotelApi {
         return new ResponseEntity<>( hotelService.updateHotelAdmin(id, request), HttpStatus.OK);
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateHotelAdmin(@PathVariable Integer id , @RequestBody String description) {
-        return new ResponseEntity<>( hotelService.updateHotel(id, description), HttpStatus.OK);
+    public ResponseEntity<?> updateHotelManager(@PathVariable Integer id , @RequestBody UpsertHotelRequest request) {
+        return new ResponseEntity<>( hotelService.updateHotel(id, request), HttpStatus.OK);
     }
 
    @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<?> updateHotelAdmin(@PathVariable Integer id ) {
-       System.out.println(id +"---------------------------------------------------------- id nè");
         hotelService.deleteHotel(id);
         return ResponseEntity.noContent().build();
     }
-
 
 }

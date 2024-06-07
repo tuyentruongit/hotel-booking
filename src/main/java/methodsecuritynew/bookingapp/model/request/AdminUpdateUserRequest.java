@@ -2,7 +2,6 @@ package methodsecuritynew.bookingapp.model.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import methodsecuritynew.bookingapp.model.statics.UserRole;
 
 @Getter
 @Setter

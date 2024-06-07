@@ -4,9 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.Hotel;
 import methodsecuritynew.bookingapp.entity.User;
-import methodsecuritynew.bookingapp.exception.BadRequestException;
-import methodsecuritynew.bookingapp.model.request.UpsertHotelRequest;
-import methodsecuritynew.bookingapp.model.statics.UserRole;
 import methodsecuritynew.bookingapp.repository.HotelRepository;
 import methodsecuritynew.bookingapp.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -16,10 +13,8 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service

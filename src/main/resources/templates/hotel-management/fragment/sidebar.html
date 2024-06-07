@@ -8,7 +8,7 @@
 <body>
 <aside class="main-sidebar sidebar-dark-primary elevation-4" th:fragment="sidebar">
     <!-- Brand Logo -->
-    <a href="./index.html" class="brand-link">
+    <a href="/hotel-manager/information" class="brand-link">
         <img src="/admin-assets/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
              class="brand-image img-circle elevation-3"
              style="opacity: 0.8"/>
@@ -91,25 +91,16 @@
 
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a  th:href="@{/hotel-manager/amenity}" class="nav-link">
                         <i class="nav-icon fas fa-tree"></i>
-                        <p>
-                            Tiện ích & giường
-                            <i class="fas fa-angle-left right"></i>
+                        <p >
+                            Tiện ích
+                           </i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a th:href="@{/hotel-manager/amenity-bed}" class="nav-link d">
-                                <i class="far fa-circle nav-icon "></i>
-                                <p>Danh sách tiện ích và giường</p>
-                            </a>
-                        </li>
-
-                    </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/hotel-manager/policy" class="nav-link">
                         <i class="nav-icon fa-solid fas fa-building-shield"></i>
                         <p>Quản lý chính sách</p>
                     </a>

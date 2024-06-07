@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{hotel-management/layout/layout.html :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
+<head>
+    <title>Tiện ích </title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="/admin-assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
+        <link rel="stylesheet" href="/admin-assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
+        <link rel="stylesheet" href="/admin-assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"/>
+    </th:block>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" id="main-content">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/admin/dashboard">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active">
+                                Tiện ích và giường
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row py-2">
+                    <div class="col-12">
+                        <a href="/hotel-manager/amenity" type="button" class="btn btn-info">
+                            <i class="fas fa-redo"></i> Refresh
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body ">
+                                <h4 class="mb-3">Tiện ích khách sạn</h4>
+                                <table class="table table-bordered table-hover" id="amenity-room-table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên tiện ích</th>
+                                        <th>Loại tiện ích</th>
+                                        <th style="width: 10%"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="amenityHotel : ${amenityHotelList}">
+
+                                        <td th:class="'id-amenity'+ ${amenityHotel.id}" th:text="${amenityHotel.id}"></td>
+                                        <td th:class="'name-amenity'+ ${amenityHotel.id}" th:text="${amenityHotel.name}"></td>
+                                        <td th:class="'type-amenity'+ ${amenityHotel.id}" th:text="${amenityHotel.amenityHotelType.value}"></td>
+                                        <td>
+                                            <button
+                                                    th:onclick="'renderDataModalHotel('+${amenityHotel.id}+')'"class="btn btn-success btn-sm mx-1" data-toggle="modal"
+                                                    data-target="#modal-amenity-hotel">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button th:onclick="'deleteAmenity('+${amenityHotel.id}+')'"
+                                                    class="btn btn-danger btn-sm mx-1">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <button  type="button" class="btn btn-info btn-flat rounded btn-create-amenity-hotel" data-toggle="modal"
+                                        data-target="#modal-amenity-hotel">
+                                    <i class="fa-solid fa-plus"></i>
+                                    Thêm mới
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="mb-3">Tiện ích phòng</h4>
+                                <table class="table table-bordered table-hover" id="amenity-hotel-table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên tiện ích</th>
+                                        <th>Loại tiện ích</th>
+                                        <th style="width: 10%"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="content-table-amenity-room">
+                                    <tr th:each="amenityRoom : ${amenityRoomList}">
+                                        <td th:class="'id-amenity'+ ${amenityRoom.id}" th:text="${amenityRoom.id}"></td>
+                                        <td th:class="'name-amenity'+ ${amenityRoom.id}" th:text="${amenityRoom.name}"></td>
+                                        <td th:class="'type-amenity'+ ${amenityRoom.id}" th:text="${amenityRoom.amenityRoomType.value}"></td>
+                                        <td>
+                                            <button th:onclick="'renderDataModalRoom('+${amenityRoom.id}+')'"
+                                                    class="btn btn-success btn-sm mx-1"
+                                                    data-toggle="modal"
+                                                    data-target="#modal-amenity-room">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button th:onclick="'deleteAmenity('+${amenityRoom.id}+')'"
+                                                    class="btn btn-danger btn-sm mx-1">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-info btn-flat rounded btn-create-amenity-room" data-toggle="modal"
+                                        data-target="#modal-amenity-room">
+                                    <i class="fa-solid fa-plus"></i>
+                                    Thêm mới
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modal-amenity-hotel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 id="modal-title-amenity-hotel">Thêm mới tiện ích cho khách sạn</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <i style="min-width: 3%" class="fa-solid fa-monument"></i>
+                                <label>Tên tiện ích</label>
+                                <input  name="title" type="text" class="form-control" id="nameAmenity" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Loại tiện ích</label>
+                                <select id="type-amenity-hotel" class="form-control">
+                                    <option class="option-amenity-hotel"
+                                            th:each="amenityHotel : ${amenityHotelType}"
+                                            th:value="${amenityHotel}"
+
+                                            th:text="${amenityHotel.value}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex justify-content-end mt-5">
+                                <div>
+                                    <button class="btn btn-success" id="save-amenity-hotel" >Lưu</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="modal-amenity-room" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 id="modal-title-amenity-room">Thêm mới tiện ích cho phòng</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <i style="min-width: 3%" class="fa-solid fa-monument"></i>
+                                <label>Tên tiện ích</label>
+                                <input  name="title" type="text" class="form-control" id="nameAmenityRoom" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Loại tiện ích</label>
+                                <select id="type-amenity-room" class="form-control">
+                                    <option  class="option-amenity-room" th:each="amenityRoom : ${amenityRoomType}"
+                                            th:value="${amenityRoom}"
+                                            th:text="${amenityRoom.value}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex justify-content-end mt-5">
+                                <div>
+                                    <button class="btn btn-success" id="save-amenity-room" >Lưu</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<th:block id="js">
+    <script src="/admin-assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/admin-assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/admin-assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/admin-assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/admin-assets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/admin-assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+
+    <script th:inline="javascript">
+        let listAmenityHotel = [[${amenityHotelList}]];
+        let listAmenityRoom = [[${amenityRoomList}]];
+
+        $('#amenity-room-table').DataTable({
+            "pageLength": 5,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "order": []
+        });
+        $('#amenity-hotel-table').DataTable({
+            "pageLength": 5,
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "order": []
+        });
+
+
+        // type của tiện ích khi click vào nút chinhhr sửa
+        const  typeAmenityRoom = document.getElementById('type-amenity-room');
+        const  typeAmenityHotel = document.getElementById('type-amenity-hotel');
+
+        // tên hiển thị trên modal khi click vào nút chỉnh sửa
+        const nameAmenity =document.getElementById('nameAmenity');
+        const nameAmenityRoom =document.getElementById('nameAmenityRoom');
+
+        // title ở 2 modal
+        const titleAmenityRoom =document.getElementById('modal-title-amenity-room');
+        const titleAmenityHotel =document.getElementById('modal-title-amenity-hotel');
+
+        // nút thêm mơi ở 2 bảng
+        const btnAmenityRoom=document.querySelector('.btn-create-amenity-room');
+        const btnAmenityHotel =document.querySelector('.btn-create-amenity-hotel');
+
+        // nút lưu ở hai modal
+        const btnSaveHotel  =  document.getElementById('save-amenity-hotel');
+        const btnSaveRoom  =  document.getElementById('save-amenity-room');
+
+        // khi click vào nút thêm mới thì sửa title cho modal
+        btnAmenityRoom.addEventListener('click' , ()=>{
+            titleAmenityRoom.innerText = "Thêm mới tiện ích cho phòng "
+            nameAmenityRoom.value = '';
+            btnSaveRoom.setAttribute('type-btn','CREATE')
+        })
+
+        btnSaveHotel.addEventListener('click' , ()=>{
+            titleAmenityRoom.innerText = "Thêm mới tiện ích cho khách sạn  "
+            nameAmenityRoom.value = '';
+            btnSaveRoom.setAttribute('type-btn','CREATE')
+        })
+
+        let idHotelCurrent = 0;
+        let idRoomCurrent = 0;
+
+        const deleteAmenity =(id)=>{
+            console.log(id)
+            const  isConfirm = confirm("Bạn có chắc muốn xóa tiện ích này đi hay không ?")
+            if (!isConfirm) return;
+            axios.delete('/api/amenity/delete/'+id)
+                .then((res) =>{
+                    toastr.success("Xóa tiện ích thành công")
+                })
+                .catch((err)=>{
+                    console.log(err);
+                    toastr.error("Xóa thất bại")
+                })
+
+        }
+
+        const  renderDataModalHotel = (id) =>{
+            let amenity = listAmenityHotel.find(ame => ame.id === id);
+            idHotelCurrent = amenity.id;
+            console.log(amenity.id)
+            const option = document.querySelectorAll('.option-amenity-hotel');
+            option.forEach(op =>{
+                if (amenity.amenityHotelType.toString() === op.value){
+                    op.selected  = true;
+                }
+            })
+            nameAmenity.value = amenity.name;
+            titleAmenityHotel.innerText = "Cập nhật tiện ích"
+            btnSaveHotel.setAttribute('type-btn','UPDATE')
+        }
+        const  renderDataModalRoom = (id) =>{
+            let amenity = listAmenityRoom.find(ame => ame.id === id);
+            const option = document.querySelectorAll('.option-amenity-room');
+            option.forEach(op =>{
+                if (amenity.amenityRoomType === op.value){
+                    op.selected = true;
+                }
+            })
+            idRoomCurrent=amenity.id
+            nameAmenityRoom.value = amenity.name;
+            console.log(titleAmenityRoom);
+            titleAmenityRoom.innerText = "Cập nhật tiện ích"
+            btnSaveRoom.setAttribute('type-btn','UPDATE')
+        }
+
+
+
+        btnSaveHotel.addEventListener('click' ,(e) =>{
+            e.preventDefault();
+            const  data = {
+                name :   nameAmenity.value,
+                typeAmenity : typeAmenityHotel.value
+            }
+            if (btnSaveHotel.getAttribute('type-btn') === 'UPDATE'){
+                updateAmenityHotel(data)
+            }else {
+                createAmenityHotel(data);
+            }
+        })
+        btnSaveRoom.addEventListener('click' ,(e) =>{
+            e.preventDefault();
+
+            const  data = {
+                name :   nameAmenityRoom.value,
+                typeAmenity : typeAmenityRoom.value
+            }
+            updateAmenityRoom(data);
+            if (btnSaveRoom.getAttribute('type-btn') === 'UPDATE'){
+                updateAmenityRoom(data)
+            }else {
+                createAmenityRoom(data);
+            }
+        })
+
+
+        const createAmenityHotel =(data)=>{
+            axios.post('/api/amenity/create/hotel-amenity', data)
+                .then((res) =>{
+                    toastr.success("Thành công")
+                    $('#modal-amenity-hotel').modal('hide');
+                })
+                .catch((err)=>{
+                    console.log(err);
+                    toastr.error("Cập nhật thất bại")
+                })
+        }
+        const createAmenityRoom =(data)=>{
+            axios.post('/api/amenity/create/hotel-amenity', data)
+                .then((res) =>{
+                    toastr.success("Thành công")
+                    $('#modal-amenity-hotel').modal('hide');
+                })
+                .catch((err)=>{
+                    console.log(err);
+                    toastr.error("Cập nhật thất bại")
+                })
+        }
+
+        const updateAmenityHotel = (data)=>{
+            axios.put('/api/amenity/update/hotel-amenity/'+idHotelCurrent, data)
+                .then((res) =>{
+                    toastr.success("Thành công")
+                    $('#modal-amenity-hotel').modal('hide');
+                })
+                .catch((err)=>{
+                    console.log(err);
+                    toastr.error("Cập nhật thất bại")
+                })
+        }
+        const updateAmenityRoom = (data)=>{
+            axios.put('/api/amenity/update/room-amenity/'+idRoomCurrent, data)
+                .then((res) =>{
+                    toastr.success("Thành công")
+                    $('#modal-amenity-room').modal('hide');
+                })
+                .catch((err)=>{
+                    console.log(err);
+                    toastr.error(err.response.data.message)
+                })
+        }
+
+
+
+    </script>
+</th:block>
+</body>
+
+</html>

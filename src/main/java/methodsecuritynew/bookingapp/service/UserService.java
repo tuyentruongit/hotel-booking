@@ -6,14 +6,12 @@ import methodsecuritynew.bookingapp.exception.BadRequestException;
 import methodsecuritynew.bookingapp.exception.ResourceNotFoundException;
 import methodsecuritynew.bookingapp.model.request.AdminUpdateUserRequest;
 import methodsecuritynew.bookingapp.model.request.CreateUserRequest;
-import methodsecuritynew.bookingapp.model.statics.UserRole;
+import methodsecuritynew.bookingapp.model.enums.UserRole;
 import methodsecuritynew.bookingapp.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
@@ -66,10 +64,10 @@ public class UserService {
     public List<User> getUserNew() {
         LocalDate star = LocalDate.now().withDayOfMonth(1);
         LocalDate end = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
-            return  userRepository.findUserByCreatedAtBetweenAndUserRoleOrderByCreatedAtDesc(star,end,UserRole.ROLE_USER);
+        return  userRepository.findUserByCreatedAtBetweenAndUserRoleOrderByCreatedAtDesc(star,end,UserRole.ROLE_USER);
     }
 
     public int totalUser() {
-      return   userRepository.findAll().size();
+        return   userRepository.findAll().size();
     }
 }

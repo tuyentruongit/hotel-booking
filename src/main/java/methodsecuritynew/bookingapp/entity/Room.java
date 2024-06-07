@@ -1,12 +1,13 @@
 package methodsecuritynew.bookingapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import methodsecuritynew.bookingapp.model.statics.BedSize;
-import methodsecuritynew.bookingapp.model.statics.BedType;
-import methodsecuritynew.bookingapp.model.statics.RentalType;
-import methodsecuritynew.bookingapp.model.statics.RoomType;
+import methodsecuritynew.bookingapp.model.enums.BedSize;
+import methodsecuritynew.bookingapp.model.enums.BedType;
+import methodsecuritynew.bookingapp.model.enums.RoomType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "rooms")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,7 @@ public class Room {
 
     String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hotel_id")
     Hotel hotel;
 
@@ -52,7 +54,7 @@ public class Room {
     BedSize bedSize;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST ,CascadeType.MERGE})
     @JoinTable(
             name = "amenity_room",
             joinColumns = @JoinColumn(name = "id_room"),

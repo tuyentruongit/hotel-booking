@@ -34,4 +34,20 @@ public class BookingApi {
         bookingService.updateBooking(id, bookingRequest);
         return ResponseEntity.ok().build();
     }
+    @PutMapping("/confirm/{id}")
+    public ResponseEntity<?> confirmBooking(@PathVariable Integer id){
+        bookingService.confirmBooking(id);
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("/reject/{id}")
+    public ResponseEntity<?> rejectBooking(@PathVariable Integer id){
+        bookingService.rejectBooking(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/confirm-check-out/{id}")
+    public ResponseEntity<?> confirmCheckOutBooking(@PathVariable Integer id){
+        bookingService. confirmCheckOutBooking(id);
+        return ResponseEntity.ok().build();
+    }
 }

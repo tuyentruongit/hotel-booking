@@ -3,7 +3,7 @@ package methodsecuritynew.bookingapp.security;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import methodsecuritynew.bookingapp.entity.User;
-import methodsecuritynew.bookingapp.model.statics.Gender;
+import methodsecuritynew.bookingapp.model.enums.Gender;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

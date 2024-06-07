@@ -3,7 +3,7 @@ package methodsecuritynew.bookingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import methodsecuritynew.bookingapp.model.statics.RentalType;
+import methodsecuritynew.bookingapp.model.enums.RentalType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -60,7 +60,7 @@ public class Hotel {
 
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL ,fetch = FetchType.EAGER, orphanRemoval = true )
-     List<PriceRoom> priceRoomList;
+     List<RoomPrice> priceRoomList;
 
     public String getRatingText() {
         if (rating == null) {

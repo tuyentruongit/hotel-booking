@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import methodsecuritynew.bookingapp.entity.AmenityRoom;
 import methodsecuritynew.bookingapp.entity.Room;
-import methodsecuritynew.bookingapp.model.statics.BedSize;
-import methodsecuritynew.bookingapp.model.statics.BedType;
-import methodsecuritynew.bookingapp.model.statics.RoomType;
+import methodsecuritynew.bookingapp.model.enums.BedSize;
+import methodsecuritynew.bookingapp.model.enums.BedType;
+import methodsecuritynew.bookingapp.model.enums.RoomType;
 import methodsecuritynew.bookingapp.service.AmenityService;
+import methodsecuritynew.bookingapp.service.ImageService;
 import methodsecuritynew.bookingapp.service.RoomService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import java.util.List;
 public class RoomHotelController {
     private final RoomService roomService;
     private final AmenityService amenityService;
+    private final ImageService imageService;
 
     @GetMapping()
     public String viewPageRoomHotel(Model model) {
@@ -34,7 +36,7 @@ public class RoomHotelController {
     @GetMapping("/detail/{id}")
     public String viewRoomDetail(Model model, @PathVariable Integer id) {
         List<AmenityRoom> amenityRoomList = amenityService.getAllAmenityRoomByHotel();
-        Room room = roomService.getRoomById(id);
+        Room room = roomService.getRoomById(id); //  logic này ạ
         model.addAttribute("room", room);
         model.addAttribute("listRoomType", RoomType.values());
         model.addAttribute("amenityRoom", amenityRoomList);
@@ -44,9 +46,11 @@ public class RoomHotelController {
     }
     @GetMapping("/create")
     public String viewRoomCreate(Model model) {
-        Room room = roomService.getRoomById(4);
+        List<AmenityRoom> amenityRoomList = amenityService.getAllAmenityRoomByHotel();
+        model.addAttribute("amenityRoom", amenityRoomList);
+        model.addAttribute("bedType", BedType.values());
+        model.addAttribute("bedSize", BedSize.values());
         model.addAttribute("listRoomType", RoomType.values());
-        model.addAttribute("amenityRoom");
         return "hotel-management/room/create";
     }
 

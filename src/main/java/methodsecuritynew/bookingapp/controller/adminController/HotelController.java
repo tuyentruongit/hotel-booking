@@ -3,7 +3,7 @@ package methodsecuritynew.bookingapp.controller.adminController;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.City;
 import methodsecuritynew.bookingapp.entity.Hotel;
-import methodsecuritynew.bookingapp.model.statics.RentalType;
+import methodsecuritynew.bookingapp.model.enums.RentalType;
 import methodsecuritynew.bookingapp.service.CityService;
 import methodsecuritynew.bookingapp.service.HotelService;
 import org.springframework.data.domain.Page;

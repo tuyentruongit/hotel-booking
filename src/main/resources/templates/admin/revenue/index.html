@@ -80,7 +80,7 @@
                         <!-- small box -->
                         <div class="small-box box-revenue-today card">
                             <div class="inner">
-                                <h4 th:text="${0 == 0 ? 0 : #numbers.formatInteger(revenueDay.totalPrice, 3, 'COMMA')} + ' VNĐ'"></h4>
+                                <h4 th:text="${revenueDay == 0 ? 0 : #numbers.formatInteger(revenueDay, 3, 'COMMA')} + ' VNĐ'"></h4>
                                 <p style="font-size: 15px"> Doanh thu hôm nay</p>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                         <!-- small box -->
                         <div class="small-box box-revenue-month card">
                             <div class="inner">
-                                <h4 th:text="${0 == 0 ? 0 : #numbers.formatInteger(revenueMonth, 3, 'COMMA')} + ' VNĐ'"></h4>
+                                <h4 th:text="${revenueMonth == 0 ? 0 : #numbers.formatInteger(revenueMonth, 3, 'COMMA')} + ' VNĐ'"></h4>
                                 <p style="font-size: 15px">Doanh thu tháng hiện tại</p>
                             </div>
                         </div>

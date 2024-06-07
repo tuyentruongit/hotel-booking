@@ -2,7 +2,7 @@ package methodsecuritynew.bookingapp.controller.adminController;
 
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.Booking;
-import methodsecuritynew.bookingapp.model.statics.PaymentMethod;
+import methodsecuritynew.bookingapp.model.enums.PaymentMethod;
 import methodsecuritynew.bookingapp.service.BookingService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;

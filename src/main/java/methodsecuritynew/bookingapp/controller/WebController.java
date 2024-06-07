@@ -1,22 +1,19 @@
 package methodsecuritynew.bookingapp.controller;
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.*;
 import methodsecuritynew.bookingapp.model.response.VerifyAccountResponse;
-import methodsecuritynew.bookingapp.model.statics.*;
+import methodsecuritynew.bookingapp.model.enums.*;
 import methodsecuritynew.bookingapp.repository.BookingRepository;
 import methodsecuritynew.bookingapp.service.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -241,6 +238,11 @@ public class WebController {
         VerifyAccountResponse data = authService.verifyAccount(token);
         model.addAttribute("data" , data);
         return "web/auth/verify-account";
+    }
+
+    @GetMapping("/confirm/rental-registration")
+    public String confirmRentalHotel (Model model){
+        return "/web/rental-registration";
     }
 
 

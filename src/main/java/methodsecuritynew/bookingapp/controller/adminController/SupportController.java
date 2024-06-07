@@ -2,9 +2,8 @@ package methodsecuritynew.bookingapp.controller.adminController;
 
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.Support;
-import methodsecuritynew.bookingapp.model.statics.SupportType;
+import methodsecuritynew.bookingapp.model.enums.SupportType;
 import methodsecuritynew.bookingapp.service.SupportService;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
