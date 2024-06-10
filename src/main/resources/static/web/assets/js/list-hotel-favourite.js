@@ -51,7 +51,7 @@ const renderData = (list) =>{
 }
 
 const deleteHotelFavourite = (id) =>{
-    axios.delete("/api/hotel/favourite/"+id+"?pageNumber="+currentPage)
+    axios.delete("/api/hotel/delete/list-favourite/"+id+"?pageNumber="+currentPage)
         .then((response)=>{
             console.log(response.data.numberOfElements)
             console.log(response)

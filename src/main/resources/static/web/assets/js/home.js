@@ -144,9 +144,6 @@ const navigation = (inputNameCity) =>{
     // Phần thứ hai là ngày kết thúc
     const dateEndString = dateParts[1];
 
-    console.log(inputNameCity)
-
-
     window.location.href="/danh-sach-khach-san?" +
         "nameCity=" + inputNameCity + "&checkIn=" + dateStartString +
         "&checkOut=" + dateEndString + "&numberGuest=" +
@@ -168,7 +165,17 @@ let defaultValue = btnList[0];
 window.addEventListener('load', () => {
     defaultValue.classList.add('active-city')
     // Gọi API để lấy dữ liệu cho thành phố mặc định và render khách sạn
-    renderCityData(defaultValue.textContent);
+    const date = document.getElementById('date-range');
+    const dateString = date.value;
+    // Tách chuỗi thành hai phần bằng từ "to"
+    const dateParts = dateString.split(" to ");
+
+    // Phần đầu tiên là ngày bắt đầu
+    const dateStartString = dateParts[0];
+
+    // Phần thứ hai là ngày kết thúc
+    const dateEndString = dateParts[1];
+    renderCityData(defaultValue.textContent ,dateStartString,dateEndString);
     showHotelCity.innerHTML = `<span>Xem tất cả khách sạn ${defaultValue.textContent}</span>`
     showHotelCity.setAttribute('value', defaultValue.textContent);
 });
@@ -188,7 +195,17 @@ btnList.forEach((btn)=>{
         // showHotelCity.innerText = 'Xem thêm khách sạn của ' + city;
         showHotelCity.innerHTML = `<span>Xem tất khách sạn ${city}</span>`
         showHotelCity.setAttribute('value',city);
-        renderCityData(city);
+        const date = document.getElementById('date-range');
+        const dateString = date.value;
+        // Tách chuỗi thành hai phần bằng từ "to"
+        const dateParts = dateString.split(" to ");
+
+        // Phần đầu tiên là ngày bắt đầu
+        const dateStartString = dateParts[0];
+
+        // Phần thứ hai là ngày kết thúc
+        const dateEndString = dateParts[1];
+        renderCityData(city,dateStartString,dateEndString);
 
 
     })
@@ -197,22 +214,26 @@ btnList.forEach((btn)=>{
 
 
 // gọi api để render dữ liệu
-const renderCityData = (value) => {
-    axios.get('/api/search/' + value)
+const renderCityData = (value,checkIn,checkOut) => {
+    console.log(checkIn.toString());
+    console.log(checkOut.toString());
+    axios.get('/api/search/' + value+"?checkIn=" + checkIn +
+    "&checkOut=" + checkOut)
         .then((res) => {
             let data = res.data;
-            renderHotel(data);
+            renderHotel(data,value);
         })
         .catch((err) => {
            console.log(err)
         });
 };
 
-
-
+const formatCurrency = (number)=> {
+    return number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+}
 // render khách sạn recommend
 
-const renderHotel = (data) =>{
+const renderHotel = (data,city) =>{
 
     const date = document.getElementById('date-range');
     const dateString = date.value;
@@ -229,20 +250,18 @@ const renderHotel = (data) =>{
     let html = '';
     let count = 1 ;
     data.forEach((hotel)=> {
-        // <span class="p-1 m-0 h-100" >(${hotel.reviews.length}nhận xét)</span>
-        // console.log(hotel.city.name , checkIn , checkOut)
         if (count > 8) {
             return;
         }
         html += `
                     <div class="col-3 h-100">
-                        <a class="card mb-5 text-reset text-decoration-none  h-100" href="/chi-tiet-khach-san/${hotel.id}?nameCity=${hotel.city.name}&checkIn=${dateStartString}&checkOut=${dateEndString}">
-                            <img class="image-hotel" src="/web/assets/image/dep.jpg" alt="Ảnh Hotel">
+                        <a class="card mb-5 text-reset text-decoration-none  h-100" href="/chi-tiet-khach-san/${hotel.id}?nameCity=${city}&checkIn=${dateStartString}&checkOut=${dateEndString}">
+                            <img class="image-hotel" src="${hotel.poster}" alt="Ảnh Hotel">
                             <div class="p-2 h-100">
                                 <div class="d-flex justify-content-start align-content-center h-100">
                                     <span class="p-1 m-0 score-rating h-100">${hotel.rating.toFixed(1)}</span>
                                     <span class="p-1 m-0 h-100" >${hotel.ratingText}</span>
-                                  
+                                     <span class="p-1 m-0 h-100" >(${hotel.totalReviews} nhận xét)</span>
                                 </div>
                             
                                 <h5 class="p-0 m-0 h-100" >${hotel.name}</h5>
@@ -253,8 +272,8 @@ const renderHotel = (data) =>{
                                             <div class="p-0 wrapper w-100 d-flex">
                                                 <span class="original-price "><del>1.300.500 ₫</del></span>
                                             </div>
-                                            <h4 class="p-0 current-price w-100 d-flex">1.150.000₫</h4>
-                                            <p class="description-price w-100 pb-1 m-0">Giá mỗi đêm chưa bao gồm thuế & phí</p>
+                                            <h4 class="p-0 current-price w-100 d-flex">${formatCurrency(hotel.estimatedPrice)}</h4>
+                                            <p class="description-price w-100 pb-1 m-0">Giá mỗi đêm đã bao gồm thuế & phí</p>
                                             <span class="discount mt-3"> Giảm 15%</span>
 
 

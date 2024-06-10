@@ -119,7 +119,7 @@
                         <div class="slider-item outstanding-city text-reset text-decoration-none "   th:each="city : ${cityFavourite}">
 
                             <div  class="slider-item outstanding-city text-reset text-decoration-none  border-none" th:data-name="${city.name}" th:onclick="navigation(this.getAttribute('data-name'))">
-                                <img src="/web/assets/image/city.jpg" alt="">
+                                <img th:src="${city.imageCity}" alt="">
                                 <div class="country-city p-2 d-flex justify-content-center"  >
                                     <h5 class="name-city" th:value="${city.name}" th:text="${city.getName()}"></h5>
                                 </div>

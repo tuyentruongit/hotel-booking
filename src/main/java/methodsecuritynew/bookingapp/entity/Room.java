@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "rooms")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,6 +61,8 @@ public class Room {
             inverseJoinColumns = @JoinColumn(name = "id_amenity")
     )
     List<AmenityRoom> amenityRoomList ;
+
+    Integer priceDefault;
 
     Boolean status;
     LocalDate createdAt;

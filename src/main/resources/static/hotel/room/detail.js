@@ -13,6 +13,7 @@ const bedTypeRoomEl = document.getElementById('bed-type');
 const saveRoom = document.getElementById('save');
 const imageRoom = document.getElementById('imageRoom');
 const btnDeleteImage = document.getElementById('btn-delete-image');
+const priceDefaultEl = document.getElementById('priceDefault');
 
 imageRoom.addEventListener('change', (e)=>{
     const file = e.target.files[0];
@@ -36,7 +37,6 @@ saveRoom.addEventListener('click', (e) => {
     e.preventDefault();
     if (!$('#form-name-room').valid()) return;
     if (!$('#form-description-room').valid()) return;
-
 
     let listId = $('#bedroom').val();
     listId = listId.concat($('#bathroom').val());
@@ -63,17 +63,19 @@ saveRoom.addEventListener('click', (e) => {
         quantity :quantityRoomEl.value,
         bedType : bedTypeRoomEl.value,
         bedSize : bedSizeRoomEl.value,
+        priceDefault : priceDefaultEl.value,
         status :status
     };
 
-    axios.put('/api/hotel-manager/room/'+idRoom , data)
+    axios.put('/api/hotel-manager/room/update/'+idRoom , data)
         .then((res) =>{
             toastr.success("Cập nhật phòng thành công")
             console.log(res.data)
             renderDataRoom(res.data)
         })
         .catch((err) =>{
-            toastr.error("Cập nhật phòng thành công");
+            console.log(err);
+            toastr.error(err.response.data.message);
 
         })
 
@@ -81,26 +83,20 @@ saveRoom.addEventListener('click', (e) => {
 })
 const renderDataRoom = (room) => {
     nameRoomEl.value = room.name
-
-    console.log(room)
-    let amenityIds = room.amenityRoomList.map(actor => actor.id);
-    $('#bathroom').val(amenityIds);
-    $('#bathroom').trigger('change');
-    $('#bedroom').val(amenityIds);
-    $('#bedroom').trigger('change');
-    $('#entertainment').val(amenityIds);
-    $('#entertainment').trigger('change');
-    $('#kitchen').val(amenityIds);
-    $('#kitchen').trigger('change');
-    $('#internet').val(amenityIds);
-    $('#internet').trigger('change');
-    $('#others').val(amenityIds);
-    $('#others').trigger('change');
+    let amenityIds = room.amenityRoomList.map(ame => ame.id);
+    const fields = ['#bathroom', '#bedroom', '#entertainment', '#kitchen', '#internet', '#others'];
+    fields.forEach(field => {
+        $(field).val(amenityIds);
+        $(field).trigger('change');
+    });
     descriptionRoomEl.value = room.description;
     roomTypeEl.value = room.roomType;
+    bedSizeRoomEl.value = room.bedSize;
+    bedTypeRoomEl.value = room.bedType;
     areaRoomEl.value = room.area;
     quantityRoomEl.value = room.quantity;
     capacityRoomEl.value = room.capacity;
+    priceDefaultEl.value = room.priceDefault;
     statusRoomEl.value =room.status ? '1' : '0';
 
 }

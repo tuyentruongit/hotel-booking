@@ -7,6 +7,17 @@
     <title>Xác minh tài khoản</title>
     <th:block id="css">
         <link rel="stylesheet" href="/web/assets/css/style-login.css">
+        <style>
+            .btn-login{
+                color: white !important;
+                display: flex;
+                justify-content: center;
+                align-content: center;
+                text-align: center;
+
+                width: 30%;
+            }
+        </style>
     </th:block>
 </head>
 <body>
@@ -21,12 +32,16 @@
                            Xác thực tài khoản
                         </h3>
                     </div>
-
+                    <th:block th:if="${!data.success}" >
+                        <span th:text="${data.message}"></span>
+                    </th:block>
                     <th:block th:if="${data.success}">
-                        <span>Tài khoản của bạn đã được xác thực.bạn có thể click vào nút bên dưới để tiến hành đăng nhập</span>
-                        <a th:href="@{/account/login}"  class="btn-login">
-                            Đăng nhập
-                        </a>
+                        <span >Tài khoản của bạn đã được xác thực.bạn có thể click vào nút bên dưới để tiến hành đăng nhập</span>
+                        <div class="d-flex justify-content-center">
+                            <a th:href="@{/account/login}"  class="btn-login text-reset text-decoration-none">
+                                Đăng nhập
+                            </a>
+                        </div>
                     </th:block>
                 </form>
 
@@ -37,7 +52,6 @@
     </div>
 </section>
 <th:block id="js">
-    <script src="/web/assets/js/login.js"></script>
 </th:block>
 
 

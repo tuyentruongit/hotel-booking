@@ -5,7 +5,7 @@
 <head>
 
 
-    <title>WebFindTravel.com </title>
+    <title>WebFindTravel.com | Chi tiết khách sạn </title>
     <th:block id="css">
         <link rel="stylesheet" href="/web/lib/OwlCarousel/dist/assets/owl.carousel.min.css">
         <link rel="stylesheet" href="/web/lib/OwlCarousel/dist/assets/owl.theme.default.min.css">
@@ -88,19 +88,15 @@
 
                     </div>
                     <button class="image-grid w-100 " type="button"  data-bs-toggle="modal" data-bs-target="#modal-image">
-                        <img class="image-grid-col-2 image-grid-row-2" src="/web/assets/image/city.jpg"
+                        <img class="image-grid-col-2 image-grid-row-2" th:src="${imageHotelList.get(0).url}"
                              alt="architecture">
-                        <img src="/web/assets/image/city.jpg"
+                        <img th:src="${imageHotelList.get(1).url}"
                              alt="architecture">
-                        <img src="/web/assets/image/city.jpg"
+                        <img th:src="${imageHotelList.get(2).url}"
                              alt="architecture">
-                        <img src="/web/assets/image/city.jpg"
+                        <img th:src="${imageHotelList.get(3).url}"
                              alt="architecture">
-                        <img src="/web/assets/image/city.jpg"
-                             alt="architecture">
-                        <img src="/web/assets/image/city.jpg"
-                             alt="architecture">
-                        <img src="/web/assets/image/city.jpg"
+                        <img th:src="${imageHotelList.get(4).url}"
                              alt="architecture">
                     </button>
                     <div class="nav-bar d-flex p-1">
@@ -145,24 +141,17 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
                             </div>
-                            <div class="list-filter-image">
-                                <button class = "btn-filter-type-image"  type="button">Tất cả ảnh
-                                </button>
-                                <button class = "btn-filter-type-image" type="button" th:each="type : ${imageTypes}" ><th:block th:text="${type.value}"></th:block>(<th:block th:text="${imageTypes.size()}"></th:block>)</button>
-                            </div>
+<!--                            <div class="list-filter-image">-->
+<!--                                <button class = "btn-filter-type-image"  type="button">Tất cả ảnh-->
+<!--                                </button>-->
+<!--                                <button class = "btn-filter-type-image" type="button" th:each="type : ${imageTypes}" ><th:block th:text="${type.value}"></th:block>(<th:block th:text="${imageTypes.size()}"></th:block>)</button>-->
+<!--                            </div>-->
                             <div class="modal-body modal-image">
-                                <img src="/web/assets/image/uudai.jpg"
-                                     alt="architecture">
-                                <img src="/web/assets/image/uudai.jpg"
-                                     alt="architecture">
-                                <img src="/web/assets/image/uudai.jpg"
-                                     alt="architecture">
-                                <img src="/web/assets/image/uudai.jpg"
-                                     alt="architecture">
-                                <img src="/web/assets/image/uudai.jpg"
-                                     alt="architecture">
-                                <img src="/web/assets/image/uudai.jpg"
-                                     alt="architecture">
+                                <th:block th:each="image : ${imageHotelList}">
+
+                                    <img th:src="${image.url}"
+                                         alt="architecture">
+                                </th:block>
                             </div>
                             <div class="modal-footer">
                             </div>
@@ -192,10 +181,8 @@
                             <p class="description-hotel" th:text="${hotel.description}"></p>
                             <h5>Tiện nghi và dịch vụ nổi bật</h5>
                             <div class="amenity-grid ">
-                                <div class="grid-item" th:each="num : ${#numbers.sequence(0,5)}">
-<!--                                    <th:block th:utext="${hotel.getAmenityHotelList().get(num).getIcon()}"></th:block>-->
-                                    <i class="fa-brands fa-algolia"></i>
-                                    <th:block th:text="${hotel.getAmenityHotelList().get(num).getName()}"></th:block>
+                                <div class="grid-item" th:each="amenity : ${amenityHotels}">
+                                    <th:block th:text="${amenity.name}"></th:block>
                                 </div>
                             </div>
                             <button type="button"  data-bs-toggle="modal" data-bs-target="#modal-amenity-hotel"
@@ -256,7 +243,7 @@
                             <div class="modal-body show-amenity-hotel">
                                 <div class="amenity-detail col-12" th:each="amenity : ${hotel.amenityHotelList}">
                                     <span class="icon-amenity">
-                                        <i class="fa-solid fa-wifi"></i>
+                                       <i class="fa-solid fa-check"></i>
                                     </span>
                                     <span class="name-amenity" th:text="${amenity.name}"></span>
                                 </div>
@@ -332,8 +319,7 @@
                                             <span class="mx-2"><th:block th:text="${room.capacity}"></th:block> giường cỡ KING</span>
                                         </div>
                                         <button class="btn text-primary d-flex align-items-center justify-content-start text-decoration-none mt-1 p-0"
-                                                data-bs-toggle="modal" data-bs-target="#modal-room-detail"
-                                            >
+                                                data-bs-toggle="modal" data-bs-target="#modal-room-detail" th:onclick="'renderImageRoomDetail('+${room.id}+')'">
                                             Xem tất cả
                                             <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
                                         </button>
@@ -342,7 +328,7 @@
                                             Giảm 25%
                                         </button>
                                         <div class="d-flex align-items-center ">
-                                            <h5 class="price-room p-0 m-0">1.224.000 đ </h5>
+                                            <h5 class="price-room p-0 m-0" th:text="|${#numbers.formatInteger(room.priceAverage,3,'COMMA')} đ|"> </h5>
                                             <span class="mx-2 original-price"><del>1.530.00 đ</del></span>
                                         </div>
                                         <p class="description-price w-50">Giá mỗi đêm đã gồm thuế và phí</p>
@@ -366,23 +352,15 @@
                                             </div>
                                             <div class="modal-body  modal-room-detail">
                                                 <div class="owl-carousel owl-theme slider-main">
-                                                    <img src="/web/assets/image/dep.jpg" alt="">
-                                                    <img src="/web/assets/image/dep.jpg" alt="">
-                                                    <img src="/web/assets/image/dep.jpg" alt="">
-                                                    <img src="/web/assets/image/dep.jpg" alt="">
-                                                    <img src="/web/assets/image/dep.jpg" alt="">
-                                                    <img src="/web/assets/image/dep.jpg" alt="">
-                                                    <img src="/web/assets/image/dep.jpg" alt="">
-                                                    <img src="/web/assets/image/dep.jpg" alt="">
+
                                                 </div>
                                                 <div class="information-room" >
-<!--                                                    <h6 class="name-hotel" th:text="${room.name}"></h6>-->
                                                     <h6 class="name-hotel" >Phòng đôi Superior</h6>
                                                     <div class="wrap-icon">
                                                         <span class="icon-amenity">
                                                             <i class="fa-regular fa-square"></i>
                                                         </span>
-                                                        <span class="name-amenity-modal" > <th:block th:text="${room.area}"></th:block> mét vuông</span>
+                                                        <span class="name-amenity-modal" >  mét vuông</span>
                                                     </div>
                                                     <div class="wrap-icon">
                                                         <span class="icon-amenity">
@@ -401,23 +379,6 @@
 
                                                 <h6 class="title-amenity-room" >Tiện nghi phòng</h6>
                                                 <div class="amenity-room-detail row"  >
-                                                    <div class="wrap-amenity-room col-6" th:each="amenityRoom : ${amenityRoomTypes}">
-                                                        <div class="d-flex">
-                                                            <i class="fa-solid fa-person-shelter"></i>
-                                                            <h6 class="title-amenity-type" th:text="${amenityRoom.value}"></h6>
-
-                                                        </div>
-                                                        <ul class="w-100">
-
-                                                            <li>Phòng tắm nè</li>
-                                                            <li>Phòng tắm nè</li>
-                                                            <li>Phòng tắm nè</li>
-                                                            <li>Phòng tắm nè</li>
-                                                            <li>Phòng tắm nè</li>
-                                                            <li>Phòng tắm nè</li>
-                                                        </ul>
-
-                                                    </div>
 
                                                 </div>
 
@@ -713,7 +674,6 @@
 
 
 <th:block id="js">
-    <script src="/web/lib/OwlCarousel/dist/owl.carousel.min.js"></script>
     <script th:inline="javascript">
         let hotel = [[${hotel}]]
         let nameCity = [[${nameCity}]];
@@ -721,10 +681,12 @@
         let checkOut = [[${checkOut}]];
         let valueNumberGuest = [[${numberGuest}]];
         let valueNumberRoom = [[${numberRoom}]];
-        let reviewLists = [[${reviewList}]]
-        let inforUser = [[${user}]]
+        let reviewLists = [[${reviewList}]];
+        let roomList = [[${roomList}]];
+        let infoUser = [[${user}]]
     </script>
     <script src="/web/assets/js/hotel-detail.js"></script>
+    <script src="/web/lib/OwlCarousel/dist/owl.carousel.min.js"></script>
 
 </th:block>
 

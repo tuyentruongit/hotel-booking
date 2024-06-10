@@ -35,7 +35,7 @@
                     <span> <i class="fa-solid fa-angle-right"></i></span>
                 </a>
 
-                <a th:href="@{/confirm/rental-registration}" class="registration text-reset text-decoration-none" >
+                <a  class="registration text-reset text-decoration-none">
                     <span> <i class="fa-solid fa-file-invoice"></i> Đăng ký cho thuê nhà</span>
                     <span> <i class="fa-solid fa-angle-right"></i></span>
                 </a>
@@ -71,122 +71,124 @@
                                 </div>
                             </div>
                             <hr>
+                            <form id="input-info-user">
+                                <div class="edit-name-user">
+                                    <div class="row">
+                                        <div class="col-3 d-flex align-items-center">
+                                            <span class="w-100">Tên</span>
+                                        </div>
+                                        <div class="col-6 d-flex">
+                                            <div class="form-group edit-name-number">
+                                                <input th:value="${#authentication.principal.user.getName()}"
+                                                       class="input-name-user form-control"
+                                                       type="text" placeholder="Họ & tên" name="nameUser">
+                                            </div>
+                                        </div>
 
-                            <div class="edit-name-user">
-                                <div class="row">
-                                    <div class="col-3 d-flex align-items-center">
-                                        <span class="w-100">Tên</span>
                                     </div>
-                                    <div class="col-6 d-flex">
-                                       <form id="input-name-user">
-                                           <div class="edit-name form-group">
-                                               <input th:value="${#authentication.principal.user.getName()}"
-                                                      class="input-name-user form-control" type="text" placeholder="Tên" name="nameUser">
-                                           </div>
-                                       </form>
-
-                                    </div>
-
                                 </div>
-                            </div>
-                            <hr>
+                                <hr>
 
-                            <div class="edit-email-user">
-                                <div class="row">
-                                    <div class="col-3 d-flex align-items-center">
-                                        <span class="w-100">Địa chỉ email</span>
-                                    </div>
-                                    <div class="col-6 d-flex">
-                                        <div class="edit-email">
-                                            <span sec:authentication="name"></span>
+                                <div class="edit-email-user">
+                                    <div class="row">
+                                        <div class="col-3 d-flex align-items-center">
+                                            <span class="w-100">Địa chỉ email</span>
+                                        </div>
+                                        <div class="col-6 d-flex">
+                                            <div class="edit-email">
+                                                <span sec:authentication="name" ></span>
+                                            </div>
+
                                         </div>
 
                                     </div>
-
                                 </div>
-                            </div>
-                            <hr>
+                                <hr>
 
-                            <div class="edit-phone-number-user">
-                                <div class="row">
-                                    <div class="col-3 d-flex align-items-center">
-                                        <span class="w-100">Số điện thoại</span>
-                                    </div>
-                                    <div class="col-6 d-flex">
-                                        <div class="edit-phone-number">
-                                            <input th:value="${#authentication.principal.user.getPhoneNumber()}"
-                                                   class="input-phone" type="text" placeholder="Số điện thoại">
+                                <div class="edit-phone-number-user">
+                                    <div class="row">
+                                        <div class="col-3 d-flex align-items-center">
+                                            <span class="w-100">Số điện thoại</span>
                                         </div>
-                                    </div>
+                                        <div class="col-6 d-flex">
+                                            <div class="form-group edit-phone-number">
+                                                <input th:value="${#authentication.principal.user.getPhoneNumber()}"
+                                                       class="input-phone form-control"
+                                                       type="text" placeholder="Số điện thoại" name="phoneUser">
+                                            </div>
+                                        </div>
 
+                                    </div>
                                 </div>
-                            </div>
-                            <hr>
+                                <hr>
 
-                            <div class="edit-birthday-user">
-                                <div class="row">
-                                    <div class="col-3 d-flex align-items-center">
-                                        <span class="w-100">Ngày sinh</span>
-                                    </div>
-                                    <div class="col-6 d-flex">
-                                        <div class="input-birth-day">
-                                            <select name="select-day" id="select-day">
-                                                <option class="day" th:each="day : ${#numbers.sequence(1,31)}" th:value="${day}"  th:text="${day}"></option>
-                                            </select>
+                                <div class="edit-address-user">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <span class="w-100">Địa chỉ</span>
                                         </div>
-                                        <div class="input-birth-day">
-                                            <select name="select-month" id="select-month">
-                                                <option class="month" th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}">
-                                                    Tháng <th:block th:text="${month}"></th:block>
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="input-birth-day">
-                                            <select name="select-year" id="select-year">
-                                                <option class="year" th:each="year : ${#numbers.sequence(1960,2023)}" th:value="${year}" th:text="${year}"></option>
-                                            </select>
+                                        <div class="col-6 d-flex">
+                                            <div class="form-group edit-address-number">
+                                                <input th:value="${#authentication.principal.user.getAddress()}"
+                                                       class="address form-control" type="text" placeholder="Nhập địa chỉ" name="addressUser" >
+                                            </div>
                                         </div>
 
                                     </div>
-
                                 </div>
-                            </div>
-                            <hr>
-
-                            <div class="edit-gender-user">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <span class="w-100">Giới tính</span>
-                                    </div>
-                                    <div class="col-6 d-flex">
-                                        <div class="edit-gender-number">
-                                            <select class="edit-gender-number" name="select-gender" id="">
-                                                <th:block th:each="gender : ${listGender}">
-                                                    <option class="gender-option" th:text="${gender.value}"
-                                                            th:value="${gender}"></option>
-                                                </th:block>
-                                            </select>
+                                <hr>
+                                <div class="edit-birthday-user">
+                                    <div class="row">
+                                        <div class="col-3 d-flex align-items-center">
+                                            <span class="w-100">Ngày sinh</span>
                                         </div>
-                                    </div>
+                                        <div class="col-6 d-flex">
+                                            <div class="input-birth-day">
+                                                <select name="select-day" id="select-day">
+                                                    <option class="day" th:each="day : ${#numbers.sequence(1,31)}" th:value="${day}"  th:text="${day}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="input-birth-day">
+                                                <select name="select-month" id="select-month">
+                                                    <option class="month" th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}">
+                                                        Tháng <th:block th:text="${month}"></th:block>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="input-birth-day">
+                                                <select name="select-year" id="select-year">
+                                                    <option class="year" th:each="year : ${#numbers.sequence(1960,2023)}" th:value="${year}" th:text="${year}"></option>
+                                                </select>
+                                            </div>
 
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="edit-address-user">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <span class="w-100">Địa chỉ</span>
-                                    </div>
-                                    <div class="col-6 d-flex">
-                                        <div class="edit-address-number">
-                                            <input th:value="${#authentication.principal.user.getAddress()}"
-                                                   class="address" type="text" placeholder="Nhập địa chỉ">
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
-                            </div>
+                                <hr>
+
+                                <div class="edit-gender-user">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <span class="w-100">Giới tính</span>
+                                        </div>
+                                        <div class="col-6 d-flex">
+                                            <div class="edit-gender-number">
+                                                <select class="edit-gender-number" name="select-gender" id="">
+                                                    <th:block th:each="gender : ${listGender}">
+                                                        <option class="gender-option" th:text="${gender.value}"
+                                                                th:value="${gender}"></option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <hr>
+
+                            </form>
+
                         </div>
                         <div class="d-flex justify-content-center">
                             <button class="cancel">Hủy</button>
@@ -341,15 +343,26 @@
     <script th:inline="javascript">
         let inforUser = [[${user}]];
         const imageUser = [[${imageUser}]];
-        $('#input-name-user').validate({
+        $('#input-info-user').validate({
             rules: {
                 nameUser: {
                     required: true,
                 },
+                addressUser: {
+                    required: true,
+                },
+                phoneUser: {
+                    required: true,
+                },
+
             },
             messages: {
                 nameUser: {
                     required: "Tên của bạn không được để trống.",
+                }, phoneUser: {
+                    required: "Số điện thoại không được để trống.",
+                }, addressUser: {
+                    required: "Địa chỉ không được để trống.",
                 },
             },
             errorElement: 'span',
@@ -416,6 +429,13 @@
                     toastr.success(err)
                 })
         }
+        //
+        const rentalRegistration = document.querySelector('.registration');
+        rentalRegistration.addEventListener('click', ()=>{
+            if (!$('#input-info-user').valid()) return;
+
+            window.location.href = '/create-hotel'
+        } )
 
 
     </script>

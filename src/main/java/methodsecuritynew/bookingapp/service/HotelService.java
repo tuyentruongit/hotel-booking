@@ -6,9 +6,13 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.*;
 import methodsecuritynew.bookingapp.exception.BadRequestException;
-import methodsecuritynew.bookingapp.model.dto.RevenueMonthDto;
+import methodsecuritynew.bookingapp.model.dto.*;
+import methodsecuritynew.bookingapp.model.enums.UserRole;
+import methodsecuritynew.bookingapp.model.request.UpsertCreateHotelRequest;
 import methodsecuritynew.bookingapp.model.request.UpsertHotelRequest;
 import methodsecuritynew.bookingapp.model.enums.RentalType;
+import methodsecuritynew.bookingapp.model.request.UpsertPolicyRequest;
+import methodsecuritynew.bookingapp.model.request.UpsertRoomRequest;
 import methodsecuritynew.bookingapp.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -28,77 +33,142 @@ public class HotelService {
     private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
-    private final AuthService authService;
-    private final CityService cityService;
-    private final AmenityHotelRepository amenityHotelRepository;
     private final ReviewRepository reviewRepository;
+    private final AmenityHotelRepository amenityHotelRepository;
+    private final CityService cityService;
+    private final AmenityService amenityService;
+    private final PolicyService policyService;
+    private final UserService userService;
+    private final RoomService roomService;
+    private final BookingRepository bookingRepository;
 
 
-    public List<Hotel> hotelListSearch = new ArrayList<>();
 
+    public List<HotelDto> hotelListSearch = new ArrayList<>();
+
+    // logic tìm kiếm khách sạn
     public void getHotelBySearch(String nameCity, String checkIn, String checkOut, Integer numberGuest, Integer numberRoom) {
+        // lấy ngày checkIn và checkOut từ string
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate checkInDay = LocalDate.parse(checkIn,dateTimeFormatter);
+        LocalDate checkOutDay = LocalDate.parse(checkOut,dateTimeFormatter);
 
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//        LocalDate checkInDate = LocalDate.parse(checkIn,dateTimeFormatter);
-//        LocalDate checkOutDate = LocalDate.parse(checkOut,dateTimeFormatter);
-//        Period numberNight = Period.between(checkInDate,checkOutDate);
-//        String name = nameCity.trim();
-//        List<Hotel> hotelList = new ArrayList<>();
-//        for (Hotel hotel : hotelRepository.findHotelByCity_NameIgnoreCase(name)){
-//            int countGuest = 0 ;
-//            int totalNumberQuantity = 0 ;
-//            List<Room> roomList = roomRepository.findRoomByHotel_Id(hotel.getId());
-//            for (Room room : roomList){
-//                countGuest+=room.getCapacity();
-//                totalNumberQuantity += room.getQuantity();
-//            }
-//
-//            int totalRoomInBooking = 0;
-//            for (int i = 0; i < numberNight.getDays(); i++) {
-//                if (bookingService.getBooKingByIdHotelAndCheckInCheckOut(hotel.getId(),checkInDate.plusDays(i)).size()-totalNumberQuantity>=numberRoom ){
-//                    bookingService.getBooKingByIdHotelAndCheckInCheckOut(hotel.getId(),checkInDate.plusDays(i))
-//                            .stream().map(booking -> )
-//                }
-//            }
-//
-//        }
-        String name = nameCity.trim();
-        List<Hotel> hotelList = new ArrayList<>();
-        for (Hotel hotel : hotelRepository.findHotelByCity_NameIgnoreCase(name)){
-            int countGuest = 0 ;
-            List<Room> list = roomRepository.findRoomByHotel_Id(hotel.getId());
-            for (Room room : list){
-                countGuest+=room.getCapacity();
-            }
-            if (countGuest>=numberGuest && list.size()>=numberRoom)
-            {
-                hotelList.add(hotel);
+        // lấy danh sách khách sạn theo city
+        List<Hotel> hotelList = hotelRepository.findHotelByCity_NameIgnoreCase(nameCity);
+        List<HotelDto> availableHotels  = new ArrayList<>();
+
+        // duyệt từng khách sạn để kiểm tra các điều kiện
+        for (Hotel hotel : hotelList){
+            if (availableRooms(hotel.getId(),checkInDay,checkOutDay,numberRoom,numberGuest)){
+               HotelDto hotelDto = createHotelDto(hotel,checkInDay,checkOutDay);
+                availableHotels.add(hotelDto);
+
             }
         }
-        hotelListSearch = hotelList;
+      hotelListSearch = availableHotels;
     }
 
+    // tạo một HotelDto từ một hotel
+    private HotelDto createHotelDto(Hotel hotel, LocalDate checkIn , LocalDate checkOut) {
+        // lấy ra các thông tin của phòng và giá theo thời điểm của ngày chekIn và checkOut
+        List<RoomDto> dataRoom = roomService.getDataRoom(hotel.getId(),checkIn,checkOut);
+        // lấy giá thấp nhất của khách sạn để hiện thị cho người dùng
+        int price = getMinPrice(dataRoom);
+        int totalReview = reviewRepository.findReviewByHotel_Id(hotel.getId()).size();
+        // tạo một dối tượng chữa các thông tin cần thiết của khách sạn
+        HotelDto hotelDto = new HotelDto();
+        hotelDto.setId(hotel.getId());
+        hotelDto.setName(hotel.getName());
+        hotelDto.setAddress(hotel.getAddress());
+        hotelDto.setTotalReviews(totalReview);
+        hotelDto.setStar(hotel.getStar());
+        hotelDto.setPoster(hotel.getPoster());
+        hotelDto.setRating(hotel.getRating());
+        hotelDto.setRatingText(hotel.getRatingText());
+        hotelDto.setEstimatedPrice(price);
+        hotelDto.setNameAmenity(hotel.getAmenityHotelList().stream().map(Amenity::getName).toList());
+        return  hotelDto;
+    }
+
+
+    // logic kiểm tra xem phòng có trống hay là không
+    private boolean availableRooms(Integer id, LocalDate checkInDay, LocalDate checkOutDay, Integer numberRoom, Integer numberGuest) {
+        // lấy danh sách các phòng theo id hotel
+        List<Room> roomList = roomService.getRoomByIdHotel(id);
+        // duyệt từng phòng lấy ra các thông tin cần thiết để kiểm tra
+        for (Room room : roomList){
+
+            if (room.getCapacity()>=numberGuest/numberRoom
+                    && roomCheck(room , checkInDay , checkOutDay , numberRoom)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // logic kiểm  số lượng phòng đã đặt theo từng ngày và từng phòng
+    private boolean roomCheck(Room room, LocalDate checkInDay, LocalDate checkOutDay , Integer numberRoom) {
+        // kiểm tra cho từng ngày trong khoảng checkin checkout
+        LocalDate currentDay = checkInDay;
+        while (!currentDay.isAfter(checkOutDay)) {
+            List<Booking> bookingList = bookingRepository.findAllByRoom_IdAndCheckInBetween(room.getId(),currentDay,currentDay.plusDays(1));
+            int totalBookedRooms = 0;
+
+            // tính tổng số lượng phòng đã được đặt cho ngày hiện tại
+            for (Booking booking : bookingList) {
+                totalBookedRooms += booking.getNumberRoom();
+            }
+
+            // kiểm tra sô lượng phòng còn lại cho ngày hiện tại
+            if (room.getQuantity() - totalBookedRooms < numberRoom) {
+                return false;
+            }
+
+            currentDay = currentDay.plusDays(1); // next ngày tiếp theo
+        }
+        return true;
+    }
+    // logic lấy giá phòng nhỏ nhất của thời gian người dùng chọn hiển thị ra ngoài giao diện
+    public int getMinPrice(List<RoomDto> roomDtoList) {
+         // kiểm tra các thông tin của phòng có null hoặc rỗng hay không
+        if (roomDtoList == null || roomDtoList.isEmpty()) {
+            throw new NoSuchElementException("Không tìm thấy dữ liệu");
+        }
+        // duyệt từng đối tượng để lấy ra giá phòng rẻ nhất ngày hôm đó
+        int minPrice = Integer.MAX_VALUE;
+        for (RoomDto roomDto : roomDtoList) {
+            if (roomDto.getPriceAverage() < minPrice) {
+                minPrice = roomDto.getPriceAverage();
+            }
+            System.out.println(minPrice+"giá nè");
+        }
+        return minPrice;
+    }
+
+    // phân trang cho trang danh sách khách sạn sau khi tìm kiếm
     @Transactional
-    public Page<Hotel> getPaginationHotel(Integer pageNumber, Integer limit) {
+    public Page<HotelDto> getPaginationHotel(Integer pageNumber, Integer limit) {
         Pageable pageable = PageRequest.of(pageNumber-1,limit);
         return PageableExecutionUtils.getPage(
                 hotelListSearch.subList((int) pageable.getOffset(), Math.min((int) pageable.getOffset() + pageable.getPageSize(), hotelListSearch.size())),
                 pageable,() -> hotelListSearch.size()
         );
+
     }
 
 
 
-    public List<Hotel> findOutstandingHotel(String name) {
-        return hotelRepository.findHotelByCity_NameIgnoreCase(name);
-    }
 
     public Hotel getHotelById(Integer id) {
         return hotelRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Không tìm thấy khách sạn nào tương ứng"));
     }
 
-    public List<Hotel> getHotelHomPage(String city) {
-        return hotelRepository.findHotelByCity_NameIgnoreCase(city);
+    public List<HotelDto> getHotelHomPage(String city , String checkIn, String checkOut, Integer numberGuest, Integer numberRoom) {
+        getHotelBySearch(city,checkIn,checkOut,numberGuest,numberRoom);
+        if (hotelListSearch.size()>8){
+            return hotelListSearch.subList(0,8);
+        }
+        return hotelListSearch;
     }
 
     public Page<Hotel> findHotelFavouriteByCity(Integer id, String city , Integer pageNumber , Integer limit) {
@@ -176,54 +246,53 @@ public class HotelService {
 
     }
 
-    public Hotel createHotelAdmin( UpsertHotelRequest request) {
-        User user =  authService.createUserHotel(request);
-        String regex = "^0([0-9]{9})";
-        String phone = "";
-        if (request.getPhoneHotel().matches(regex)){
-            phone = request.getPhoneHotel();
-        }else {
-            throw new BadRequestException("Số điện thoại không hợp lệ ");
-        }
-        String regexEmail ="([a-zA-Z0-9]+)@([a-zA-Z0-9]+)\\.([a-zA-Z0-9]+)";
-        String email = "";
-        System.out.println("nè---------------------------------"+request.getEmail().matches(regexEmail));
-        if (request.getEmail().matches(regexEmail)){
-            email = request.getEmail();
-        }else {
-            throw new BadRequestException("Email không hợp lệ ");
-        }
-        if (hotelRepository.findHotelByName(request.getName())!=null){
-           throw new RuntimeException("Tên khách sạn trên đã tồn tại");
-        }
-        City city = cityService.getCityById(request.getIdCity());
-        RentalType rentalType = RentalType.valueOf(request.getRentalType());
-        Hotel hotel = Hotel.builder()
-                .name(request.getName())
-                .status(request.getStatus())
-                .city(city)
-                .rentalType(rentalType)
-                .email(email)
-                .star(request.getStar())
-                .description(request.getDescription())
-                .address(request.getAddressHotel())
-                .createdAt(LocalDate.now())
-                .hotline(phone)
-                .user(user)
-                .build();
-        return hotelRepository.save(hotel);
-    }
+//    public Hotel createHotelAdmin( UpsertHotelRequest request) {
+//        User user =  authService.createUserHotel(request);
+//        String regex = "^0([0-9]{9})";
+//        String phone = "";
+//        if (request.getPhoneHotel().matches(regex)){
+//            phone = request.getPhoneHotel();
+//        }else {
+//            throw new BadRequestException("Số điện thoại không hợp lệ ");
+//        }
+//        String regexEmail ="([a-zA-Z0-9]+)@([a-zA-Z0-9]+)\\.([a-zA-Z0-9]+)";
+//        String email = "";
+//        System.out.println("nè---------------------------------"+request.getEmail().matches(regexEmail));
+//        if (request.getEmail().matches(regexEmail)){
+//            email = request.getEmail();
+//        }else {
+//            throw new BadRequestException("Email không hợp lệ ");
+//        }
+//        if (hotelRepository.findHotelByName(request.getName())!=null){
+//           throw new RuntimeException("Tên khách sạn trên đã tồn tại");
+//        }
+//        City city = cityService.getCityById(request.getIdCity());
+//        RentalType rentalType = RentalType.valueOf(request.getRentalType());
+//        Hotel hotel = Hotel.builder()
+//                .name(request.getName())
+//                .status(request.getStatus())
+//                .city(city)
+//                .rentalType(rentalType)
+//                .email(email)
+//                .star(request.getStar())
+//                .description(request.getDescription())
+//                .address(request.getAddressHotel())
+//                .createdAt(LocalDate.now())
+//                .hotline(phone)
+//                .user(user)
+//                .build();
+//        return hotelRepository.save(hotel);
+//    }
 
+    // admin xóa khác sạn
     public void deleteHotel(Integer id) {
         Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Không tìm thấy khách sạn nào có id : " + id ));
 
-        List<Room> roomList = roomRepository.findRoomByHotel_Id(id);
+        List<Room> roomList = roomService.getRoomByIdHotel(id);
         List<Review> reviewList = reviewRepository.findReviewByHotel_Id(id);
         reviewRepository.deleteAll(reviewList);
-        List<AmenityHotel> amenityHotelList = amenityHotelRepository.findAllByHotel_Id( id);
         roomRepository.deleteAll(roomList);
-        amenityHotelRepository.deleteAll(amenityHotelList);
         hotelRepository.delete(hotel);
     }
 
@@ -236,11 +305,19 @@ public class HotelService {
         return  hotelRepository.findById(2).orElseThrow(()-> new RuntimeException("Không tìm thấy hotel trên ") );
     }
 
+
+    // hotel-manager update khách sạn
     public Hotel updateHotel(Integer id, UpsertHotelRequest request) {
         Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Không tìm thấy khách sạn nào có id : " + id ));
         hotel.setDescription(request.getDescription());
-        hotel.setStatus(request.getStatus());
+        List<AmenityHotel> list = new ArrayList<>();
+        request.getAmenityHotelList().forEach(idAme ->{
+            AmenityHotel amenityHotel = amenityHotelRepository.findById(idAme)
+                    .orElseThrow(()-> new RuntimeException("Không tìm thấy amenity nào có id : " + idAme));
+            list.add(amenityHotel);
+        });
+        hotel.setAmenityHotelList(list);
         return hotelRepository.save(hotel);
     }
 
@@ -248,4 +325,52 @@ public class HotelService {
         return  hotelRepository.findHotelByCity_Id(id);
     }
 
+    // tạo khách sạn khi người người dùng đăng ký cho thuê phòng
+    @Transactional
+    public Hotel createHotelUser(UpsertCreateHotelRequest upsertCreateHotelRequest) {
+        UpsertHotelRequest upsertHotelRequest = upsertCreateHotelRequest.getUpsertHotelRequest();
+        UpsertPolicyRequest upsertPolicyRequest = upsertCreateHotelRequest.getUpsertPolicyRequest();
+        UpsertRoomRequest upsertRoomRequest = upsertCreateHotelRequest.getUpsertRoomRequest();
+        Hotel hotel = hotelRepository.findByHotline(upsertHotelRequest.getPhoneHotel());
+        if (hotel!=null){
+            throw  new RuntimeException("Số điện thoại đã tồn tại ");
+        }
+        List<AmenityHotel> amenityHotelList = amenityService.getAllAmenityHotelById(upsertHotelRequest.getAmenityHotelList());
+        City city = cityService.getCityById(upsertHotelRequest.getIdCity());
+        PolicyHotel policyHotel = policyService.createPolicyHotel(upsertPolicyRequest);
+        User user = userService.getUserCurrent();
+        user.setUserRole(UserRole.ROLE_HOTEL);
+        userRepository.save(user);
+        Hotel hotelNew = Hotel.builder()
+                .name(upsertHotelRequest.getName())
+                .email(upsertHotelRequest.getEmail())
+                .description(upsertHotelRequest.getDescription())
+                .address(upsertHotelRequest.getAddressHotel())
+                .poster("/web/assets/image/avata-default.jpg")
+                .city(city)
+                .policyHotel(policyHotel)
+                .user(user)
+                .star(upsertHotelRequest.getStar())
+                .hotline(upsertHotelRequest.getPhoneHotel())
+                .amenityHotelList(amenityHotelList)
+                .createdAt(LocalDate.now())
+                .status(false)
+                .rentalType(RentalType.valueOf(upsertHotelRequest.getRentalType()))
+                .build();
+        hotelRepository.save(hotelNew);
+        Room room= roomService.createRoom(upsertRoomRequest);
+        roomRepository.save(room);
+        return hotelNew;
+    }
+
+    public void updatePolicyHotel(UpsertPolicyRequest request) {
+        Hotel hotel = getHotelByAccountCurrent();
+        policyService.updatePolicyHotel(request,hotel);
+    }
+
+    public List<Room> getAllRoom() {
+        Hotel hotel= getHotelByAccountCurrent();
+        return roomService.getRoomByIdHotel(hotel.getId());
+
+    }
 }

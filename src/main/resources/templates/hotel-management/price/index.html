@@ -273,7 +273,6 @@
             calendar.render()
         })
         const renderRoomPrice = (listRoomPrice) => {
-
             let html = "";
             listRoomPrice.forEach((el,) => {
                 let formattedNumber = (+el.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });

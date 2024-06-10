@@ -104,9 +104,9 @@ $('#form-update-hotel').validate({
     }
 });
 
-const deleteMovie = document.getElementById("deleteHotel");
-deleteMovie.addEventListener('click', () => {
-    const isConfirm = confirm("Bạn có chắc mình muốn xóa bộ phim này không?");
+const deleteHotel = document.getElementById("deleteHotel");
+deleteHotel.addEventListener('click', () => {
+    const isConfirm = confirm("Bạn có chắc mình muốn khách sạn này không?");
     if (!isConfirm) return;
     console.log(idHotel)
     axios.delete("/api/hotel/admin/delete/" + idHotel)

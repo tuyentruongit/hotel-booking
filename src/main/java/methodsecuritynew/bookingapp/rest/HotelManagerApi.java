@@ -3,6 +3,7 @@ package methodsecuritynew.bookingapp.rest;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.model.request.UpsertPolicyRequest;
 import methodsecuritynew.bookingapp.service.BookingService;
+import methodsecuritynew.bookingapp.service.HotelService;
 import methodsecuritynew.bookingapp.service.PolicyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class HotelManagerApi {
 
     private final BookingService bookingService;
-    private final PolicyService policyService;
+    private final HotelService hotelService;
 
     @GetMapping("/revenue-day/{idHotel}")
     public ResponseEntity<?> getRevenueMonthByHotel (@RequestParam Integer month
@@ -34,9 +35,7 @@ public class HotelManagerApi {
     }
     @PostMapping("/update-policy")
     public ResponseEntity<?> updatePolicyHotel ( UpsertPolicyRequest request){
-        policyService.updatePolicyHotel(request);
+        hotelService.updatePolicyHotel(request);
         return ResponseEntity.noContent().build();
-
-
     }
 }

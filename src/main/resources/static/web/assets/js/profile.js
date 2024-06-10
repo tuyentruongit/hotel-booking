@@ -38,12 +38,6 @@ const  getBirthday = () =>{
 }
 
 
-
-
-
-
-
-
 // hiện dữ liệu của người dùng khi vào trang user
 const renderData = ()=>{
     let birthdayUser =  new Date( inforUser.birthDay);
@@ -123,7 +117,7 @@ const formatDate = (dateString) => {
 // gọi api khi ấn vào nút lưu , cập nhật dữ liệu cho người dùng
 const btnSave = document.querySelector('.btn-save');
 btnSave.addEventListener('click' ,()=>{
-    if (!$('#input-name-user').valid()) return;
+    if (!$('#input-info-user').valid()) return;
 
     // lấy ra gender người dùng đang chọn
     let gender = '';

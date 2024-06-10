@@ -1,13 +1,21 @@
 package methodsecuritynew.bookingapp.service;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import methodsecuritynew.bookingapp.entity.Hotel;
 import methodsecuritynew.bookingapp.entity.User;
 import methodsecuritynew.bookingapp.exception.BadRequestException;
 import methodsecuritynew.bookingapp.exception.ResourceNotFoundException;
 import methodsecuritynew.bookingapp.model.request.AdminUpdateUserRequest;
 import methodsecuritynew.bookingapp.model.request.CreateUserRequest;
 import methodsecuritynew.bookingapp.model.enums.UserRole;
+import methodsecuritynew.bookingapp.repository.HotelRepository;
 import methodsecuritynew.bookingapp.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +28,8 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final HttpSession session;
+    private final HotelRepository hotelRepository;
 
 
     public User adminResetPasswordUser(Integer id) {
@@ -56,7 +66,6 @@ public class UserService {
                 .userRole(UserRole.valueOf(request.getRole()))
                 .enable(false)
                 .createdAt(LocalDate.now())
-
                 .build();
         return userRepository.save(user);
     }
@@ -64,10 +73,65 @@ public class UserService {
     public List<User> getUserNew() {
         LocalDate star = LocalDate.now().withDayOfMonth(1);
         LocalDate end = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        System.out.println(end  + "ngày cuối tháng ");
+        System.out.println(star  + "ngày dầu  tháng ");
         return  userRepository.findUserByCreatedAtBetweenAndUserRoleOrderByCreatedAtDesc(star,end,UserRole.ROLE_USER);
     }
 
     public int totalUser() {
         return   userRepository.findAll().size();
+    }
+
+
+    // lấy user đang đăng nhập hiện tại
+    public User getUserCurrent (){
+        return userRepository.findByEmail(session.getAttribute("MY_SESSION").toString()).orElseThrow(()->new UsernameNotFoundException("Không tìm thấy user hiện tại "));
+    }
+
+    // lưu khách sạn vào danh sách yêu thích
+    public void saveHotelFavourite(Integer id) {
+        // tìm user đang đăng nhập
+        User user = userRepository.findByEmail((String) session.getAttribute("MY_SESSION")).orElseThrow(()-> new UsernameNotFoundException("User Not Found "));
+        // tìm khách sạn được chọn
+        Hotel hotel = hotelRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khách sạn trên"));
+        user.getHotelList().add(hotel);
+        userRepository.save(user);
+    }
+    // xóa khách sạn ra khỏi danh sách yêu thích trang danh sách khách snaj yêu thích
+    public Page<Hotel> deleteHotelFavourite(Integer id, Integer pageNumber) {
+        if (pageNumber < 1){
+            throw  new RuntimeException("Số trang không hợp lệ ");
+        }
+        // tạo đối twuongj pageable
+        Pageable pageable = PageRequest.of(pageNumber-1,8);
+        User user = deleteHotelFavourite(id);
+        userRepository.save(user);
+        List<Hotel> favouriteHotels = user.getHotelList();
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), favouriteHotels.size());
+
+        // trả về một page
+        return PageableExecutionUtils.getPage(favouriteHotels.subList(start,end)
+                ,pageable,
+                favouriteHotels::size);
+    }
+
+
+    // xóa khách sạn yêu thích taại trang danh sách khách sạn
+    public User deleteHotelFavourite(Integer idHotel) {
+        // tìm kiếm user đăng nhập
+        User user = userRepository.findByEmail((String) session.getAttribute("MY_SESSION")).orElseThrow(()-> new UsernameNotFoundException("User Not Found "));
+        // tìm kiếm khách sạn bị xóa khỏi danh sách yêu thích
+        Hotel hotel = hotelRepository.findById(idHotel)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy khách sạn trên"));
+
+        // kiêm tra xem khách sạn đó có trong danh sách yeeu thích của user hay không
+        if (!user.getHotelList().contains(hotel)) {
+            throw new IllegalStateException("Khách sạn trên không phải khách sạn được yêu thích của người dùng");
+        }
+        // remove ra khỏi danh sách yêu thích
+        user.getHotelList().remove(hotel);
+        return userRepository.save(user);
     }
 }

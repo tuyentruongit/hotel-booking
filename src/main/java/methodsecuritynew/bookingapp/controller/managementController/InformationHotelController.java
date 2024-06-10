@@ -1,9 +1,11 @@
 package methodsecuritynew.bookingapp.controller.managementController;
 
 import lombok.RequiredArgsConstructor;
+import methodsecuritynew.bookingapp.entity.AmenityHotel;
 import methodsecuritynew.bookingapp.entity.Hotel;
 import methodsecuritynew.bookingapp.entity.ImageHotel;
 import methodsecuritynew.bookingapp.entity.Room;
+import methodsecuritynew.bookingapp.service.AmenityService;
 import methodsecuritynew.bookingapp.service.HotelService;
 import methodsecuritynew.bookingapp.service.ImageService;
 import methodsecuritynew.bookingapp.service.RoomService;
@@ -22,6 +24,7 @@ public class InformationHotelController {
     public final HotelService hotelService ;
     public final ImageService imageService ;
     public final RoomService roomService ;
+    public final AmenityService amenityService ;
 
 
     @GetMapping("/information")
@@ -29,6 +32,8 @@ public class InformationHotelController {
         Hotel hotel  = hotelService.getHotelByAccountCurrent();
         List<ImageHotel> imageHotelList = imageService.getAllImageByIdHotel(2);
         List<Room> roomList  = roomService.getRoomByIdHotel(hotel.getId());
+        List<AmenityHotel> amenityHotelListAll = amenityService.getAllAmenityHotel();
+        model.addAttribute("amenityHotelListAll" , amenityHotelListAll);
         model.addAttribute("roomList" , roomList);
         model.addAttribute("imageHotelList" , imageHotelList);
         model.addAttribute("hotel" , hotel);

@@ -172,58 +172,63 @@ class BookingAppApplicationTests {
 //        }
 //    }
             // đã tạo
-//    @Test
-//    void createDataAmenityHotel() {
-//
-////        Faker faker = new Faker();
-//        Random random = new Random();
-////        List<Hotel> hotelList = hotelRepository.findAll();
-////        int count = 0;
-////
-////        for (int i = 0; i < 300; i++) {
-////            if (count < 300-1){
-////                count ++;
-////            }else {
-////                count=0;
-////            }
-////
-////            AmenityHotel amenityHotel = new AmenityHotel();
-////            amenityHotel.setName(faker.company().name());
-////            amenityHotel.setCreatedAt(LocalDate.now());
-////            amenityHotel.setUpdateAt(LocalDate.now());
-//////            amenityHotel.setHotel(hotelList.get(count));
-////            amenityHotelRepository.save(amenityHotel);
-////        }
-//////
-////        List<AmenityHotel> amenityHotelList  = amenityHotelRepository.findAll();
-////        for (AmenityHotel amenityHotel : amenityHotelList){
-////            amenityHotel.setAmenityHotelType(AmenityHotelType.values()[random.nextInt(AmenityHotelType.values().length)]);
-////            amenityHotelRepository.save(amenityHotel);
-////        }
-////        List<AmenityRoom> amenityRoomList  = amenityRoomRepository.findAll();
-////        for (AmenityRoom amenityRoom : amenityRoomList){
-////            amenityRoom.setAmenityRoomType(AmenityRoomType.values()[random.nextInt(AmenityRoomType.values().length)]);
-////            amenityRoomRepository.save(amenityRoom);
-////        }
-//    }
+    @Test
+    void createDataAmenityHotel() {
 
-//    @Test
-//    void createDataAmenityRoom() {
+        Faker faker = new Faker();
+        Random random = new Random();
+        List<Hotel> hotelList = hotelRepository.findAll();
+        List<Room> roomList = roomRepository.findAll();
+        int count = 0;
+
+//        for (int i = 0; i < 100; i++) {
+//            List<Hotel> hotelList1 = new ArrayList<>();
+//            for (int j = 0; j < 10; j++) {
+//                hotelList1.add(hotelList.get(random.nextInt(hotelList.size())));
+//            }
 //
-////        Faker faker = new Faker();
-////        Random random = new Random();
-////
-////        for (int i = 0; i < 400; i++) {
-////
-////            AmenityRoom amenityRoom = new AmenityRoom();
-////            amenityRoom.setName(faker.company().name());
-////            amenityRoom.setCreatedAt(LocalDate.now());
-////            amenityRoom.setUpdateAt(LocalDate.now());
-////
-////            amenityRoomRepository.save(amenityRoom);
-////        }
-////        System.out.println(amenityRoomRepository.findAll());
+//            AmenityHotel amenityHotel = new AmenityHotel();
+//            amenityHotel.setName(faker.company().name());
+//            amenityHotel.setCreatedAt(LocalDate.now());
+//            amenityHotel.setUpdateAt(LocalDate.now());
+//            amenityHotelRepository.save(amenityHotel);
+//        }
 //
+
+        List<AmenityHotel> amenityHotelList  = amenityHotelRepository.findAll();
+        for (int i = 0; i < amenityHotelList.size(); i++) {
+            amenityHotelList.get(i).setAmenityHotelType(AmenityHotelType.values()[random.nextInt(AmenityHotelType.values().length)]);
+
+            amenityHotelRepository.save(amenityHotelList.get(i));
+        }
+//        List<AmenityRoom> amenityRoomList  = amenityRoomRepository.findAll();
+//        for (int i = 0; i < amenityRoomList.size(); i++) {
+//            List<AmenityRoom> amenityRoomList1 = new ArrayList<>();
+//            for (int j = 0; j < random.nextInt(5,9); j++) {
+//                amenityRoomList1.add(amenityRoomList.get(random.nextInt(amenityHotelList.size())));
+//            }
+//            roomList.get(i).setAmenityRoomList(amenityRoomList1);
+//            roomRepository.save(roomList.get(i));
+//        }
+    }
+
+    @Test
+    void createDataAmenityRoom() {
+
+        Faker faker = new Faker();
+        Random random = new Random();
+
+        List<Room> roomList = roomRepository.findAll();
+
+        for (int i = 0; i < 100; i++) {
+            AmenityRoom amenityRoom = new AmenityRoom();
+            amenityRoom.setName(faker.company().name());
+            amenityRoom.setCreatedAt(LocalDate.now());
+            amenityRoom.setUpdateAt(LocalDate.now());
+            amenityRoom.setAmenityRoomType(AmenityRoomType.values()[random.nextInt(AmenityRoomType.values().length)]);
+            amenityRoomRepository.save(amenityRoom);
+        }
+
 //        List<AmenityRoom> amenityRoomList = amenityRoomRepository.findAll();
 //        List<Hotel> hotelList = hotelRepository.findAll();
 //        Random random = new Random();
@@ -231,7 +236,7 @@ class BookingAppApplicationTests {
 //           amenityRoom.setHotel(hotelList.get(random.nextInt(hotelList.size())));
 //           amenityRoomRepository.save(amenityRoom);
 //       }
-//    }
+    }
 
     // đã tạo
 //    @Test
@@ -411,6 +416,44 @@ class BookingAppApplicationTests {
 
         }
 
+    }
+
+    @Test
+    void mau (){
+        Faker faker = new Faker();
+        List<User> userList = userRepository.findAllByUserRole(UserRole.ROLE_USER);
+        Hotel hotel = hotelRepository.findById(2).get();
+        List<Room> roomList = roomRepository.findRoomByHotel_Id(hotel.getId());
+
+        Random random = new Random();
+        Booking booking  = Booking.builder()
+                    .user(userList.get(random.nextInt(userList.size())))
+                    .hotel(hotel)
+                    .room(roomList.get(2))
+                    .nameCustomer(faker.name().name())
+                    .emailCustomer(faker.internet().emailAddress())
+                    .phoneCustomer(faker.phoneNumber().phoneNumber())
+                    .guests(random.nextInt(1,4))
+                    .numberRoom(random.nextInt(1,3))
+                    .price(random.nextInt(100000, 1000000))
+                    .checkIn(LocalDate.now().plusDays(2))
+                    .checkOut(LocalDate.now().plusDays(4))
+                    .paymentMethod(PaymentMethod.PAY_AT_ACCOMMODATION)
+                    .statusBooking(StatusBooking.COMPLETE)
+                    .createAt(LocalDate.now())
+                    .build();
+        bookingRepository.save(booking);
+
+    }
+
+
+    @Test
+    void gnd(){
+        List<Hotel> hotelList = hotelRepository.findAll();
+        for (Hotel hotel : hotelList){
+            hotel.setPoster("web/assets/image/dep.jpg");
+            hotelRepository.save(hotel);
+        }
     }
 
 }

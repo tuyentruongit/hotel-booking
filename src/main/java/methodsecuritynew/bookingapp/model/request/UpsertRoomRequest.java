@@ -18,9 +18,7 @@ public class UpsertRoomRequest {
     Integer quantity;
     String bedType;
     String bedSize;
+    Integer priceDefault;
     Boolean status;
-
-
-
 
 }

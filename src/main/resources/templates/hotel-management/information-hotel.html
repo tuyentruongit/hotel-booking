@@ -133,17 +133,16 @@
                                                 <textarea th:text="${hotel.description}" name="description" id="description" class="form-control" rows="6"></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <label>Trạng thái</label>
-                                                <select id="status" class="form-control">
-                                                    <option value="0"
-                                                    th:selected="${!hotel.status}">
-                                                        Riêng tư
-                                                    </option>
-                                                    <option value="1"
-                                                            th:selected="${hotel.status}">
-                                                        Công khai
-                                                    </option>
-                                                </select>
+                                                <label>Tiện ích</label>
+                                                <div class="select2-purple">
+                                                    <select name="genre" class="select2 form-control" multiple="multiple"
+                                                            id="amenity-hotel">
+                                                        <option th:each="amenity : ${amenityHotelListAll}"
+                                                                th:value="${amenity.id}"
+                                                                th:text="${amenity.name}">
+                                                        </option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <button type="button" class="btn btn-info px-4" id="btn-save">
                                                 Lưu
@@ -255,7 +254,6 @@
         $(".select2").select2();
         let hotel = [[${hotel}]];
         let imageList = [[${imageHotelList}]];
-        console.log(document.getElementById('myForm'));
 
     </script>
     <script src="/hotel/informationHotel.js"></script>

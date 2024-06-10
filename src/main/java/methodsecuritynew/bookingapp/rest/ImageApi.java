@@ -2,12 +2,15 @@ package methodsecuritynew.bookingapp.rest;
 
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.ImageHotel;
+import methodsecuritynew.bookingapp.entity.ImageRoom;
 import methodsecuritynew.bookingapp.entity.ImageUser;
 import methodsecuritynew.bookingapp.service.ImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController()
 @RequestMapping("api/images")
@@ -36,5 +39,11 @@ public class ImageApi {
        imageService.deleteImageHotel(id);
         return  ResponseEntity.noContent().build();
     }
+    @GetMapping("/get-image-room/{idRoom}")
+    public ResponseEntity<?> getImageRoomByIdRoom(@PathVariable Integer idRoom){
+        List<ImageRoom> imageRoomList = imageService.getAllImageRoomByIdRoom(idRoom);
+        return ResponseEntity.ok(imageRoomList);
+    }
+
 
 }

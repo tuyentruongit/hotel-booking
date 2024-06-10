@@ -107,7 +107,6 @@ plusRoom.addEventListener('click', () => {
 
 
 // logic tìm kiếm
-
 const btnSearch = document.getElementById('btn-search');
 let inputNameCity = document.getElementById('input-name-city');
 
@@ -176,6 +175,27 @@ searchByNameHotel.addEventListener('keydown',(event)=>{
 
 })
 let data = hotels.slice();
+const listSort = document.querySelectorAll('.type-sort');
+listSort.forEach((btn)=>{
+    btn.addEventListener('click' , (qualifiedName, value)=> {
+        listSort.forEach((btns) => {
+            btns.classList.remove('select-sort');
+        })
+        btn.classList.add("select-sort")
+
+    })
+})
+// sắp xếp khaách sạn theo luwaj chọn của người dùng
+let sortPriceDesc = () => {
+    data.sort((hotel1, hotel2) => hotel2.estimatedPrice - hotel1.estimatedPrice);
+
+    functionFilter(options,data);
+}
+let sortPriceAsc = () => {
+    data.sort((hotel1, hotel2) => hotel1.estimatedPrice - hotel2.estimatedPrice);
+    functionFilter(options,data);
+}
+
 let sortHeightRating = () => {
     data.sort((hotel1, hotel2) => hotel2.rating - hotel1.rating);
     functionFilter(options,data)
@@ -188,6 +208,8 @@ let dataDefault = () => {
     functionFilter(options,hotels);
 }
 
+
+// lấy ra hotel theo trang mà người dùng chọn
 const getHotel = (page) =>{
     console.log(page);
     axios.get("/api/hotel?pageNumber="+page,)
@@ -203,6 +225,8 @@ const getHotel = (page) =>{
             // toastr.error(error.response.data.message);
         })
 }
+
+// render các page
 const    renderPagination = (totalPage) =>{
     console.log(totalPage)
     let html = '';
@@ -330,10 +354,16 @@ const functionFilter = (options,hotelList) => {
     renderListHotel(hotelListAfterFiltering);
 };
 
+// format giá
+const formatCurrency = (number)=> {
+    return number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+}
+
 
 //hàm render dữ liệu khách sạn sau khi đã được lọc
 const renderListHotel = (hotelList) => {
     let newContent = '';
+    // nếu như không có khách sạn nào theo tìm kiếm của người dùngthifif hiển thị nội dung bên dưới
     if (hotelList.length===0){
         document.querySelector('.pagination-container').classList.add("d-none");
         containerParent.innerHTML = ` <h5 class="d-flex justify-content-center" >Chúng tôi không thể tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng thử tìm lại.</h5>`;
@@ -342,6 +372,7 @@ const renderListHotel = (hotelList) => {
     else {
         document.querySelector('.pagination-container').classList.remove("d-none");
     }
+    // hiển thị dữ liệu ra ngoài giao diện
     hotelList.forEach((hotel) => {
         let htmlStar = '';
         for (let i = 0; i < hotel.star; i++) {
@@ -350,11 +381,9 @@ const renderListHotel = (hotelList) => {
         let htmlAmenity = '';
         for (let i = 0; i < 2; i++) {
             htmlAmenity += `
-                            <span style="font-size: 14px" class="me-3 ">${hotel.amenityHotelList[i].icon} ${hotel.amenityHotelList[i].name}</span>
+                            <span style="font-size: 14px" class="me-3 "> ${hotel.nameAmenity[i]}</span>
                     `
-
         }
-        //<span class="quantity">${hotel.reviews.length} nhận xét</span>
         newContent += `
                         <div  class="row container-hotel" >
                                 <button  class="btn-favourite p-0 m-0" value="${hotel.id}" type-button="add">
@@ -382,17 +411,17 @@ const renderListHotel = (hotelList) => {
                                             <div class="age-rating">${hotel.rating.toFixed(1)} </div>
                                             <div class="infor-rating-hotel">
                                                 <h6 class="p-0 m-0" >${hotel.ratingText}</h6>
-                                               
+                                                 <span class="quantity">${hotel.totalReviews} nhận xét</span>
                                             </div>
                                         </div>
                                         <ul class="price list-unstyled justify-content-center p-0 m-0">
-                                            <span class="description-price">Giá mỗi đêm chưa bao gồm thuế & phí</span>
+                                            <span class="description-price">Giá ước tính mỗi đêm đã bao gồm thuế & phí</span>
 
                                             <li class="p-0 wrapper w-100 d-flex justify-content-end">
                                                 <span class="original-price "><del>1.300.500 ₫</del></span>
                                                 <span class="discount px-2"> Giảm 15%</span>
                                             </li>
-                                            <h4 class="p-0 current-price w-100 d-flex justify-content-end">1.150.000₫</h4>
+                                            <h4 class="p-0 current-price w-100 d-flex justify-content-end">${formatCurrency(hotel.estimatedPrice)}</h4>
 
 
                                         </ul>
@@ -405,49 +434,66 @@ const renderListHotel = (hotelList) => {
 
     })
     containerParent.innerHTML = newContent;
-
     if (hotelsFavourite!=null){
-        const listIdHotel = hotelsFavourite.map(hotel => Number(hotel.id));
-        // xủ lý khi người dùng click vào nút yêu thích
-        let btnHeart = document.querySelectorAll('.btn-favourite')
-        btnHeart.forEach((heart) => {
-            let idHotelAtButtton = Number(heart.value)
-            if (listIdHotel.includes(idHotelAtButtton)){
-                heart.classList.add("style-heart")
-                heart.setAttribute("type-button","delete")
-            }
-            heart.addEventListener('click', () => {
-                if (heart.getAttribute("type-button")==="add") {
-                    axios.post("/api/hotel/favourite/"+heart.value)
-                        .then(()=>{
-                            toastr.success("Đã thêm khách sạn vào danh sách yêu thích.")
-                            heart.classList.add("style-heart")
-                            heart.setAttribute("type-button","delete")
-                        })
-                        .catch((err)=>{
-                            if (err.response.status===401){
-                                toastr.error("Vui lòng đăng nhập");
-                            }
-                        })
-
-                } else {
-                    axios.delete("/api/hotel/favourite/"+heart.value)
-                        .then(()=>{
-                            toastr.success("Đã xóa khách sạn khỏi danh sách yêu thích.")
-                            heart.classList.remove("style-heart");
-                            heart.setAttribute("type-button","add")
-                        })
-                        .catch((err)=>{
-                            if (err.response.status===401){
-                                toastr.error("Vui lòng đăng nhập");
-                            }
-                        })
-
-                }
-            })
-
-        })
+        listFavouriteHotelUser()
     }
+}
+// nêú người dùng đã đăng nhập thì kiểm tra các khách sạn mà người dùng đã thêm vào trước đó
+const listFavouriteHotelUser = ()=>{
+    // lấy ra danh sách id của khách sạn
+    const listIdHotel = hotelsFavourite.map(hotel => Number(hotel.id));
+    // xủ lý khi người dùng click vào nút yêu thích
+    let btnHeart = document.querySelectorAll('.btn-favourite')
+    btnHeart.forEach((heart) => {
+        let idHotelAtButtton = Number(heart.value)
+        // highlight button yêu thích nếu khách sạn đó nằm trong danh sách yêu thích của người dùng
+        if (listIdHotel.includes(idHotelAtButtton)){
+            heart.classList.add("style-heart")
+            heart.setAttribute("type-button","delete")
+        }
+        // hàm xử lý khi clich vào button yêu thích
+        heart.addEventListener('click', () => {
+            if (heart.getAttribute("type-button")==="add") {
+                addHotelFavouriteList(heart,heart.value);
+
+            } else {
+                deleteFavourite(heart , heart.value)
+            }
+        })
+
+    })
+}
+
+// gọi api xử lý khi người dùng thêm khách sạn vào danh sách yêu thích
+const  addHotelFavouriteList = (heart , id)=>{
+    axios.post("/api/hotel/favourite/"+id)
+        .then(()=>{
+            toastr.success("Đã thêm khách sạn vào danh sách yêu thích.")
+            heart.classList.add("style-heart")
+            heart.setAttribute("type-button","delete")
+        })
+        .catch((err)=>{
+            if (err.response===401){
+                toastr.error("Vui lòng đăng nhập");
+            }
+        })
+}
+// gọi api xử lý khi người dùng không muốn thêm khách sạn vào danh sách yêu thích
+const   deleteFavourite = (heart,id) =>{
+    console.log(id)
+    axios.delete("/api/hotel/delete/favourite/"+id)
+        .then((err)=>{
+            console.log(err)
+            toastr.success("Đã xóa khách sạn khỏi danh sách yêu thích.")
+            heart.classList.remove("style-heart");
+            heart.setAttribute("type-button","add")
+        })
+        .catch((err)=>{
+            if (err.response===401){
+                toastr.error("Vui lòng đăng nhập");
+            }
+        })
+
 }
 
 // xử lý validation dữ liệu

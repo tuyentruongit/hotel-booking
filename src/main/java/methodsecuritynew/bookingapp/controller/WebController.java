@@ -3,6 +3,7 @@ package methodsecuritynew.bookingapp.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.*;
+import methodsecuritynew.bookingapp.model.dto.RoomDto;
 import methodsecuritynew.bookingapp.model.response.VerifyAccountResponse;
 import methodsecuritynew.bookingapp.model.enums.*;
 import methodsecuritynew.bookingapp.repository.BookingRepository;
@@ -37,6 +38,7 @@ public class WebController {
     private  final BookingRepository bookingRepository;
     private final ReviewsService reviewsService;
     private final ImageService imageService;
+    private final AmenityService amenityService;
 
 
     @GetMapping("/")
@@ -56,7 +58,7 @@ public class WebController {
                                @RequestParam(required = false, defaultValue = "1") Integer numberRoom,
                                Model model) {
 
-       hotelService.getHotelBySearch(nameCity, checkIn, checkOut, numberGuest, numberRoom);
+        hotelService.getHotelBySearch(nameCity, checkIn, checkOut, numberGuest, numberRoom);
         if (session.getAttribute("MY_SESSION")!= null) {
             List<Hotel> hotelFavourite = hotelService.getAllHotelFavourite((String) session.getAttribute("MY_SESSION"));
             model.addAttribute("hotelFavourite", hotelFavourite);
@@ -80,11 +82,25 @@ public class WebController {
                                  @RequestParam(required = false) String checkOut,
                                  @RequestParam(required = false, defaultValue = "1") Integer numberGuest,
                                  @RequestParam(required = false, defaultValue = "1") Integer numberRoom) {
+        // lấy hotel theo id
         Hotel hotel = hotelService.getHotelById(id);
-        List<Room> roomList = roomService.getRoomByIdHotel(id);
+        // chuyển checkIn, checkOut sang localdate để lấy dữ liệu các phòng trong khách sạn
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate checkInDay = LocalDate.parse(checkIn,dateTimeFormatter);
+        LocalDate checkOutDay = LocalDate.parse(checkOut,dateTimeFormatter);
+        List<RoomDto> roomList = roomService.getDataRoom(id,checkInDay,checkOutDay);
+        // danh sách các review của khách sạn
         List<Review> reviewList = reviewsService.findAllReview(id);
+        // lấy các tiện sub cac tiên ích của khách sạn
+        List<AmenityHotel> listAmenity;
+        if (hotel.getAmenityHotelList().size()>5){
+            listAmenity = hotel.getAmenityHotelList().subList(0,5);
+        }else {
+            listAmenity = hotel.getAmenityHotelList();
+        }
 
         model.addAttribute("reviewList" , reviewList);
+        model.addAttribute("amenityHotels" , listAmenity);
         model.addAttribute("hotel", hotel);
         model.addAttribute("roomList", roomList);
         model.addAttribute("nameCity", nameCity);
@@ -96,11 +112,12 @@ public class WebController {
             User user = authService.getUserCurrent();
             model.addAttribute("user" , user);
         }
-        List<ImageType> imageTypes = List.of(ImageType.values());
-        model.addAttribute("imageTypes", imageTypes);
+        // lấy danh sách các tiện ích của phòng
         List<AmenityRoomType> amenityRoomTypes = List.of(AmenityRoomType.values());
         model.addAttribute("amenityRoomTypes", amenityRoomTypes);
-
+        // lấy tất cả image hotel
+        List<ImageHotel>  imageHotelList = imageService.getAllImageByIdHotel(hotel.getId());
+        model.addAttribute("imageHotelList", imageHotelList);
         return "web/hotel-detail";
 
     }
@@ -243,6 +260,20 @@ public class WebController {
     @GetMapping("/confirm/rental-registration")
     public String confirmRentalHotel (Model model){
         return "/web/rental-registration";
+    }
+    @GetMapping("/create-hotel")
+    public String createHotel (Model model){
+        List<City> cityList = cityService.getAllCity();
+        List<AmenityHotel> amenityHotelList = amenityService.getAllAmenityHotel();
+        List<AmenityRoom> amenityRoomList = amenityService.getAllAmenityRoom();
+        model.addAttribute("amenityHotelList" , amenityHotelList);
+        model.addAttribute("amenityRoomList" , amenityRoomList);
+        model.addAttribute("rentalTypes" , RentalType.values());
+        model.addAttribute("roomTypes" , RoomType.values());
+        model.addAttribute("bedTypes" , BedType.values());
+        model.addAttribute("bedSizes" , BedSize.values());
+        model.addAttribute("cityList" ,cityList);
+        return "/web/create-hotel";
     }
 
 

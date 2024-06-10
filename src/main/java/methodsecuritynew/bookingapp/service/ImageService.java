@@ -271,20 +271,24 @@ public class ImageService {
         return imageRoomRepository.save(imageRoom);
     }
 
-    public Page<ImageRoom> getAllImageRoom(Integer id , Integer limit , Integer page) {
+    public Page<ImageRoom> getImageRoomPage(Integer id , Integer limit , Integer page) {
         PageRequest pageRequest = PageRequest.of(page-1,limit, Sort.by("createdAt").ascending());
         return imageRoomRepository.findAllByRoom_Id(id,pageRequest);
     }
 
     public void deleteImageRoom(String id) {
-        ImageRoom imageRoom =imageRoomRepository.findById(id)
+        ImageRoom imageRoom = imageRoomRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Không tìm thấy ảnh nào có id :"+id));
-
         FileUtils.deleteFile(imageRoom.getUrl());
-
         imageRoomRepository.delete(imageRoom);
+    }
 
+    public void getAllImageRoomDelete(Integer id) {
+        List<ImageRoom> imageRoomList = imageRoomRepository.findAllByRoom_Id(id);
+        imageRoomRepository.deleteAll(imageRoomList);
+    }
 
-
+    public List<ImageRoom> getAllImageRoomByIdRoom(Integer idRoom) {
+        return imageRoomRepository.findAllByRoom_Id(idRoom);
     }
 }

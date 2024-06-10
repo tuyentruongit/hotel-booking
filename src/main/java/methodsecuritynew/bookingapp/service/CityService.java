@@ -6,6 +6,7 @@ import methodsecuritynew.bookingapp.entity.Hotel;
 import methodsecuritynew.bookingapp.exception.BadRequestException;
 import methodsecuritynew.bookingapp.model.request.UpsertCityRequest;
 import methodsecuritynew.bookingapp.repository.CityRepository;
+import methodsecuritynew.bookingapp.repository.HotelRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,7 +22,9 @@ import java.util.List;
 public class CityService {
 
     private final CityRepository cityRepository;
-//    private final HotelService hotelService;
+
+    private final HotelRepository hotelRepository;
+
 
     // tìm kiếm thành phố nổi nật Home Page
     public List<City> findCityFavourite() {
@@ -38,10 +41,10 @@ public class CityService {
         return cityRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy thành phố nào có id : " + id));
     }
 
-    public Page<City> getPageCity(Integer page, Integer limit) {
-        PageRequest pageRequest = PageRequest.of(page - 1, limit, Sort.by("name"));
-        return cityRepository.findAll(pageRequest);
-    }
+//    public Page<City> getPageCity(Integer page, Integer limit) {
+//        PageRequest pageRequest = PageRequest.of(page - 1, limit, Sort.by("name"));
+//        return cityRepository.findAll(pageRequest);
+//    }
 
     public City createCity(UpsertCityRequest request) {
         if (cityRepository.findCityByName(request.getNameCity()) != null) {
@@ -72,15 +75,11 @@ public class CityService {
     public void deleteCity(Integer id) {
         City city = cityRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không có thành phố nào có id là " + id));
-
-//        List<Hotel> hotelList = hotelService.getAllHotelByCity(city.getId());
-//        for (Hotel hotel : hotelList){
-//            hotel.setCity(null);
-//        }
+        List<Hotel> hotel = hotelRepository.findHotelByCity_Id(id);
+        if (!hotel.isEmpty()){
+            throw new BadRequestException("Không thể xóa thành phố này do có khách sạn đang áp dụng");
+        }
         cityRepository.delete(city);
     }
 
-    public void uploadImage(MultipartFile file, Integer id) {
-
-    }
 }

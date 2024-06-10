@@ -47,7 +47,6 @@ public class HotelController {
         Hotel hotel = hotelService.getHotelById(id);
         List<City> cityList = cityService.getAllCity();
         model.addAttribute("hotel" , hotel);
-        System.out.println("nè"+ Arrays.toString(RentalType.values()));
         model.addAttribute("rentalTypes" , RentalType.values());
         model.addAttribute("cityList" ,cityList);
         return "admin/hotel/detail";

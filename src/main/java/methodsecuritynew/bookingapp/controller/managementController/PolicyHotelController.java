@@ -18,7 +18,6 @@ public class PolicyHotelController {
     @GetMapping("/policy")
     public String getPagePolicyHotel(Model  model){
         PolicyHotel policyHotel = hotelService.getHotelByAccountCurrent().getPolicyHotel();
-
         model.addAttribute("policy" ,policyHotel);
         return "hotel-management/policy-hotel/index";
     }

@@ -13,10 +13,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class PolicyService {
     private final PolicyRepository policyRepository;
-    private final HotelService hotelService;
 
-    public void updatePolicyHotel( UpsertPolicyRequest request) {
-        Hotel hotel = hotelService.getHotelByAccountCurrent();
+    public void updatePolicyHotel( UpsertPolicyRequest request , Hotel hotel) {
         PolicyHotel policyHotel = hotel.getPolicyHotel();
         policyHotel.setCheckIn(request.getCheckIn());
         policyHotel.setCheckOut(request.getCheckOut());
@@ -30,4 +28,17 @@ public class PolicyService {
     }
 
 
+    public PolicyHotel createPolicyHotel(UpsertPolicyRequest upsertPolicyRequest) {
+        PolicyHotel policyHotel = PolicyHotel.builder()
+                .checkIn(upsertPolicyRequest.getCheckIn())
+                .checkOut(upsertPolicyRequest.getCheckOut())
+                .service(upsertPolicyRequest.getService())
+                .cancelPolicy(upsertPolicyRequest.getCancel())
+                .note(upsertPolicyRequest.getOther())
+                .animal(upsertPolicyRequest.getAnimal())
+                .ageLimit(upsertPolicyRequest.getAge())
+                .createdAt(LocalDate.now())
+                .build();
+        return  policyRepository.save(policyHotel);
+    }
 }

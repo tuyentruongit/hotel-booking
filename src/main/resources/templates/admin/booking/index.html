@@ -4,7 +4,7 @@
       th:replace="~{admin/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Booking Index</title>
+    <title>Danh sách đặt phòng</title>
     <th:block id="css">
         <link rel="stylesheet" href="/admin-assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
         <link rel="stylesheet" href="/admin-assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"/>
@@ -75,6 +75,8 @@
                                              <span class="badge bg-success"
                                                    th:if="${booking.statusBooking.value.equalsIgnoreCase('Hoàn Tất')}">Hoàn Tất</span>
                                             <span class="badge bg-warning"
+                                                  th:if="${booking.statusBooking.value.equalsIgnoreCase('Từ chối')}">Từ Chối</span>
+                                            <span class="badge bg-info"
                                                   th:if="${booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận')}">Chờ xác nhận</span>
                                             <span class="badge bg-danger"
                                                   th:if="${booking.statusBooking.value.equalsIgnoreCase('Đã Hủy')}">Đã Hủy</span>
@@ -89,7 +91,7 @@
                                             <a th:href="@{/admin/hotels/{id}/detail (id=${booking.hotel.id})}"
                                                th:text="${booking.hotel.name}"></a>
                                         </td>
-                                        <td th:text="${booking.price}"></td>
+                                        <td th:text="|${#numbers.formatInteger(booking.price,3,'COMMA')}đ|"></td>
                                     </tr>
 
                                     </tbody>

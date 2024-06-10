@@ -6,7 +6,9 @@ let classList = profileDropdownList.classList;
 const toggle = () => classList.toggle("active");
 
 window.addEventListener("click", function (e) {
-    if (!btn.contains(e.target)) classList.remove("active");
+    if (!btn.contains(e.target)){
+        classList.remove("active");
+    }
 });
 const logOut = ()=>{
     let isConFirm = confirm("Bạn có chắc rằng muốn đăng xuất?")

@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface ImageRoomRepository extends JpaRepository<ImageRoom,String> {
     Page<ImageRoom> findAllByRoom_Id(Integer id, Pageable pageable);
+    List<ImageRoom> findAllByRoom_Id(Integer id);
 
 }

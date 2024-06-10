@@ -21,12 +21,15 @@ public class AuthApi {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest){
+        System.out.println("đến đây");
         return new  ResponseEntity<>(authService.register(registerRequest), HttpStatus.CREATED);
 
     }
 
     @PutMapping("/update-user/{id}")
     public ResponseEntity<?> updateUser(@RequestBody ChangeInformationUserRequest changeInformationUserRequest, @PathVariable Integer id){
+        System.out.println("id nè" + id  );
+        System.out.println("id nè" + changeInformationUserRequest  );
         authService.updateUser(id,changeInformationUserRequest);
         return ResponseEntity.ok().build();
 

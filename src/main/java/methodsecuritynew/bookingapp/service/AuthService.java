@@ -59,13 +59,6 @@ public class AuthService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             // lưu vào session
             httpSession.setAttribute("MY_SESSION",authentication.getName());
-//            if (authentication.getAuthorities().stream().anyMatch(role -> role.getAuthority().equals("ROLE_HOTEL"))) {
-//                // Nếu vai trò là khách sạn, chuyển hướng đến trang của khách sạn
-//                return "redirect:/hotel-page"; // Thay đổi đường dẫn tới trang của khách sạn
-//            } else {
-//                // Nếu không phải là khách sạn, có thể chuyển hướng đến trang mặc định hoặc trang chính của người dùng
-//                return "redirect:/default-page"; // Thay đổi đường dẫn tới trang mặc định
-//            }
 
         }
         catch(DisabledException disabledException){
@@ -76,11 +69,19 @@ public class AuthService {
         }
     }
 
+
+    // logic xủ lý khi người dùng đăng ký tài khoản mới
     @Transactional
     public String register(RegisterRequest registerRequest) {
+        // kiểm tra email có tồn tại trong hệ thống hay không
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()){
             throw new BadRequestException("Email đã tồn tại");
         }
+        // confirm password người dùng đã nhập
+        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())){
+            throw new BadRequestException("Mật khẩu không trùng khớp");
+        }
+        // tạo user
         User user = User.builder()
                 .name(registerRequest.getName())
                 .userRole(UserRole.ROLE_USER)
@@ -91,6 +92,7 @@ public class AuthService {
                 .enable(false)
                 .build();
         userRepository.save(user);
+        // tạo token để xác thực
         TokenConfirm tokenConfirm = TokenConfirm.builder()
                 .nameToken(UUID.randomUUID().toString())
                 .tokenType(TokenType.REGISTRATION)
@@ -98,38 +100,40 @@ public class AuthService {
                 .expiredAt(LocalDateTime.now().plusHours(1))
                 .user(user)
                 .build();
-
         tokenConfirmRepository.save(tokenConfirm);
-        // link xác thực gửi đến email
+        // gửi  link xác thực gửi đến email
         String link = "http://localhost:9000/account/xac-minh-tai-khoan?token=" + tokenConfirm.getNameToken();
         mailService.sendMail(user.getEmail(),
                 "Xác thực tài khoản",
                 "Chào " +user.getName()+"! \n" +
                         "\n" +
-                        "Chúng tôi xác nhận rằng bạn đã đăng ký tài khoản thành công tại StayEase.\n" +
+                        "Chúng tôi xác nhận rằng bạn đã đăng ký tài khoản thành công tại WebFindTravel.\n" +
                         "\n" +
                         "Xin vui lòng nhấp vào liên kết sau để xác nhận đăng ký của bạn và kích hoạt tài khoản:\n" +
                         "\n" +
                         link+"\n" +
                         "\n" +
                         "Trân trọng.\n" );
-        return "Vui lòng kiểm tra email để xác thực tài khoản";
-
-
+        return "Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản";
     }
 
 
+
+    // xác minh token
     @Transactional
     public VerifyAccountResponse verifyAccount(String token) {
+        // lấy ra token ,  thuộc type registation hay không
         Optional<TokenConfirm> optionalTokenConfirm = tokenConfirmRepository
                 .findByNameTokenAndTokenType(token, TokenType.REGISTRATION);
 
+        // kiểm tra token có tồn tại hay không
         if (optionalTokenConfirm.isEmpty()){
             return VerifyAccountResponse.builder()
                     .success(false)
                     .message("Link xác thực không tồn tại")
                     .build();
         }
+        // kiểm tra xem token đã hết hạn hay chưa
         TokenConfirm tokenConfirm = optionalTokenConfirm.get();
         if (tokenConfirm.getExpiredAt().isBefore(LocalDateTime.now())){
             return VerifyAccountResponse.builder()
@@ -137,17 +141,22 @@ public class AuthService {
                     .message("Link xác thực đã hết hạn ")
                     .build();
         }
+        // kiểm tra xem token đã được xác thực trước đó hayy chưa
         if (tokenConfirm.getConfirmedAt()!=null){
             return VerifyAccountResponse.builder()
                     .success(false)
                     .message("Link xác thực đã được sử dụng trước đó")
                     .build();
         }
+
+        // set enable cho user là true để tài khoản đó có thể đăng nhập
         tokenConfirm.getUser().setEnable(true);
         userRepository.save(tokenConfirm.getUser());
 
+        // set thời gian đã xác thực cho token
         tokenConfirm.setConfirmedAt(LocalDateTime.now());
         tokenConfirmRepository.save(tokenConfirm);
+        // trả về một instance VerifyAccountResponse
             return VerifyAccountResponse.builder()
                     .success(true)
                     .message("Xác thực tài khoản thành công")
@@ -176,6 +185,8 @@ public class AuthService {
         userRepository.save(user);
     }
 
+
+    // thay đổi mật khẩu
     public void changePassword(Integer id, ChangePasswordRequest changePasswordRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user") );
 
@@ -193,8 +204,8 @@ public class AuthService {
         }else {
             throw new BadRequestException("Mật khẩu không chính xác");
         }
-
     }
+    // thay ddooir mật khẩu khi người dùng chọn chức nang quên mật khẩu
     public void changePasswordForForgetPassword(UpsertPasswordRetrieval upsertPasswordRetrieval) {
         TokenConfirm tokenConfirm = tokenConfirmRepository
                 .findByNameTokenAndTokenType(upsertPasswordRetrieval.getNameToken(), TokenType.FORGOT_PASSWORD).orElseThrow(()-> new BadRequestException("Không tìm thấy token trên "));
@@ -204,9 +215,12 @@ public class AuthService {
     }
 
 
+    // logic xử lý chức năng quên mật khẩu
     public void forgotPassword(String email) {
-       User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user"));
+        // lấy user với email người dùng nhập
+       User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Tài khoản không tồn tại ."));
 
+       // tạo một token với type ForGot Password
         TokenConfirm tokenConfirm = TokenConfirm.builder()
                 .nameToken(UUID.randomUUID().toString())
                 .tokenType(TokenType.FORGOT_PASSWORD)
@@ -215,6 +229,7 @@ public class AuthService {
                 .user(user)
                 .build();
         tokenConfirmRepository.save(tokenConfirm);
+        // gửi link xác thực tới email
         String link = "http://localhost:9000/account/quen-mat-khau?token=" + tokenConfirm.getNameToken();
         mailService.sendMail(user.getEmail(),
                 "Quên mật khẩu ",
@@ -229,6 +244,8 @@ public class AuthService {
                         "Trân trọng.\n" );
     }
 
+
+    // logic xử lý link với chức năng quên mật khẩu
     public String verifyForgotPassword(String token) {
         Optional<TokenConfirm> optionalTokenConfirm = tokenConfirmRepository
                 .findByNameTokenAndTokenType(token, TokenType.FORGOT_PASSWORD);
@@ -246,9 +263,13 @@ public class AuthService {
         return tokenConfirm.getNameToken();
     }
 
+
+    // lấy user đang đăng nhập
     public User getUserCurrent (){
         return userRepository.findByEmail(httpSession.getAttribute("MY_SESSION").toString()).orElseThrow(()->new UsernameNotFoundException("Không tìm thấy user hiện tại "));
     }
+
+    // TODO:Cần sửa
     public User createUserHotel(UpsertHotelRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()){
             throw new BadRequestException("Email đã tồn tại");
@@ -280,6 +301,8 @@ public class AuthService {
         return userRepository.findAllByUserRole(UserRole.ROLE_USER);
     }
 
+
+    // lấy thông tin user với id được cung cấp
     public User getUserById(Integer id) {
         return userRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("Không tìm thấy user nào có id :"+id));
     }

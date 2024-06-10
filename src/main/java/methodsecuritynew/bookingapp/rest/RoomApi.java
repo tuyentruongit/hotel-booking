@@ -19,7 +19,7 @@ import java.util.List;
 public class RoomApi {
 
     private final RoomService roomService;
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateRoom (@RequestBody UpsertRoomRequest request, @PathVariable Integer id){
         return ResponseEntity.ok(roomService.updateRoom(request,id));
     }

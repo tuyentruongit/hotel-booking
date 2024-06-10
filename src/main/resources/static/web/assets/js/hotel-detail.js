@@ -8,25 +8,7 @@ $("#date-range").flatpickr({
 });
 
 // slider
-$('.owl-carousel').owlCarousel({
-    loop:true,
-    margin:10,
-    nav:true,
-    navText:['<i class="fa-solid fa-angle-left"></i>','<i class="fa-solid fa-angle-right"></i>'],
-    autoHeight: false,
-    dots: false,
-    responsive:{
-        0:{
-            items:1
-        },
-        600:{
-            items:1
-        },
-        1000:{
-            items:1
-        }
-    }
-})
+
 const stars = document.querySelectorAll(".star");
 const ratingValue = document.getElementById("rating-value");
 
@@ -157,10 +139,10 @@ const renderDataSearch = (nameCity, numGuest, numRoom) => {
     }
 
     inputNameCity.value = nameCity
-    if (hotel.id === parseInt(btnHeart.value)){
-        btnHeart.setAttribute("type-button","delete");
-        btnHeart.classList.add("style-heart")
-    }
+    // if (hotel.id === parseInt(btnHeart.value)){
+    //     btnHeart.setAttribute("type-button","delete");
+    //     btnHeart.classList.add("style-heart")
+    // }
 }
 
 // khi vừa vào trang thì render ra dữ liệu
@@ -180,7 +162,7 @@ const reviewContent = document.getElementById("reviewContent");
 const btnSubmitReview = document.getElementById("submitReview");
 btnSubmitReview.addEventListener('click', (e) => {
     e.preventDefault();
-    if (!$('#form-review').valid())return;
+    if (!$('#form-review').valid()) return;
 
     if (currentRating === 0) {
         alert("Vui lòng chọn số sao")
@@ -255,7 +237,6 @@ const formatDate = (dateString) => {
 };
 
 
-
 const reviewListEL = document.querySelector('.container-review-detail')
 
 
@@ -277,7 +258,7 @@ const renderReview = (reviews) => {
                                        
                                         <span class="content-review">${review.comment}</span>
                                         
-                                          ${inforUser && inforUser.id === review.user.id ? `
+                                          ${infoUser && infoUser.id === review.user.id ? `
                                              <div class="warp-button-edit" >
                                             <button class=" btn-edit-review btn text-primary" type="button"
                                                     data-bs-toggle="modal" data-bs-target="#myModal" onclick="renderDataReview(${review.id})">Chỉnh sửa
@@ -317,6 +298,98 @@ $('#form-search').validate({
         $(element).removeClass('is-invalid');
     }
 });
+// logic hiện trang
+const renderImageRoomDetail = async (id) => {
+    let room = roomList.find(room => room.id === id);
+    try {
+        const res = await axios.get('/api/images/get-image-room/' + id);
+        const imageRoomList = res.data;
+
+        let htmlImage = '';
+         imageRoomList.forEach(image => {
+            htmlImage += `<div class="item"><img src="${image.url}" alt=""></div>`;
+        });
+
+        const sliderMain = document.querySelector('.slider-main');
+        sliderMain.innerHTML = htmlImage;
+        // Phá hủy Owl Carousel nếu nó đã được khởi tạo
+        if ($('.owl-carousel').data('owl.carousel')) {
+            $('.owl-carousel').trigger('destroy.owl.carousel');
+            $('.owl-carousel').removeClass('owl-loaded');
+            $('.owl-carousel').find('.owl-stage-outer').children().unwrap();
+        }
+        $('.owl-carousel').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            navText: ['<i class="fa-solid fa-angle-left"></i>', '<i class="fa-solid fa-angle-right"></i>'],
+            autoHeight: false,
+            dots: false,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 1
+                },
+                1000: {
+                    items: 1
+                }
+            }
+        })
+        renderInfoRoom(room);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+const renderInfoRoom =(room)=>{
+    document.querySelector('.information-room').innerHTML=`
+     <h6 class="name-hotel" >${room.name}</h6>
+     <span>${room.description}</span>
+     <div class="wrap-icon">
+     <span class="icon-amenity">
+        <i class="fa-regular fa-square"></i>
+     </span>
+     <span class="name-amenity-modal" >${room.area}  mét vuông</span>
+     </div>
+     <div class="wrap-icon">
+        <span class="icon-amenity">
+            <i class="fa-solid fa-users"></i>
+        </span>
+        <span class="name-amenity-modal"> ${room.capacity} khách</span>
+     </div>
+     <div class="wrap-icon">
+         <span class="icon-amenity">
+              <i class="fa-solid fa-bed"></i>
+         </span>
+         <span class="name-amenity-modal" > ${room.bedType}</span>
+     </div>
+    `
+    renderAmenityRoom(room);
+
+}
+
+const formatPrice = (number ) =>{
+   return  number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+}
+const renderAmenityRoom = (room)=>{
+    let html = '';
+    room.amenityRoomList.forEach(amenity =>{
+        html+= `<div class="wrap-amenity-room col-6" >
+                                                        <div class="d-flex">
+                                                            <i class="fa-solid fa-person-shelter"></i>
+                                                            <h6 class="title-amenity-type">${amenity.name}</h6>
+
+                                                        </div>
+                                                    </div>`
+    })
+    document.querySelector('.amenity-room-detail').innerHTML = html;
+
+    document.querySelector('.price-room-modal').innerHTML=`<h5 class="price-room-new">${formatPrice(room.priceAverage)}</h5>`
+
+}
+
 
 //
 // $('#form-review').validate({
@@ -375,8 +448,6 @@ $('#form-search').validate({
 //
 //     }
 // })
-
-
 
 
 renderReview(reviewLists);

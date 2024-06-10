@@ -13,6 +13,8 @@ public interface HotelRepository extends JpaRepository<Hotel,Integer> {
     List<Hotel> findHotelByCity_Id(Integer id);
     Hotel findHotelByName(String name);
     Hotel findHotelByUser_Id(Integer id);
+    Hotel findByHotline (String hotline);
+    long countByAmenityHotelList_Id(Integer id);
 
 
 }

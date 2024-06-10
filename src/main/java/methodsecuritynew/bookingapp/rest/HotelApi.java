@@ -2,10 +2,14 @@ package methodsecuritynew.bookingapp.rest;
 
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.Hotel;
+import methodsecuritynew.bookingapp.entity.User;
+import methodsecuritynew.bookingapp.model.dto.HotelDto;
+import methodsecuritynew.bookingapp.model.request.UpsertCreateHotelRequest;
 import methodsecuritynew.bookingapp.model.request.UpsertHotelRequest;
 import methodsecuritynew.bookingapp.security.CustomUserDetailService;
 import methodsecuritynew.bookingapp.service.HotelService;
 
+import methodsecuritynew.bookingapp.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,31 +25,36 @@ public class HotelApi {
 
     private final CustomUserDetailService customUserDetailService;
     private final HotelService hotelService;
-
-    @PostMapping("/admin/create")
-    public ResponseEntity<?> createHotelAdmin(@RequestBody UpsertHotelRequest upsertHotelRequest ) {
-        Hotel hotel = hotelService.createHotelAdmin(upsertHotelRequest);
+    private final UserService userService;
+    @PostMapping("/user/create")
+    public ResponseEntity<?> createHotelUser(@RequestBody UpsertCreateHotelRequest upsertHotelRequest ) {
+        System.out.println(upsertHotelRequest.getUpsertPolicyRequest().getOther()+"chuyển");
+        Hotel hotel = hotelService.createHotelUser(upsertHotelRequest);
         return new ResponseEntity<>(hotel,HttpStatus.CREATED);
     }
 
-
-
     @PostMapping("/favourite/{id}")
     public ResponseEntity<List<Hotel>> saveHotelFavourite(@PathVariable Integer id){
-        customUserDetailService.saveHotelFavourite(id);
+        userService.saveHotelFavourite(id);
         return ResponseEntity.ok().build();
     }
-    @DeleteMapping("/favourite/{id}")
+    // xóa khách sạn ra khỏi danh sanh yêu thích trang danh sách yêu thiích
+    @DeleteMapping("/delete/list-favourite/{id}")
     public ResponseEntity<Page<Hotel>> deleteHotelFavourite(@PathVariable Integer id,@RequestParam Integer pageNumber){
-//        System.out.println("-------------------- pageabled" + pageable.getPageSize());
-//        System.out.println("-------------------- pageabled" + pageable.getOffset());
-        Page<Hotel> hotelPage = customUserDetailService.deleteHotelFavourite(id,pageNumber);
+        Page<Hotel> hotelPage = userService.deleteHotelFavourite(id,pageNumber);
         return ResponseEntity.ok(hotelPage);
+    }
+
+    // xóa khách sạn ra khỏi danh sách yêu thích trang danh sách khách sạn
+    @DeleteMapping("/delete/favourite/{id}")
+    public ResponseEntity<?> deleteHotelFavourite(@PathVariable Integer id){
+        User user  = userService.deleteHotelFavourite(id);
+        return ResponseEntity.ok(user);
     }
     @GetMapping()
     public ResponseEntity<?> getPaginationHotel(@RequestParam(required = false , defaultValue = "1") Integer pageNumber ,
                                                           @RequestParam(required = false , defaultValue = "10") Integer limit){
-        Page<Hotel> paginationHotel= hotelService.getPaginationHotel(pageNumber,limit);
+        Page<HotelDto> paginationHotel= hotelService.getPaginationHotel(pageNumber,limit);
         return new ResponseEntity<>(paginationHotel, HttpStatus.OK);
     }
     @PutMapping("/admin/update/{id}")

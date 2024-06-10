@@ -20,7 +20,7 @@
                 margin: 0;
             }
 
-            .input-area, .capacity, .quantity {
+            .input-area, .capacity, .quantity, .priceDefault {
                 width: 70px;
                 border-radius: 10px;
                 border: 1px #2c3034 solid;
@@ -121,7 +121,7 @@
                                             <div class="select2-purple">
                                                 <select name="genre" class="select2 form-control" multiple="multiple"
                                                         id="bathroom">
-                                                    <option th:each="amenity : ${amenityRoom}"
+                                                    <option th:each="amenity : ${amenityRoomAll}"
                                                             th:if="${#strings.equalsIgnoreCase(amenity.amenityRoomType.value, 'Phòng tắm')}"
                                                             th:value="${amenity.id}"
                                                             th:text="${amenity.name}">
@@ -135,7 +135,7 @@
                                             <div class="select2-purple">
                                                 <select name="genre" class="select2 form-control" multiple="multiple"
                                                         id="bedroom">
-                                                    <option th:each="amenity : ${amenityRoom}"
+                                                    <option th:each="amenity : ${amenityRoomAll}"
                                                             th:if="${#strings.equalsIgnoreCase(amenity.amenityRoomType.value, 'Phòng ngủ')}"
                                                             th:value="${amenity.id}"
                                                             th:text="${amenity.name}"></option>
@@ -148,7 +148,7 @@
                                             <div class="select2-purple">
                                                 <select name="genre" class="select2 form-control" multiple="multiple"
                                                         id="entertainment">
-                                                    <option th:each="amenity : ${amenityRoom}"
+                                                    <option th:each="amenity : ${amenityRoomAll}"
                                                             th:if="${#strings.equalsIgnoreCase(amenity.amenityRoomType.value, 'Giải trí')}"
                                                             th:value="${amenity.id}"
                                                             th:text="${amenity.name}"></option>
@@ -161,7 +161,7 @@
                                             <div class="select2-purple">
                                                 <select name="genre" class="select2 form-control" multiple="multiple"
                                                         id="kitchen">
-                                                    <option th:each="amenity : ${amenityRoom}"
+                                                    <option th:each="amenity : ${amenityRoomAll}"
                                                             th:if="${#strings.equalsIgnoreCase(amenity.amenityRoomType.value, 'Bếp')}"
                                                             th:value="${amenity.id}"
                                                             th:text="${amenity.name}"></option>
@@ -174,7 +174,7 @@
                                             <div class="select2-purple">
                                                 <select name="genre" class="select2 form-control" multiple="multiple"
                                                         id="internet">
-                                                    <option th:each="amenity : ${amenityRoom}"
+                                                    <option th:each="amenity : ${amenityRoomAll}"
                                                             th:if="${#strings.equalsIgnoreCase(amenity.amenityRoomType.value, 'Internet')}"
                                                             th:value="${amenity.id}"
                                                             th:text="${amenity.name}"></option>
@@ -188,7 +188,7 @@
                                             <div class="select2-purple">
                                                 <select name="genre" class="select2 form-control" multiple="multiple"
                                                         id="others">
-                                                    <option th:each="amenity : ${amenityRoom}"
+                                                    <option th:each="amenity : ${amenityRoomAll}"
                                                             th:if="${#strings.equalsIgnoreCase(amenity.amenityRoomType.value, 'Khác')}"
                                                             th:value="${amenity.id}"
                                                             th:text="${amenity.name}"></option>
@@ -212,7 +212,7 @@
                                             <label>Mô tả ngắn</label>
 
                                             <textarea th:text="${room.description}" name="description" id="description"
-                                                      class="form-control" rows="6"></textarea>
+                                                      class="form-control" rows="4"></textarea>
                                         </div>
                                       <div class="d-flex">
                                           <div class="form-group col-6">
@@ -227,10 +227,17 @@
                                           </div>
                                       </div>
 
-                                        <div class="form-group col-6  ">
-                                            <label> Số lượng phòng : </label>
-                                            <input id="quantity" name="quantity" class=" w-100 quantity form-control" type="number"
-                                                   placeholder="Số người">
+                                        <div class="d-flex">
+                                            <div class="form-group col-6  ">
+                                                <label> Số lượng phòng : </label>
+                                                <input id="quantity" name="quantity" class=" w-100 quantity form-control" type="number"
+                                                       placeholder="Số lượng phòng">
+                                            </div>
+                                            <div class="form-group col-6  ">
+                                                <label> Giá mặc định : </label>
+                                                <input id="priceDefault" name="priceDefault" class=" w-100 priceDefault form-control" type="number"
+                                                       placeholder="Giá mặc định">
+                                            </div>
                                         </div>
                                     </form>
 
@@ -337,6 +344,7 @@
     <script th:inline="javascript">
         $(".select2").select2();
         let room = [[${room}]];
+        console.log(room)
 
     </script>
     <script th:src="@{/admin-assets/dist/js/notify-admin.js}"></script>

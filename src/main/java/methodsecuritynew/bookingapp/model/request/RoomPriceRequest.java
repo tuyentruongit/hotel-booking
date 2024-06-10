@@ -15,5 +15,5 @@ public class RoomPriceRequest {
     String endDate;
     List<String> dayApply;
     Integer idRoom;
-    Double price;
+    Integer price;
 }

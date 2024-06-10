@@ -18,14 +18,7 @@ public abstract class Amenity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-
     String name;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "hotel_id")
-    Hotel hotel;
-
-
     LocalDate createdAt;
     LocalDate updateAt;
 }

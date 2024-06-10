@@ -157,7 +157,7 @@
     const userRole = document.getElementById("role");
     const btnCreate = document.getElementById("btn-create")
 
-    // Tạo khóa học
+    // Tạo user
     btnCreate.addEventListener("click", async () => {
       if (!$('#form-create-user').valid()) return false;
 
@@ -170,7 +170,6 @@
 
       try {
         let res = await axios.post("/api/admin/users", data)
-
         if (res.data) {
           console.log(data)
           toastr.success("Tạo user thành công");

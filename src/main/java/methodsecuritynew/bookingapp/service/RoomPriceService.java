@@ -17,6 +17,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Slf4j
@@ -42,7 +43,6 @@ public class RoomPriceService {
         Period period = Period.between(startDate,endDate);
         for (int i = 0 ; i <= period.getDays(); i++) {
             LocalDate localDate = startDate.plusDays(i);
-            log.info("ngày lưu"+localDate);
 
             RoomPrice roomPricePresent = roomPriceRepository.findByDateAndRoom_Id(localDate, request.getIdRoom());
 
@@ -68,14 +68,31 @@ public class RoomPriceService {
 
     }
 
+
     public List<RoomPriceDto> getRoomPriceDay(String date) {
+        Hotel hotel = hotelService.getHotelByAccountCurrent();
+        List<Room> roomList = roomRepository.findRoomByHotel_Id(hotel.getId());
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate localDate = LocalDate.parse(date,dateTimeFormatter);
         List<RoomPriceDto> roomPriceDtos = new ArrayList<>();
         List<RoomPrice> roomPriceList = roomPriceRepository.findAllByDate(localDate);
-        for (RoomPrice roomPrice : roomPriceList) {
-            roomPriceDtos.add(new RoomPriceDto(roomPrice.getRoom().getName(), roomPrice.getPrice(),
-                    roomPrice.getRoom().getRoomType().getValue(),roomPrice.getDate()));
+        for (int i = 0; i < roomList.size(); i++) {
+            boolean check = false;
+            for (RoomPrice roomPrice : roomPriceList) {
+                if (Objects.equals(roomPrice.getHotel().getId(), hotel.getId())
+                        && Objects.equals(roomList.get(i).getId(), roomPrice.getRoom().getId())){
+                    roomPriceDtos.add(new RoomPriceDto(roomPrice.getRoom().getName(), roomPrice.getPrice(),
+                            roomPrice.getRoom().getRoomType().getValue(),roomPrice.getDate()));
+                    check = true;
+                    break;
+                }
+
+            }
+            if (!check){
+                Room room = roomList.get(i);
+                RoomPriceDto roomPriceDto = new RoomPriceDto(room.getName(),room.getPriceDefault(),room.getRoomType().getValue(),localDate);
+                roomPriceDtos.add(roomPriceDto);
+            }
         }
         return roomPriceDtos;
     }

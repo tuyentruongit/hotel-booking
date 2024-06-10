@@ -14,7 +14,6 @@ import methodsecuritynew.bookingapp.model.enums.AmenityHotelType;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AmenityHotel extends Amenity {
-
     @Enumerated(EnumType.STRING)
     AmenityHotelType amenityHotelType;
 }

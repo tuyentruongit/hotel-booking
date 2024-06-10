@@ -8,18 +8,20 @@ const btnDeleteImage = document.getElementById("btn-delete-image");
 const inputImage = document.getElementById("avatar");
 const thumbnailPreview = document.getElementById("thumbnail");
 
+let amenityHotelIds = hotel.amenityHotelList.map(ame => ame.id);
+$('#amenity-hotel').val(amenityHotelIds);
+$('#amenity-hotel').trigger('change');
 
 btnSave.addEventListener('click', (e) => {
     e.preventDefault();
     if (!$('#myForm').valid()) return;
-     let statusHotel = false
-    if (document.getElementById('status').value === '1'){
-        statusHotel=true;
-    }
+    let listId = $('#amenity-hotel').val();
+    listId = listId.map(e => parseInt(e));
+
 
     const data ={
         description : descriptionEl.value,
-        status :statusHotel
+        amenityHotelList :listId
     }
 
 

@@ -3,6 +3,8 @@ package methodsecuritynew.bookingapp.model.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -16,5 +18,6 @@ public class UpsertHotelRequest {
     String addressHotel;
     Integer idCity ;
     Integer star ;
+    List<Integer> amenityHotelList;
     Boolean status;
 }

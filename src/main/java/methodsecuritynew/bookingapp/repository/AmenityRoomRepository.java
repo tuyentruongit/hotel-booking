@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AmenityRoomRepository extends JpaRepository<AmenityRoom, Integer> {
 
-    List<AmenityRoom> findAmenityRoomByHotel_Id(int id);
+//    List<AmenityRoom> findAmenityRoomByHotel_Id(int id);
 
     AmenityRoom findByName(String name);
 }

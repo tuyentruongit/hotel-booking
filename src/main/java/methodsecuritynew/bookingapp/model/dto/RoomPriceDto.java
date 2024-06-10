@@ -13,8 +13,7 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoomPriceDto {
     String nameRoom;
-    Double price;
+    Integer price;
     String typeRoom;
     LocalDate day;
-
 }

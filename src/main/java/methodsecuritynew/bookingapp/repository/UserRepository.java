@@ -23,6 +23,5 @@ public interface UserRepository extends JpaRepository<User,Integer> {
             "ORDER BY YEAR(o.createdAt) ASC, MONTH(o.createdAt) ASC")
     List<RegisterDto> findUserRegistrationsByMonthAndYear();
 
-//    List<User> findUserByCreatedAtBetweenOrderByCreatedAtDesc(LocalDate star , LocalDate end);
     List<User> findUserByCreatedAtBetweenAndUserRoleOrderByCreatedAtDesc(LocalDate star , LocalDate end , UserRole userRole);
 }

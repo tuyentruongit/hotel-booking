@@ -20,9 +20,7 @@ public class CustomFilter extends OncePerRequestFilter {
     private final CustomUserDetailService customUserDetailService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         String emailUser = (String) request.getSession().getAttribute("MY_SESSION");
-
         if(emailUser != null && SecurityContextHolder.getContext().getAuthentication()==null){
             UserDetails userDetail = customUserDetailService.loadUserByUsername(emailUser);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

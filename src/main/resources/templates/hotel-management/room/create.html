@@ -44,7 +44,7 @@
                 margin: 0;
             }
 
-            .input-area, .capacity, .quantity {
+            .input-area, .capacity, .quantity, .priceDefault {
                 width: 70px;
                 border-radius: 10px;
                 border: 1px #2c3034 solid;
@@ -70,9 +70,9 @@
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <ol class="breadcrumb">
-                        <!--            <li class="breadcrumb-item">-->
-                        <!--              <a href="#">Dashboard</a>-->
-                        <!--            </li>-->
+                        <li class="breadcrumb-item">
+                            <a href="/hotel-manager/dashboard">Dashboard</a>
+                        </li>
                         <li class="breadcrumb-item">
                             <a th:href="@{/hotel-manager/room}">Phòng</a>
                         </li>
@@ -208,7 +208,7 @@
                                             <label>Mô tả ngắn</label>
 
                                             <textarea name="description" id="description"
-                                                      class="form-control" rows="6"></textarea>
+                                                      class="form-control" rows="4"></textarea>
                                         </div>
                                         <div class="d-flex">
                                             <div class="form-group col-6">
@@ -223,11 +223,18 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group col-6  ">
-                                            <label> Số lượng phòng : </label>
-                                            <input id="quantity" name="quantity" class=" w-100 quantity form-control" type="number"
-                                                   placeholder="Số lượng phòng">
-                                        </div>
+                                       <div class="d-flex">
+                                           <div class="form-group col-6  ">
+                                               <label> Số lượng phòng : </label>
+                                               <input id="quantity" name="quantity" class=" w-100 quantity form-control" type="number"
+                                                      placeholder="Số lượng phòng">
+                                           </div>
+                                           <div class="form-group col-6  ">
+                                               <label> Giá mặc định : </label>
+                                               <input id="priceDefault" name="priceDefault" class=" w-100 priceDefault form-control" type="number"
+                                                      placeholder="Giá mặc định">
+                                           </div>
+                                       </div>
                                     </form>
 
                                     <div class="form-group">
@@ -395,6 +402,7 @@
         const statusRoomEl = document.getElementById('status');
         const bedSizeRoomEl = document.getElementById('bed-size');
         const bedTypeRoomEl = document.getElementById('bed-type');
+        const priceDefaultEl = document.getElementById('priceDefault');
 
         const btnSave = document.getElementById('save');
         btnSave.addEventListener('click' ,(e)=>{
@@ -424,8 +432,11 @@
                 quantity :quantityRoomEl.value,
                 bedType : bedTypeRoomEl.value,
                 bedSize : bedSizeRoomEl.value,
+                priceDefault : priceDefaultEl.value,
                 status :status
             };
+
+            console.log(data)
 
             axios.post('/api/hotel-manager/room/create', data)
                 .then((res) =>{

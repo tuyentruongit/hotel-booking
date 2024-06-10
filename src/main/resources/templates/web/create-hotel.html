@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title>Tạo khách sạn</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/latest/styles/github.min.css" />
+        <link rel="stylesheet" href="/admin-assets/plugins/select2/css/select2.min.css" />
+        <link rel="stylesheet" href="/admin-assets/dist/css/style.css">
+        <style>
+            .phone-hotel{
+                border: 1px #747C85 solid;
+                border-radius: 3px;
+                padding: 6px 5px;
+            }
+            .email-hotel{
+                border: 1px #747C85 solid;
+                border-radius: 3px;
+                padding: 6px 5px;
+            }
+            input[type=number]::-webkit-outer-spin-button,
+            input[type=number]::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            .input-area, .capacity, .quantity {
+                border-radius: 10px;
+                border: 1px #2c3034 solid;
+                padding: 5px;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header mt-5">
+        <div class="container">
+            <div class="row mb-2">
+                <div class="d-flex justify-content-center">
+                    <h4>Thêm thông tin cho nơi lưu trú</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--     Main content -->
+    <section class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="form-create-hotel">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <h6>Tên nơi lưu trú</h6>
+                                            <input name="nameHotel" type="text" class="form-control" id="nameHotel"/>
+                                        </div>
+
+                                        <div class="form-group my-1">
+                                            <h6>Mô tả ngắn</h6>
+                                            <textarea name="description" id="description" class="form-control" rows="2"></textarea>
+                                        </div>
+
+                                        <div class="form-group my-1">
+                                            <h6>Thành phố</h6>
+                                            <div class="select2-purple">
+                                                <select name="city" class=" form-control" id="city">
+                                                    <option th:each="city : ${cityList}" th:value="${city.id}"
+                                                            th:text="${city.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group my-1">
+                                            <h6> Địa chỉ cụ thể</h6>
+                                            <input name="address" type="text" class="form-control" id="addressHotel"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group my-1">
+                                            <h6>Số điện thoại</h6>
+                                            <input  name="phoneHotel" type="text" id="phoneHotel" class=" form-control" placeholder="Số điện thoại"/>
+                                        </div>
+
+                                        <div class="form-group my-1">
+                                            <h6  class="col-5">Email</h6>
+                                            <input id="emailHotel" name="emailHotel" class="col-7 form-control" type="text" placeholder="Email">
+                                        </div>
+
+                                        <div class="form-group my-1">
+                                            <h6>Loại hình cho thuê</h6>
+                                            <select id="rentalType" class="form-control">
+                                                <option th:each="rentalType : ${rentalTypes}" th:value="${rentalType}"
+                                                        th:text="${rentalType.value}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h6>Chọn một số tiện ích mà khách sạn có</h6>
+                                            <div class="select2-purple">
+                                                <select name="genre" class="select2 form-control" multiple="multiple"
+                                                        id="amenityHotel">
+                                                    <option th:each="amenityHotel : ${amenityHotelList}"
+                                                            th:value="${amenityHotel.id}"
+                                                            th:text="${amenityHotel.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h6>Xếp hạng sao</h6>
+                                            <div class="">
+                                                <select name="star" class=" form-control" id="star">
+                                                    <option value="0">Khác</option>
+                                                    <option value="1">1 sao</option>
+                                                    <option value="2">2 sao</option>
+                                                    <option value="3">3 sao</option>
+                                                    <option value="4">4 sao</option>
+                                                    <option value="5">5 sao</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <h5 class="mt-3">Phòng</h5>
+                    <div class="card ">
+                        <div class="card-body">
+                            <form class="form-create-room">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <h6>Tên phòng</h6>
+                                            <input name="nameRoom" type="text" class="form-control" id="nameRoom"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <h6>Loại phòng</h6>
+                                            <select id="roomType" class="form-control">
+                                                <option th:each="roomType : ${roomTypes}" th:value="${roomType}"
+                                                        th:text="${roomType.value}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <h6>Tiện ích phòng </h6>
+                                            <div class="select2-purple">
+                                                <select name="genre" class="select2 form-control" multiple="multiple"
+                                                        id="amenityRoom">
+                                                    <option th:each="amenityRoom : ${amenityRoomList}"
+                                                            th:value="${amenityRoom.id}"
+                                                            th:text="${amenityRoom.name}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <h6>Mô tả ngắn về phòng</h6>
+                                            <textarea name="descriptionRoom" id="descriptionRoom" class="form-control" rows="2"></textarea>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="d-flex justify-content-between ">
+                                            <div class="form-group col-5 my-1">
+                                                <h6>Diện tích : </h6>
+                                                <input id="area-room" name="area" class="input-area form-control " type="number"
+                                                       placeholder="Diện tích">
+                                            </div>
+                                            <div class="form-group col-5 my-1">
+                                                <h6> Sức chứa : </h6>
+                                                <input id="capacity" name="capacity" class="capacity form-control " type="number"
+                                                       placeholder="Số người">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-6  my-1">
+                                            <h6> Số lượng phòng : </h6>
+                                            <input id="quantity" name="quantity" class=" w-100 quantity form-control" type="number"
+                                                   placeholder="Số người">
+                                        </div>
+                                        <div class="form-group my-1">
+                                            <h6>Loại giường</h6>
+                                            <select id="bed-type" class="form-control">
+                                                <option class="option-room-type" th:each="type : ${bedTypes}"
+                                                        th:value="${type}"
+                                                        th:text="${type.value}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group my-1">
+                                            <h6>Size giường</h6>
+
+                                            <select id="bed-size" class="form-control">
+                                                <option class="option-room-type" th:each="size : ${bedSizes}"
+                                                        th:value="${size}" th:text="${size.value}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group   my-1">
+                                            <h6> Giá phòng: </h6>
+                                            <input id="priceDefault" name="quantity" class=" w-100 quantity form-control" type="number"
+                                                   placeholder="Giá phòng">
+                                            <span>Bạn có thể tùy chỉnh giá phòng theo mùa, cuối tuần, lễ</span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <h5 class="mt-3">Chính sách</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6" >
+                                    <form id="form-policy-left">
+                                        <div class="form-group w-100">
+                                            <label>Nhận phòng </label>
+                                            <div >
+                                                <textarea name="checkIn" class="form-control w-100 content-policy" id="editor-check-in"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group w-100">
+                                            <label>Trả phòng </label>
+                                            <div >
+                                                <textarea
+                                                          class="w-100 content-policy form-control" id="editor-check-out"
+                                                          name="checkOut"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Chính sách hủy</label>
+                                            <div >
+                                                <textarea
+                                                          class="w-100 content-policy form-control" id="editor-cancel"
+                                                          name="cancel"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Dịch vụ</label>
+                                            <textarea class="d-none" name="content" ></textarea>
+                                            <div >
+                                                <textarea
+                                                          class="w-100 content-policy form-control" id="editor-service-hotel"
+                                                          name="service"></textarea>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <form id="form-policy-right">
+                                        <div class="form-group">
+                                            <label>Vật nuôi</label>
+                                            <div >
+                                                <textarea
+                                                          class="w-100 content-policy form-control" id="editor-animal"
+                                                          name="animal"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Độ tuổi</label>
+                                            <div >
+                                                <textarea
+                                                          class="w-100 content-policy form-control" id="editor-age"
+                                                          name="age"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Khác</label>
+                                            <div >
+                                                <textarea
+                                                          class="w-100 content-policy form-control" id="editor-other"
+                                                          name="other"></textarea>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="register-hotel mt-2 d-flex justify-content-end">
+                    <button class="btn-register-hotel">
+                        Đăng ký
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<th:block id="js">
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/highlight.js/latest/highlight.min.js"></script>
+    <script src="/admin-assets/plugins/select2/js/select2.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"
+            integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"
+             integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A=="
+             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script th:inline="javascript">
+        $(".select2").select2();
+
+        const btnRegisterHotelEl = document.querySelector(".btn-register-hotel");
+        const nameHotelEl = document.getElementById('nameHotel');
+        const descriptionHotelEl = document.getElementById('description');
+        const addressHotelEl = document.getElementById('addressHotel');
+        const cityHotelEl = document.getElementById('city');
+        const phoneHotelEl = document.getElementById('phoneHotel');
+        const emailHotelEl = document.getElementById('emailHotel');
+        const rentalTypeHotelEl = document.getElementById('rentalType');
+        const starEl = document.getElementById('star');
+        const nameRoomEl = document.getElementById('nameRoom');
+        const roomTypeEl = document.getElementById('roomType');
+        const descriptionRoomEl = document.getElementById('descriptionRoom');
+        const areaRoomEl = document.getElementById('area-room');
+        const capacityEl = document.getElementById('capacity');
+        const quantityEl = document.getElementById('quantity');
+        const bedTypeEl = document.getElementById('bed-type');
+        const bedSizeEl = document.getElementById('bed-size');
+        const priceDefaultEl = document.getElementById('priceDefault');
+        const checkInEl = document.getElementById('editor-check-in');
+        const checkOutEl = document.getElementById('editor-check-out');
+        const cancelEl = document.getElementById('editor-cancel');
+        const serviceEl = document.getElementById('editor-service-hotel');
+        const animalEl = document.getElementById('editor-animal');
+        const ageEl = document.getElementById('editor-age');
+        const otherEl = document.getElementById('editor-other');
+
+        // xử lý khi click vào nút đăng ký cho thuê khách sạn
+        btnRegisterHotelEl.addEventListener('click',()=>{
+            console.log(document.getElementById("amenityHotel"));
+            // lấy id các tiện ích của khách sạn được chọn
+            let listIdAmenityHotel = $('#amenityHotel').val();
+            listIdAmenityHotel = listIdAmenityHotel.map(e => parseInt(e));
+            console.log(listIdAmenityHotel)
+
+            // lấy id của tiện ích phòng được chọn
+            let listIdAmenityRoom = $('#amenityRoom').val();
+            listIdAmenityRoom = listIdAmenityRoom.map(e => parseInt(e));
+            console.log(listIdAmenityRoom)
+            // dữ liệu của thông tin khách sạn
+            const  dataHotel = {
+                name : nameHotelEl.value,
+                description : descriptionHotelEl.value,
+                rentalType : rentalTypeHotelEl.value,
+                phoneHotel : phoneHotelEl.value,
+                email : emailHotelEl.value,
+                addressHotel : addressHotelEl.value,
+                idCity : parseInt(cityHotelEl.value),
+                star : starEl.value,
+                amenityHotelList : listIdAmenityHotel,
+            }
+            const dataRoom = {
+                name :nameRoomEl.value,
+                description :descriptionRoomEl.value,
+                amenityRoom :listIdAmenityRoom,
+                roomType :roomTypeEl.value,
+                area :parseInt(areaRoomEl.value),
+                capacity : parseInt(capacityEl.value),
+                quantity :parseInt(quantityEl.value),
+                bedType :bedTypeEl.value,
+                bedSize :bedSizeEl.value,
+                priceDefault :priceDefaultEl.value,
+
+            }
+            const dataPolicy = {
+                checkIn :checkInEl.value,
+                checkOut :checkOutEl.value,
+                service :serviceEl.value,
+                cancel :cancelEl.value,
+                animal :animalEl.value,
+                age : ageEl.value,
+                other :"otherEl.value",
+            }
+            console.log(otherEl.value + "kahcs")
+
+
+            const formData = {
+                upsertHotelRequest : dataHotel,
+                upsertRoomRequest : dataRoom,
+                upsertPolicyRequest : dataPolicy,
+            }
+            console.log(formData);
+
+            axios.post('/api/hotel/user/create',formData)
+                .then((res) =>{
+                    toastr.success("Thành công ");
+
+                })
+                .catch((err) =>{
+                    console.log(err);
+                    toastr.error("Thất bại ");
+                })
+
+        })
+
+    </script>
+    <script th:src="@{/admin-assets/dist/js/notify-admin.js}"></script>
+</th:block>
+</body>
+
+</html>

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import methodsecuritynew.bookingapp.model.enums.RentalType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -60,7 +62,16 @@ public class Hotel {
 
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL ,fetch = FetchType.EAGER, orphanRemoval = true )
-     List<RoomPrice> priceRoomList;
+    List<RoomPrice> priceRoomList;
+
+    @ManyToMany( fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "amenity_hotel",
+            joinColumns = @JoinColumn(name = "id_hotel"),
+            inverseJoinColumns = @JoinColumn(name = "id_amenity")
+    )
+    @Fetch(FetchMode.SUBSELECT)
+    List<AmenityHotel> amenityHotelList ;
 
     public String getRatingText() {
         if (rating == null) {

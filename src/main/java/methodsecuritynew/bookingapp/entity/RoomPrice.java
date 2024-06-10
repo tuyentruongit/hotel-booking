@@ -21,14 +21,13 @@ public class RoomPrice {
 
     LocalDate date;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     @JsonIgnore
-     Room room;
+    Room room;
 
 
-    Double price;
+    Integer price;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id")
