@@ -191,6 +191,8 @@
                     <div class="cancel-booking" th:classappend="${booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận') || booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận') ? 'd-inline-block': 'd-none' }">
                         <h6 class="w-100">Tất cả thông tin có đều chính xác ?</h6>
                         <span>Bạn có thể thay đổi thông tin bất kỳ lúc nào .</span>
+                    </div>
+                    <div class="w-100">
                         <a th:value="${booking.id}"  class="btn-cancel-booking w-100 " th:href="@{/cancel-booking/{idBooking} (idBooking = ${booking.id})}"> <i class="fa-solid fa-xmark"></i> Hủy đặt phòng</a>
                     </div>
                     <div class="wrap-btn-reviews">
@@ -276,7 +278,7 @@
                         <span class="title-contact">Đối với hầu hết câu hỏi, chỗ nghỉ thường là nơi tốt nhất để liên hệ</span>
                        <div class="phone">
                            <label>Điện thoại : </label>
-                           <span >(941) 919-1419</span>
+                           <span ></span>
                        </div>
                         <div class="email">
                            <label>Email : </label>

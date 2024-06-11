@@ -149,7 +149,7 @@ public class WebController {
     @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
     @GetMapping("/yeu-thich/{id}")
     public String getFavouriteHotel(Model model, @PathVariable Integer id ) {
-        Map<String,Integer> mapHotelFavouriteByCity = hotelService.getNameCityHotelFavourite(id);
+        Map<City,Integer> mapHotelFavouriteByCity = hotelService.getNameCityHotelFavourite(id);
         model.addAttribute("mapHotelFavouriteByCity" , mapHotelFavouriteByCity);
         Boolean authenticated = SecurityContextHolder.getContext().getAuthentication() != null;
         model.addAttribute("authentication" , authenticated);
@@ -183,6 +183,7 @@ public class WebController {
         String dayOfWeekEnd = booking.getCheckOut().getDayOfWeek().getDisplayName(TextStyle.SHORT,locale);
 
         model.addAttribute("booking" , booking);
+        System.out.println(booking.getIsReviewed() + "Oke chưa ");
         model.addAttribute("dayOfWeekStar" , dayOfWeekStar);
         model.addAttribute("dayOfWeekEnd" , dayOfWeekEnd);
 
@@ -190,12 +191,13 @@ public class WebController {
     }
 
     @Secured({"ROLE_USER","ROLE_HOTEL","ROLE_ADMIN"})
-    @GetMapping("/danh-sach-yeu-thich/{id}/{city}")
+    @GetMapping("/danh-sach-yeu-thich/{idUer}/{city}")
     public String getFavouriteList( @RequestParam(required = false , defaultValue = "1") Integer pageNumber,
                                     @RequestParam(required = false , defaultValue = "8") Integer limit,
-                                    Model model, @PathVariable Integer id ,@PathVariable String city) {
-        Page<Hotel> hotelPage = hotelService.findHotelFavouriteByCity(id,city,pageNumber,limit);
+                                    Model model, @PathVariable Integer idUer ,@PathVariable String city) {
+        Page<Hotel> hotelPage = hotelService.findHotelFavouriteByCity(idUer,city,pageNumber,limit);
         model.addAttribute("hotelPage",hotelPage);
+        model.addAttribute("listHotel",hotelPage.getContent());
         model.addAttribute("indexPage",pageNumber);
         model.addAttribute("city",city);
         return "web/favourite-list";

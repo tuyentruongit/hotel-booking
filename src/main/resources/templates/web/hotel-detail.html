@@ -284,14 +284,14 @@
                         <div class="row mb-4">
                             <div class="col-4 p-3 " th:each="room : ${roomList}">
                                 <div class="card-room w-100 h-100">
-                                  <button type="button"  data-bs-toggle="modal" data-bs-target="#modal-room-detail"
+                                  <button th:onclick="'renderImageRoomDetail('+${room.id}+')'" type="button"  data-bs-toggle="modal" data-bs-target="#modal-room-detail"
                                           class="w-100 m-0 p-0 btn-show-detail-room">
                                       <img class="w-100" th:src="${room.thumbnailRoom}"
-                                           alt="">
+                                           alt="" >
                                   </button>
-                                    <button class="btn-show-image-room"  data-bs-toggle="modal" data-bs-target="#modal-room-detail">
+                                    <button th:onclick="'renderImageRoomDetail('+${room.id}+')'"  class="btn-show-image-room"  data-bs-toggle="modal" data-bs-target="#modal-room-detail">
                                         <i class="fa-regular fa-images"></i>
-                                        <span>8</span>
+                                        <span th:text="${roomList.size()}"></span>
                                     </button>
 
                                     <div class="px-2 pt-1 pb-2">
@@ -625,7 +625,7 @@
                                         <div class="form-group">
 
                                             <textarea id="reviewContent"
-                                                      class="w-100 rounded overflow-hidden  my-2"
+                                                      class="w-100 form-control rounded overflow-hidden  my-2"
                                                       type="text" placeholder="Viết bình luận . . . ."
                                                       name="content">
                                             </textarea>

@@ -370,6 +370,8 @@ const renderInfoRoom =(room)=>{
 
 }
 
+
+
 const formatPrice = (number ) =>{
    return  number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
 }
@@ -391,30 +393,30 @@ const renderAmenityRoom = (room)=>{
 }
 
 
-//
-// $('#form-review').validate({
-//     rules: {
-//         content: {
-//             required: true,
-//         },
-//     },
-//     content: {
-//         content: {
-//             required: "Nội dung không được để trống",
-//         },
-//     },
-//     errorElement: 'span',
-//     errorPlacement: function (error, element) {
-//         error.addClass('invalid-feedback');
-//         element.closest('.form-group').append(error);
-//     },
-//     highlight: function (element, errorClass, validClass) {
-//         $(element).addClass('is-invalid');
-//     },
-//     unhighlight: function (element, errorClass, validClass) {
-//         $(element).removeClass('is-invalid');
-//     }
-// });
+
+$('#form-review').validate({
+    rules: {
+        content: {
+            required: true,
+        },
+    },
+    messages: {
+        content: {
+            required: "Nội dung không được để trống",
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    }
+});
 
 // xủ lý khi người dùng click vào nút yêu thích
 // let btnHeart = document.querySelector('.btn-favourite');

@@ -36,14 +36,14 @@
     margin-bottom: 10px;
 }
 
-.btn-cancel-booking {
+.btn-cancel-booking , .btn-cancel-booking:hover {
     background-color: #526D82;
     color: white;
     text-decoration: none;
     padding: 5px 5px;
     border-radius: 10px;
     border: none;
-}
+    width: 100% !important;}
 .reviews{
     border: 1px solid #E7E7E7;
     padding: 10px;

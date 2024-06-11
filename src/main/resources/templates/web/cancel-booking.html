@@ -12,8 +12,6 @@
 <body>
 
 <div id="main-content">
-
-
     <section class="page-cancel-booking ">
 
         <div class="container ">
@@ -68,7 +66,7 @@
                                 <span>Đặt phòng của bạn</span>
                             </div>
                             <div class="col-6">
-                                <p class="price">VND <th:block th:text="${booking.price}"></th:block></p>
+                                <p class="price"><th:block th:text="|${#numbers.formatInteger(booking.price,3,'COMMA')}đ|"></th:block></p>
                             </div>
                         </div>
                         <div class="row">
@@ -76,7 +74,7 @@
                                 <span>Phí hủy</span>
                             </div>
                             <div class="col-6">
-                                <p class="price">VND 0</p>
+                                <p class="price">0 đ</p>
                             </div>
                         </div>
                         <div class="row">
@@ -84,7 +82,7 @@
                                 <h5>Số tiền bạn phải trả</h5>
                             </div>
                             <div class="col-6">
-                                <h5 class="price">VND 0</h5>
+                                <h5 class="price">0 đ</h5>
                             </div>
                         </div>
 
@@ -125,7 +123,6 @@
             }
         })
     </script>
-
     <script src="/web/assets/js/cancel-booking.js"></script>
 
 </th:block>

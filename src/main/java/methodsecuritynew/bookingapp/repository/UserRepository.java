@@ -13,7 +13,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Integer> {
     Optional<User> findByEmail(String email);
     Optional<User> findByPhoneNumber(String phoneNumber);
-
     List<User> findAllByUserRole (UserRole userRole);
 
     @Query("SELECT new methodsecuritynew.bookingapp.model.dto.RegisterDto(MONTH(o.createdAt), YEAR(o.createdAt), COUNT(o.id)) " +

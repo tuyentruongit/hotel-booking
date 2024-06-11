@@ -63,6 +63,7 @@ public class BookingService {
                 .guests(bookingRequest.getGuest())
                 .checkIn(checkIn)
                 .checkOut(checkOut)
+                .isReviewed(false)
                 .price(bookingRequest.getPrice())
                 .numberRoom(bookingRequest.getNumberRoom())
                 .paymentMethod(paymentMethod)

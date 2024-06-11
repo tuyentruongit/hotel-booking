@@ -129,8 +129,10 @@ public class HotelService {
         return hotelListSearch;
     }
 
+    // tìm kiếm các khách sạn yêu thích theo thành phố
     public Page<Hotel> findHotelFavouriteByCity(Integer id, String city , Integer pageNumber , Integer limit) {
         PageRequest pageRequest = PageRequest.of(pageNumber-1,limit);
+        // lấy ra danh sách khách sạn được yêu thích của user
         List<Hotel> hotelList =   userRepository.findById(id).orElseThrow(()-> new RuntimeException("Không tìm thấy khách sạn nào có id " + id)).getHotelList().stream()
                 .filter(hotel -> Objects.equals(hotel.getCity().getName(),city))
                 .toList();
@@ -142,18 +144,18 @@ public class HotelService {
 
     }
 
-    public Map<String , Integer> getNameCityHotelFavourite(Integer id) {
+    public Map<City , Integer> getNameCityHotelFavourite(Integer id) {
         List<Hotel> hotelList = userRepository.findById(id).get().getHotelList();
-        Map<String , Integer> myMap = new HashMap<>();
+        Map<City , Integer> myMap = new HashMap<>();
         for (Hotel hotel : hotelList){
-            if (!myMap.containsKey(hotel.getCity().getName())){
+            if (!myMap.containsKey(hotel.getCity())){
                 int count = 0 ;
                 for (Hotel value : hotelList) {
                     if (value.getCity().getName().contains(hotel.getCity().getName())) {
                         count++;
                     }
                 }
-                myMap.put(hotel.getCity().getName(),count);
+                myMap.put(hotel.getCity(),count);
             }
         }
         return myMap;

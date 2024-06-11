@@ -31,7 +31,8 @@ btnBooking.addEventListener('click', () => {
             toastr.success("Đặt phòng thành công")
         })
         .catch((error) => {
-            toastr.error("Khách sạn đã từ chối đơn đặt phòng của bạn")
+            console.log(error)
+            toastr.error(error.response.data.message)
         })
 })
 
