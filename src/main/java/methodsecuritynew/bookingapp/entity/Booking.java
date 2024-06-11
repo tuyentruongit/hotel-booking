@@ -54,6 +54,8 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     StatusBooking statusBooking;
 
+    Boolean isReviewed;
+
     LocalDate createAt;
     LocalDate updateAt;
 }

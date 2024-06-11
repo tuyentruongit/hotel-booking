@@ -22,7 +22,7 @@ btnBooking.addEventListener('click', () => {
         numberRoom: numRoom,
         checkIn: startDate,
         checkOut: endDate,
-        price : 123456,
+        price : totalPrice,
         paymentMethod : paymentHotel.value
     }
     console.log(data)

@@ -12,5 +12,5 @@ import lombok.experimental.FieldDefaults;
 public class UpsertReviewRequest {
     Integer rating;
     String comment;
-    Integer idHotel;
+    Integer idBooking;
 }

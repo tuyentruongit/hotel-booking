@@ -269,12 +269,12 @@ const renderHotel = (data,city) =>{
                                 <div class="price list-unstyledp-0 m-0">
                                            
 
-                                            <div class="p-0 wrapper w-100 d-flex">
-                                                <span class="original-price "><del>1.300.500 ₫</del></span>
-                                            </div>
+<!--                                            <div class="p-0 wrapper w-100 d-flex">-->
+<!--                                                <span class="original-price "><del>1.300.500 ₫</del></span>-->
+<!--                                            </div>-->
                                             <h4 class="p-0 current-price w-100 d-flex">${formatCurrency(hotel.estimatedPrice)}</h4>
                                             <p class="description-price w-100 pb-1 m-0">Giá mỗi đêm đã bao gồm thuế & phí</p>
-                                            <span class="discount mt-3"> Giảm 15%</span>
+<!--                                            <span class="discount mt-3"> Giảm 15%</span>-->
 
 
                                    </div>

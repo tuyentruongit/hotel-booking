@@ -63,6 +63,7 @@ public class Room {
     List<AmenityRoom> amenityRoomList ;
 
     Integer priceDefault;
+    String thumbnailRoom;
 
     Boolean status;
     LocalDate createdAt;

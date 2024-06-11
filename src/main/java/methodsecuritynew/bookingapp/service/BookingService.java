@@ -40,13 +40,19 @@ public class BookingService {
     }
 
     public Booking bookingHotel(UpsertBookingRequest bookingRequest) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate checkIn = LocalDate.parse(bookingRequest.getCheckIn(), dateTimeFormatter);
+        LocalDate checkOut = LocalDate.parse(bookingRequest.getCheckOut(), dateTimeFormatter);
+        // lấy ra phòng mà người dùng đã yêu cầu đặt
+        Room room = roomService.getRoomById(bookingRequest.getIdRoom());
+        if (room.getCapacity()< bookingRequest.getGuest()/ bookingRequest.getNumberRoom() ||
+                !roomService.roomCheck(room,checkIn,checkOut,bookingRequest.getNumberRoom())){
+            throw new RuntimeException("Phòng này đã có người đặt trước đó, vui lòng chọn phòng khác");
+        }
 
         String strPaymentMethod = bookingRequest.getPaymentMethod().trim();
         PaymentMethod paymentMethod = PaymentMethod.valueOf(strPaymentMethod);
         User user = authService.getUserCurrent();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate checkIn = LocalDate.parse(bookingRequest.getCheckIn(), dateTimeFormatter);
-        LocalDate checkOut = LocalDate.parse(bookingRequest.getCheckOut(), dateTimeFormatter);
         Booking booking = Booking.builder()
                 .user(user)
                 .hotel(hotelService.getHotelById(bookingRequest.getIdHotel()))
@@ -60,7 +66,7 @@ public class BookingService {
                 .price(bookingRequest.getPrice())
                 .numberRoom(bookingRequest.getNumberRoom())
                 .paymentMethod(paymentMethod)
-                .statusBooking(StatusBooking.COMPLETE)
+                .statusBooking(StatusBooking.PENDING)
                 .createAt(LocalDate.now())
                 .build();
         return bookingRepository.save(booking);
@@ -255,7 +261,6 @@ public class BookingService {
         List<Room> roomList = roomService.getRoomByIdHotel(idHotel);
         List<TotalBookingByRoomTypeDto> result = new ArrayList<>();
        List<TotalBookingByRoomTypeDto> totalBookingByRoomTypeDtoList = bookingRepository.getTotalBookingByRoomTypeAndYear(idHotel,year);
-        System.out.println(totalBookingByRoomTypeDtoList.size() +" kích cỡ nè");
         for (int i = 0; i < roomList.size(); i++) {
             boolean check = false;
             for (TotalBookingByRoomTypeDto totalBookingByRoomTypeDto : totalBookingByRoomTypeDtoList){
@@ -273,7 +278,6 @@ public class BookingService {
             }
 
         }
-        System.out.println(result.size() +" kích cỡ nè 2");
         return result;
     }
 

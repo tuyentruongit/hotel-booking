@@ -54,7 +54,7 @@ function highlightStars(rating) {
 let minusGuest = document.querySelector(".minus-guest");
 let numberGuest = document.querySelector(".num-guest")
 let plusGuest = document.querySelector(".plus-guest")
-let countGuest = 1;
+let countGuest = valueNumberGuest;
 minusGuest.addEventListener('click', () => {
     if (countGuest <= 1) {
         return
@@ -78,7 +78,7 @@ const minusRoom = document.querySelector(".minus-room");
 let numberRoom = document.querySelector(".num-room")
 const plusRoom = document.querySelector(".plus-room")
 
-let countRoom = 1;
+let countRoom = valueNumberRoom;
 minusRoom.addEventListener('click', () => {
     if (countRoom <= 1) {
         return
@@ -133,7 +133,7 @@ const renderDataSearch = (nameCity, numGuest, numRoom) => {
         numberGuest.textContent = numGuest;
     }
     if (numRoom < 10) {
-        numRoom.textContent = "0" + numRoom;
+        numberRoom.textContent = "0" + numRoom;
     } else {
         numberRoom.textContent = numRoom;
     }

@@ -61,12 +61,15 @@ rangeInput.forEach((input) => {
 let minusGuest = document.querySelector(".minus-guest");
 let numberGuest = document.querySelector(".num-guest")
 let plusGuest = document.querySelector(".plus-guest")
-let countGuest = 1;
+const minusRoom = document.querySelector(".minus-room");
+let numberRoom = document.querySelector(".num-room")
+const plusRoom = document.querySelector(".plus-room")
+let countGuest = valueNumberGuest;
 minusGuest.addEventListener('click', () => {
+    console.log("nhấn được")
     if (countGuest <= 1) {
-        return
+        return;
     }
-
     countGuest--;
     countGuest = (countGuest < 10) ? '0' + countGuest : countGuest;
     numberGuest.innerText = countGuest;
@@ -82,12 +85,9 @@ plusGuest.addEventListener('click', () => {
 })
 
 
-const minusRoom = document.querySelector(".minus-room");
-let numberRoom = document.querySelector(".num-room")
-const plusRoom = document.querySelector(".plus-room")
-
-let countRoom = 1;
+let countRoom = valueNumberRoom;
 minusRoom.addEventListener('click', () => {
+    console.log("Nhấn được")
     if (countRoom <= 1) {
         return
     }
@@ -395,7 +395,7 @@ const renderListHotel = (hotelList) => {
 
                                 <div class="course w-100 border">
                                     <div class="image-btn">
-                                        <img class="course-preview " src="/web/assets/image/dep.jpg">
+                                        <img class="course-preview " src="${hotel.poster}">
 
                                     </div>
                                     <div class="course-info">

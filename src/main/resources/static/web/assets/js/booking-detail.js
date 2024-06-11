@@ -65,19 +65,19 @@ btnSubmitReview.addEventListener('click', () => {
     const dataReview = {
         comment: reviewContent.value,
         rating: currentRating,
-        idHotel: btnReview.value
+        idBooking: btnReview.value
     }
 
     console.log(dataReview);
     axios.post("/api/reviews/create", dataReview)
         .then((res) => {
            toastr.success("Gửi đánh giá thành công");
+           document.querySelector('.wrap-btn-reviews').innerHTML='';
             modalReviewConfig.hide();
         })
         .catch((err) => {
-            toastr.error("Gửi đánh giá thành công");
+            console.log(err);
         })
-
 
 })
 

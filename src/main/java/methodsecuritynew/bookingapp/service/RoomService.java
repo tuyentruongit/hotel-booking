@@ -9,10 +9,7 @@ import methodsecuritynew.bookingapp.model.request.UpsertRoomRequest;
 import methodsecuritynew.bookingapp.model.enums.BedSize;
 import methodsecuritynew.bookingapp.model.enums.BedType;
 import methodsecuritynew.bookingapp.model.enums.RoomType;
-import methodsecuritynew.bookingapp.repository.AmenityRoomRepository;
-import methodsecuritynew.bookingapp.repository.HotelRepository;
-import methodsecuritynew.bookingapp.repository.RoomPriceRepository;
-import methodsecuritynew.bookingapp.repository.RoomRepository;
+import methodsecuritynew.bookingapp.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +27,7 @@ public class RoomService {
     private final HotelRepository hotelRepository;
     private final UserService userService;
     private final RoomPriceRepository roomPriceRepository;
+    private final BookingRepository bookingRepository;
 
 
     public List<Room> getRoomByIdHotel(Integer id) {
@@ -132,9 +130,45 @@ public class RoomService {
     }
 
 
+    // logic lấy ra các phòng trống của từng khách sạn theo ngày và theo booking
+    List<Room> availableRooms(Integer id, LocalDate checkInDay, LocalDate checkOutDay, Integer numberRoom, Integer numberGuest) {
+        // lấy danh sách các phòng theo id hotel
+        List<Room> roomList = getRoomByIdHotel(id);
+        List<Room> result = new ArrayList<>();
+        // duyệt từng phòng lấy ra các thông tin cần thiết để kiểm tra
+        for (Room room : roomList){
+            if (room.getCapacity()>=numberGuest/numberRoom
+                    && roomCheck(room , checkInDay , checkOutDay , numberRoom)){
+                result.add(room);
+            }
+        }
+        return result;
+    }
+    // logic kiểm  số lượng phòng đã đặt theo từng ngày và từng phòng
+    public boolean roomCheck(Room room, LocalDate checkInDay, LocalDate checkOutDay , Integer numberRoom) {
+        // kiểm tra cho từng ngày trong khoảng checkin checkout
+        LocalDate currentDay = checkInDay;
+        while (!currentDay.isAfter(checkOutDay)) {
+            List<Booking> bookingList = bookingRepository.findAllByRoom_IdAndCheckInBetween(room.getId(),currentDay,currentDay.plusDays(3));
+            int totalBookedRooms = 0;
+
+            // tính tổng số lượng phòng đã được đặt cho ngày hiện tại
+            for (Booking booking : bookingList) {
+                totalBookedRooms += booking.getNumberRoom();
+            }
+            // kiểm tra sô lượng phòng còn lại cho ngày hiện tại
+            if (room.getQuantity() - totalBookedRooms < numberRoom) {
+                return false;
+            }
+
+            currentDay = currentDay.plusDays(1); // next ngày tiếp theo
+        }
+        return true;
+    }
+
+
     // tạo dối tượng lưu trữ các thông tin cần thiết
     public RoomDto createRoomDto(Room room, int price, int count) {
-
         RoomDto roomDto = new RoomDto();
         roomDto.setId(room.getId());
         roomDto.setName(room.getName());
@@ -142,6 +176,7 @@ public class RoomService {
         roomDto.setCapacity(room.getCapacity());
         roomDto.setRoomType(room.getRoomType());
         roomDto.setArea(room.getArea());
+        roomDto.setThumbnailRoom(room.getThumbnailRoom());
         roomDto.setBedType(room.getBedType().getValue());
         roomDto.setBedSize(room.getBedSize().getValue());
         // giá hiển thị  bằng tổng giá số ngày người dùng lưu trú chia cho số ngày lưu trú
@@ -151,9 +186,9 @@ public class RoomService {
     }
 
     // logic lấy các thông tin của phòng gias phòng theo ngày mà người dùng đã chọn
-    public List<RoomDto> getDataRoom(Integer idHotel, LocalDate start , LocalDate end) {
+    public List<RoomDto> getDataRoom(Integer idHotel, LocalDate start , LocalDate end , Integer numberGuest, Integer numberRoom) {
         // lấy ra các phòng theo id của khách sạn
-        List<Room> roomList = roomRepository.findRoomByHotel_Id(idHotel);
+        List<Room> roomList = availableRooms(idHotel,start,end,numberGuest,numberRoom);
         List<RoomDto> roomDtoList = new ArrayList<>();
         for (Room room : roomList ){
             LocalDate currentDay = start;

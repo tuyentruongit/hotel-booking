@@ -84,11 +84,10 @@ public class WebController {
                                  @RequestParam(required = false, defaultValue = "1") Integer numberRoom) {
         // lấy hotel theo id
         Hotel hotel = hotelService.getHotelById(id);
-        // chuyển checkIn, checkOut sang localdate để lấy dữ liệu các phòng trong khách sạn
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate checkInDay = LocalDate.parse(checkIn,dateTimeFormatter);
         LocalDate checkOutDay = LocalDate.parse(checkOut,dateTimeFormatter);
-        List<RoomDto> roomList = roomService.getDataRoom(id,checkInDay,checkOutDay);
+        List<RoomDto> roomList = roomService.getDataRoom(id,checkInDay,checkOutDay,numberGuest,numberRoom);
         // danh sách các review của khách sạn
         List<Review> reviewList = reviewsService.findAllReview(id);
         // lấy các tiện sub cac tiên ích của khách sạn
@@ -209,8 +208,9 @@ public class WebController {
                              @PathVariable Integer idRoom,
                              @RequestParam String checkIn,
                              @RequestParam String checkOut,
-                             @RequestParam String numberGuest,
-                             @RequestParam String numberRoom,
+                             @RequestParam Integer numberGuest,
+                             @RequestParam Integer numberRoom,
+                             @RequestParam Integer price,
                              Model model) {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -232,6 +232,8 @@ public class WebController {
         model.addAttribute("period",period);
         model.addAttribute("numberGuest",numberGuest);
         model.addAttribute("numberRoom",numberRoom);
+        model.addAttribute("price",price);
+        model.addAttribute("totalPrice",price* period.getDays()*numberRoom);
         return "web/thong-tin-thanh-toan";
     }
 

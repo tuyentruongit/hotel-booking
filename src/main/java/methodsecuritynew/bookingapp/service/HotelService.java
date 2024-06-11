@@ -59,19 +59,19 @@ public class HotelService {
 
         // duyệt từng khách sạn để kiểm tra các điều kiện
         for (Hotel hotel : hotelList){
-            if (availableRooms(hotel.getId(),checkInDay,checkOutDay,numberRoom,numberGuest)){
-               HotelDto hotelDto = createHotelDto(hotel,checkInDay,checkOutDay);
+            // laays ra các phòng trống của khách sạn
+            List<RoomDto> dataRoom = roomService.getDataRoom(hotel.getId(),checkInDay,checkOutDay,numberRoom,numberGuest);
+            if (!dataRoom.isEmpty()){
+                // lấy ra các thông tin của phòng và giá theo thời điểm của ngày chekIn và checkOut
+                HotelDto hotelDto = createHotelDto(hotel,dataRoom);
                 availableHotels.add(hotelDto);
-
             }
         }
       hotelListSearch = availableHotels;
     }
 
     // tạo một HotelDto từ một hotel
-    private HotelDto createHotelDto(Hotel hotel, LocalDate checkIn , LocalDate checkOut) {
-        // lấy ra các thông tin của phòng và giá theo thời điểm của ngày chekIn và checkOut
-        List<RoomDto> dataRoom = roomService.getDataRoom(hotel.getId(),checkIn,checkOut);
+    private HotelDto createHotelDto(Hotel hotel, List<RoomDto> dataRoom) {
         // lấy giá thấp nhất của khách sạn để hiện thị cho người dùng
         int price = getMinPrice(dataRoom);
         int totalReview = reviewRepository.findReviewByHotel_Id(hotel.getId()).size();
@@ -90,44 +90,6 @@ public class HotelService {
         return  hotelDto;
     }
 
-
-    // logic kiểm tra xem phòng có trống hay là không
-    private boolean availableRooms(Integer id, LocalDate checkInDay, LocalDate checkOutDay, Integer numberRoom, Integer numberGuest) {
-        // lấy danh sách các phòng theo id hotel
-        List<Room> roomList = roomService.getRoomByIdHotel(id);
-        // duyệt từng phòng lấy ra các thông tin cần thiết để kiểm tra
-        for (Room room : roomList){
-
-            if (room.getCapacity()>=numberGuest/numberRoom
-                    && roomCheck(room , checkInDay , checkOutDay , numberRoom)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // logic kiểm  số lượng phòng đã đặt theo từng ngày và từng phòng
-    private boolean roomCheck(Room room, LocalDate checkInDay, LocalDate checkOutDay , Integer numberRoom) {
-        // kiểm tra cho từng ngày trong khoảng checkin checkout
-        LocalDate currentDay = checkInDay;
-        while (!currentDay.isAfter(checkOutDay)) {
-            List<Booking> bookingList = bookingRepository.findAllByRoom_IdAndCheckInBetween(room.getId(),currentDay,currentDay.plusDays(1));
-            int totalBookedRooms = 0;
-
-            // tính tổng số lượng phòng đã được đặt cho ngày hiện tại
-            for (Booking booking : bookingList) {
-                totalBookedRooms += booking.getNumberRoom();
-            }
-
-            // kiểm tra sô lượng phòng còn lại cho ngày hiện tại
-            if (room.getQuantity() - totalBookedRooms < numberRoom) {
-                return false;
-            }
-
-            currentDay = currentDay.plusDays(1); // next ngày tiếp theo
-        }
-        return true;
-    }
     // logic lấy giá phòng nhỏ nhất của thời gian người dùng chọn hiển thị ra ngoài giao diện
     public int getMinPrice(List<RoomDto> roomDtoList) {
          // kiểm tra các thông tin của phòng có null hoặc rỗng hay không
@@ -140,7 +102,6 @@ public class HotelService {
             if (roomDto.getPriceAverage() < minPrice) {
                 minPrice = roomDto.getPriceAverage();
             }
-            System.out.println(minPrice+"giá nè");
         }
         return minPrice;
     }
@@ -155,9 +116,6 @@ public class HotelService {
         );
 
     }
-
-
-
 
     public Hotel getHotelById(Integer id) {
         return hotelRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Không tìm thấy khách sạn nào tương ứng"));

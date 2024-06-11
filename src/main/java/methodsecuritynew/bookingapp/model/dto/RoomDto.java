@@ -22,6 +22,7 @@ public class RoomDto {
     Integer area;
     String bedType;
     String bedSize ;
+    String thumbnailRoom ;
     Integer priceAverage;
     List<AmenityRoom> amenityRoomList ;
 }

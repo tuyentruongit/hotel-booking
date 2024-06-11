@@ -110,8 +110,6 @@
                                     <input id="payment-hotel" class=" m-2 custom-checkbox" type="radio"  name="payment" th:value="${payemtMethod}" >
                                     <label for="payment-hotel" th:text="${payemtMethod.value}"></label>
                                 </li>
-
-
                             </ul>
 
                         </form>
@@ -119,21 +117,21 @@
                     <div class="price-detail py-2  px-3  rounded my-3">
                         <h5>Chi tiết giá</h5>
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="">Giá gốc</span>
-                            <span class=""><del>1.23.456 đ</del></span>
+                            <span class="">Giá mỗi đêm</span>
+                            <span class=""  th:text="|${#numbers.formatInteger(price,3,'COMMA')}đ|"></span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="">Giá phòng</span>
-                            <span class="">1.23.456 đ</span>
+                            <span class="">Số lượng phòng</span>
+                            <span class="" th:text="${numberRoom}"></span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="">Thuế GTGT</span>
-                            <span class="">10%</span>
+                            <span class="">Số đêm lưu trú</span>
+                            <span class="" th:text="${period.getDays()}"></span>
                         </div>
                         <hr>
                         <div class="total-money d-flex justify-content-between">
                             <h4 class="">Tổng </h4>
-                            <h5 >1.234.567 đ</h5>
+                            <h5 th:text="|${#numbers.formatInteger(totalPrice,3,'COMMA')}đ|"></h5>
                         </div>
 
                     </div>
@@ -181,6 +179,7 @@
         let numRoom = [[${numberRoom}]];
         let startDate = [[${start}]];
         let endDate = [[${end}]];
+        let totalPrice = [[${totalPrice}]];
     </script>
     <script src="/web/assets/js/payment-booking.js"> </script>
 

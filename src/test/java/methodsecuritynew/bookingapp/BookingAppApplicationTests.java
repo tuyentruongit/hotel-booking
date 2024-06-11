@@ -451,9 +451,15 @@ class BookingAppApplicationTests {
     void gnd(){
         List<Hotel> hotelList = hotelRepository.findAll();
         for (Hotel hotel : hotelList){
-            hotel.setPoster("web/assets/image/dep.jpg");
+            hotel.setPoster("/upload_image/image_city/1717841348123");
             hotelRepository.save(hotel);
         }
+    }
+
+    @Test
+    void createReviews (){
+
+
     }
 
 }

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:replace="~{web/layout/layout :: layout(~{::title},~{::#css},~{::#main-content},~{::#js})}">
 <head>
 
@@ -285,7 +286,7 @@
                                 <div class="card-room w-100 h-100">
                                   <button type="button"  data-bs-toggle="modal" data-bs-target="#modal-room-detail"
                                           class="w-100 m-0 p-0 btn-show-detail-room">
-                                      <img class="w-100" src="/web/assets/image/uudai.jpg"
+                                      <img class="w-100" th:src="${room.thumbnailRoom}"
                                            alt="">
                                   </button>
                                     <button class="btn-show-image-room"  data-bs-toggle="modal" data-bs-target="#modal-room-detail">
@@ -324,12 +325,12 @@
                                             <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
                                         </button>
                                         <hr>
-                                        <button class="discount" type="button">
-                                            Giảm 25%
-                                        </button>
+<!--                                        <button class="discount" type="button">-->
+<!--                                            Giảm 25%-->
+<!--                                        </button>-->
                                         <div class="d-flex align-items-center ">
                                             <h5 class="price-room p-0 m-0" th:text="|${#numbers.formatInteger(room.priceAverage,3,'COMMA')} đ|"> </h5>
-                                            <span class="mx-2 original-price"><del>1.530.00 đ</del></span>
+<!--                                            <span class="mx-2 original-price"><del>1.530.00 đ</del></span>-->
                                         </div>
                                         <p class="description-price w-50">Giá mỗi đêm đã gồm thuế và phí</p>
 <!--                                        <a class="d-flex align-items-center justify-content-start text-decoration-none "-->
@@ -337,9 +338,13 @@
 <!--                                            <span>Chi tiết giá</span>-->
 <!--                                            <i class="fa-solid fa-angle-right ms-2 mt-1"></i>-->
 <!--                                        </a>-->
-                                        <a th:href="@{/thanh-toan/{id_hotel}/{id_room}(id_hotel=${hotel.id},id_room=${room.id}, checkIn=${checkIn}, checkOut=${checkOut},numberGuest = ${numberGuest},numberRoom=${numberRoom})}"
-                                           class="text-reset text-decoration-none btn-booking">
-                                           <span>Đặt <span th:if="${numberRoom>1}"> <th:block th:text="${numberRoom}"></th:block> phòng</span></span>
+                                        <a th:href="@{/thanh-toan/{id_hotel}/{id_room}(id_hotel=${hotel.id},id_room=${room.id}, checkIn=${checkIn}, checkOut=${checkOut},numberGuest=${numberGuest},numberRoom=${numberRoom},price = ${room.priceAverage})}"
+                                           class="text-reset text-decoration-none btn-booking"
+                                           sec:authorize=" isAuthenticated()">
+                                            <span>Đặt <span th:if="${numberRoom>1}"><th:block th:text="${numberRoom}"></th:block> phòng</span></span>
+                                        </a>
+                                        <a th:href="@{/account/login}"  sec:authorize="not isAuthenticated()" class="text-reset text-decoration-none btn-booking">
+                                            <span>Vui lòng đăng nhập</span>
                                         </a>
                                     </div>
                                 </div>
