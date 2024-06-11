@@ -4,11 +4,14 @@
 Hotel booking website project with features such as displaying famous and newest hotels, allowing users to book rooms and rate hotels. The admin interface allows administrators to manage website content, including adding, editing, and deleting hotels, managing users, and viewing reports
 ##  Basic Function For User
 1. **Login/Sign up**:
-![Hình ảnh](img_ma/login.png)![Hình ảnh](img_ma/signup.png)
+![Hình ảnh](image-markdown/login.png)![Hình ảnh](image-markdown/register.png)
 2. **Home Page**
-   - ![Hình ảnh](img_ma/hompage-1.png)![Hình ảnh](img_ma/hompage-2.png)![Hình ảnh](img_ma/hompage-3.png)
-4. **Movie Search**:
-     - Users can search for movies by many criteria such as genre, country, series, retail movies, and theatrical movies. Search results are organized scientifically, making it easy for viewers to choose.
+   - ![Hình ảnh](image-markdown/hompage-1.png)![Hình ảnh](image-markdown/hompage-2.png)
+3. **Hotel Search**:
+     - Users can search for hotels by city, date of stay, number of people and number of rooms as required.
+4. **Hotel List**:
+     - Users can filter hotels by amenities, reviews, stars, ..... Sort hotels by price, star rating, reviews.
+     - ![Hình ảnh](image-markdown/hotel-list-1.png)![Hình ảnh](image-markdown/hotel-list-2.png)
 5. **View Movie Information**:
      - Information of the movie.
      - List of episodes (if any).
@@ -25,7 +28,7 @@ Hotel booking website project with features such as displaying famous and newest
    - Blog List
       ![Hình ảnh](img_ma/blog-1.png)
       ![Hình ảnh](img_ma/blog-2.png)
-10. **Logout**:
+9. **Logout**:
    - This function helps users ensure that their accounts are not accessed without permission, protecting personal information and movie viewing history.
 ##  Basic Function For Admin
 1. **View System Overview**:
