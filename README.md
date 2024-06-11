@@ -33,29 +33,13 @@ Hotel booking website project with features such as displaying famous and newest
        ![Hình ảnh](image-markdown/list-booking.png)
      - View details of the booking you have booked, can cancel as well as evaluate with each different status.
       ![Hình ảnh](image-markdown/booking-detail.png)
-     
-9. **Logout**:
-9. **Logout**:
-9. **Logout**:
-9. **Logout**:
-9. **Logout**:
+10. **List of favorite hotels**:
+    ![Hình ảnh](image-markdown/hotel-favourite.png)
+11. **Support**:
+   - Users can view support articles to use functions on the website
+    ![Hình ảnh](image-markdown/support.png)
+12. **Logout**:
 ##  Basic Function For Admin
 1. **View System Overview**:
-    - Admins can view an overview dashboard that provides a comprehensive view of important system metrics such as number of new registered users, number of most viewed movies, and more. This helps administrators       grasp the operating situation.
-       ![Hình ảnh](img_ma/admin-dashboard.png)
-2. **Managing Movies, Episodes**:
-    - This function allows administrators to add, edit or delete movies and episodes. Administrators can update movie information, manage movie status (eg: premiere, currently running, ended), and manage the           content of each episode.
-      - Movie Management
-        ![Hình ảnh](img_ma/manager-movie.png)
-       - Creeate Movies
-        ![Hình ảnh](img_ma/create-movie-admin.png)
-       - movie Detail Role Admin
-        ![Hình ảnh](img_ma/detail-move-admin.png)
-3. **Blog management**:
-   - This function allows administrators to post, edit or delete articles about movie news, movie reviews or user guide articles. This is an effective way to interact and retain users on the system.
-     - Blog Management
-     ![Hình ảnh](img_ma/manager-blog.png)
-     - Create Blog
-     ![Hình ảnh](img_ma/create-blog.png)
-4. **Upload Image**
-   ![Hình ảnh](img_ma/upload-image.png)
+    - Admins can view a dashboard that provides a comprehensive view of important system metrics, such as the number of new registered users, the number of bookings for the month. This helps administrators grasp 
+      the operating situation.
