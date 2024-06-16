@@ -54,8 +54,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests(authorization -> {
+            authorization.requestMatchers("/hotel-manager/**").hasAnyRole("HOTEL");
+            authorization.requestMatchers("/admin/**").hasAnyRole("ADMIN");
             authorization.anyRequest().permitAll();
-                }
+        }
         );
 
         httpSecurity.logout(logout -> {

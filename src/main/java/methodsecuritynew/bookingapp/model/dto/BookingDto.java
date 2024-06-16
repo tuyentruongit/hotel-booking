@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingDto {
+    Integer id;
     Integer guests;
     LocalDate checkIn;
     LocalDate checkOut;

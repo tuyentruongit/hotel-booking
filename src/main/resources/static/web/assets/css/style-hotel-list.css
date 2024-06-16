@@ -1,5 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
-
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body {
+    font-family: montserrat, arial, verdana;
+}
 /* style thanh tìm kiếm */
 .search{
     background-color: #27374D;
@@ -13,9 +15,9 @@
 
 
 .inputdata-search input{
-
     border-radius: 10px;
     background-color: #E9ECEF;
+    border: none;
 
 }
 .inputdata-search #date-range{
@@ -34,18 +36,11 @@
 
 
 .btn-search{
-    background-color:#9DB2BF;
     border-radius: 10px;
-    border: none
-}
-
-
-.btn-search button{
-    background-color: #E9ECEF;
     border: none;
+    background-color: #E9ECEF;}
 
 
-}
 
 .flatpickr-months{
     z-index:9999;
@@ -226,7 +221,7 @@ input[type="range"]::-moz-range-thumb {
 
 }
 .button-guest-number {
-    padding: 10px;
+    padding: 7px;
     display: flex;
     justify-content: space-between;
     background-color: #E9ECEF;
@@ -254,7 +249,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .button-room-number {
-    padding: 10px;
+    padding: 7px;
     display: flex;
     justify-content: space-between;
     background-color: #E9ECEF;

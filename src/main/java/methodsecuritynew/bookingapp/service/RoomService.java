@@ -57,10 +57,10 @@ public class RoomService {
             list.add(amenityRoom);
         });
 
-        room.setName(request.getName());
+        room.setName(request.getNameRoom());
         room.setAmenityRoomList(list);
-        room.setDescription(request.getDescription());
-        room.setStatus(request.getStatus());
+        room.setDescription(request.getDescriptionRoom());
+        room.setStatus(request.getStatusRoom());
         room.setArea(request.getArea());
         room.setCapacity(request.getCapacity());
         room.setPriceDefault(request.getPriceDefault());
@@ -88,10 +88,9 @@ public class RoomService {
     // tạo phòng khi đăng ký cho thuê vầ khi taoh thêm phòng mới hotel manager\
     @Transactional
     public Room createRoom(UpsertRoomRequest request) {
-//        User user = userService.getUserCurrent();
-//        Hotel hotel = hotelRepository.findHotelByUser_Id(user.getId());
-        Hotel hotel = hotelRepository.findById(2).orElseThrow(() -> new RuntimeException("Không thấy"));
-        Room room = roomRepository.findRoomByName(request.getName());
+        User user = userService.getUserCurrent();
+        Hotel hotel = hotelRepository.findHotelByUser_Id(user.getId());
+        Room room = roomRepository.findRoomByName(request.getNameRoom());
         if (room!=null){
             throw new RuntimeException("Tên phòng trên đã tồn tại");
         }
@@ -102,10 +101,10 @@ public class RoomService {
             list.add(amenityRoom);
         });
         Room roomNew = Room.builder()
-                .name(request.getName())
+                .name(request.getNameRoom())
                 .amenityRoomList(list)
-                .description(request.getDescription())
-                .status(request.getStatus())
+                .description(request.getDescriptionRoom())
+                .status(request.getStatusRoom())
                 .area(request.getArea())
                 .capacity(request.getCapacity())
                 .quantity(request.getQuantity())
@@ -116,8 +115,15 @@ public class RoomService {
                 .bedType(BedType.valueOf(request.getBedType()))
                 .roomType(RoomType.valueOf(request.getRoomType()))
                 .createdAt(LocalDate.now())
+                .status(false)
                 .build();
         return roomRepository.save(roomNew);
+    }
+    public void deleteAllRoom(Integer idHotel) {
+        List<Room> roomList = getRoomByIdHotel(idHotel);
+        for (Room room : roomList){
+            deleteRoom(room.getId());
+        }
     }
 
     public void deleteRoom(Integer id) {
@@ -133,11 +139,12 @@ public class RoomService {
     // logic lấy ra các phòng trống của từng khách sạn theo ngày và theo booking
     List<Room> availableRooms(Integer id, LocalDate checkInDay, LocalDate checkOutDay, Integer numberRoom, Integer numberGuest) {
         // lấy danh sách các phòng theo id hotel
-        List<Room> roomList = getRoomByIdHotel(id);
+        List<Room> roomList = roomRepository.findRoomByHotel_IdAndStatusTrue(id);
+
         List<Room> result = new ArrayList<>();
         // duyệt từng phòng lấy ra các thông tin cần thiết để kiểm tra
         for (Room room : roomList){
-            if (room.getCapacity()>=numberGuest/numberRoom
+            if (room.getCapacity()>= numberGuest /numberRoom
                     && roomCheck(room , checkInDay , checkOutDay , numberRoom)){
                 result.add(room);
             }

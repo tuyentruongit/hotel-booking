@@ -1,4 +1,8 @@
 
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body {
+    font-family: montserrat, arial, verdana;
+}
 /* Chỉnh style cho nút */
 .btn-title-support,.btn-type-support,#btn-all {
     background-color: #eee;

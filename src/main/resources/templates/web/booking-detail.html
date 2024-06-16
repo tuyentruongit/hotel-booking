@@ -33,10 +33,10 @@
                                 <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm nơi lưu trú khác
                             </a>
 
-                            <a class="text-decoration-none text-reset"
-                               th:href="@{/thanh-toan/{idHotel}/{idRoom} (idHotel=${booking.hotel.id},idRoom=${booking.room.id},checkIn = ${booking.checkIn},checkOut = ${booking.checkOut},numberGuest = ${booking.guests},numberRoom = ${booking.numberRoom})}">
-                                <i class="fa-solid fa-rotate-left"></i> Đặt lại
-                            </a>
+<!--                            <a class="text-decoration-none text-reset"-->
+<!--                               th:href="@{/thanh-toan/{idHotel}/{idRoom} (idHotel=${booking.hotel.id},idRoom=${booking.room.id},checkIn = ${booking.checkIn},checkOut = ${booking.checkOut},numberGuest = ${booking.guests},numberRoom = ${booking.numberRoom})}">-->
+<!--                                <i class="fa-solid fa-rotate-left"></i> Đặt lại-->
+<!--                            </a>-->
                         </div>
 
                     </div>
@@ -59,17 +59,24 @@
                                         </div>
                                         <div class="w-100 d-flex justify-content-between p-0 m-0">
                                             <h6 class="content-in-out w-50"><th:block th:text="${dayOfWeekStar}"></th:block>, <th:block th:text="${booking.checkIn.getDayOfMonth()}"></th:block>  tháng <th:block th:text="${booking.checkIn.getMonth().value}"></th:block> <th:block th:text="${booking.checkIn.getYear()}"></th:block></h6>
-                                            <h6 class="content-in-out w-50"><th:block th:text="${dayOfWeekEnd}"></th:block>, <th:block th:text="${booking.checkIn.getDayOfMonth()}"></th:block> tháng <th:block th:text="${booking.checkOut.getMonth().value}"></th:block> <th:block th:text="${booking.checkOut.getYear()}"></th:block></h6>
+                                            <h6 class="content-in-out w-50"><th:block th:text="${dayOfWeekEnd}"></th:block>, <th:block th:text="${booking.checkOut.getDayOfMonth()}"></th:block> tháng <th:block th:text="${booking.checkOut.getMonth().value}"></th:block> <th:block th:text="${booking.checkOut.getYear()}"></th:block></h6>
                                         </div> <div class="w-100 d-flex justify-content-between p-0 m-0">
 <!--                                            <span class="content-in-out w-50" th:text="${booking.hotel.policyHotel.checkIn}"></span>-->
 <!--                                            <span class="content-in-out w-50" th:text="${booking.hotel.policyHotel.checkOut}"></span>-->
-                                            <span class="content-in-out w-50">14:00 - 23:00</span>
-                                            <span class="content-in-out w-50" >10:00 - 12:00</span>
+                                            <span class="content-in-out w-50">
+                                                <th:block th:text="${booking.hotel.policyHotel.startCheckIn}"></th:block>
+                                                -
+                                                <th:block th:text="${booking.hotel.policyHotel.endCheckIn}"></th:block>
+                                            </span>
+                                            <span class="content-in-out w-50" >
+                                                <th:block th:text="${booking.hotel.policyHotel.startCheckOut}"></th:block>
+                                                -
+                                                <th:block th:text="${booking.hotel.policyHotel.endCheckOut}"></th:block></span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="row d-flex my-2">
+                                <div class="row d-flex my-4">
                                     <div class="col-1">
                                         <i style="font-size: 20px" class="fa-solid fa-list-ul"></i>
                                     </div>
@@ -98,7 +105,7 @@
                                 </div>
                             </div>
                             <div class="">
-                                <img class="image-hotel" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg">
+                                <img class="image-hotel" th:src="${booking.hotel.poster}">
                             </div>
                         </div>
                         <h5 class="title-detail-room">Chi tiết phòng</h5>
@@ -141,17 +148,24 @@
                                     <h6 class="title-infor">Giường</h6>
                                 </div>
                                 <div class="col-9">
-<!--                                    <span th:text="${booking.room.area}"></span>-->
-                                    2 giường cỡ KING
+                                    <span th:text="${booking.room.bedType.value}"></span>
+                                </div>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-3">
+                                    <h6 class="title-infor">Kích cỡ giường</h6>
+                                </div>
+                                <div class="col-9">
+                                    <span th:text="${booking.room.bedSize.value}"></span>
                                 </div>
                             </div>
                             <div class="row my-3">
                                 <div class="col-3">
                                     <h6 class="title-infor">Loại phòng</h6>
                                 </div>
-                                <div class="col-9">
-<!--                                    <span th:text="${booking.room.roomType}"></span>-->
-                                    Phòng Đôi
+                                <div class="col-9" >
+                                    <span th:text="${booking.room.roomType.value}"></span>
+
                                 </div>
                             </div>
                             <div class="row my-3">
@@ -173,14 +187,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
-
-
-
-
                     </div>
 
 
@@ -191,9 +197,9 @@
                     <div class="cancel-booking" th:classappend="${booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận') || booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận') ? 'd-inline-block': 'd-none' }">
                         <h6 class="w-100">Tất cả thông tin có đều chính xác ?</h6>
                         <span>Bạn có thể thay đổi thông tin bất kỳ lúc nào .</span>
-                    </div>
-                    <div class="w-100">
-                        <a th:value="${booking.id}"  class="btn-cancel-booking w-100 " th:href="@{/cancel-booking/{idBooking} (idBooking = ${booking.id})}"> <i class="fa-solid fa-xmark"></i> Hủy đặt phòng</a>
+                        <div class="w-100">
+                            <a th:value="${booking.id}"  class="btn-cancel-booking w-100 " th:href="@{/cancel-booking/{idBooking} (idBooking = ${booking.id})}"> <i class="fa-solid fa-xmark"></i> Hủy đặt phòng</a>
+                        </div>
                     </div>
                     <div class="wrap-btn-reviews">
                         <div class="reviews" th:if="${!booking.isReviewed}"  th:classappend="${!booking.statusBooking.value.equalsIgnoreCase('Hoàn Tất') ? 'd-none': 'd-inline-block' }">
@@ -204,6 +210,28 @@
                             </button>
                         </div>
                     </div>
+                    <div class="price-detail py-2  px-3  rounded my-3">
+                        <h5>Chi tiết giá</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="">Giá mỗi đêm</span>
+                            <span class=""  th:text="|${#numbers.formatInteger(booking.price,3,'COMMA')}đ|"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="">Số lượng phòng</span>
+                            <span class="" th:text="${booking.numberRoom}"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="">Số đêm lưu trú</span>
+                            <span class="" th:text="${period.getDays()}"></span>
+                        </div>
+                        <hr>
+                        <div class="total-money d-flex justify-content-between">
+                            <h4 class="">Tổng </h4>
+                            <h5 th:text="|${#numbers.formatInteger(booking.price,3,'COMMA')}đ|"></h5>
+                        </div>
+
+                    </div>
+
 
                     <!-- The Modal -->
                     <div class="modal" id="myModal">

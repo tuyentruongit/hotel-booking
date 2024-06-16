@@ -1,3 +1,7 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body {
+    font-family: montserrat, arial, verdana;
+}
 .page-cancel-booking{
     min-height: 600px;
 }

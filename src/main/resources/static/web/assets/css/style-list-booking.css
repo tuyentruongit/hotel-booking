@@ -1,4 +1,7 @@
-
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body {
+    font-family: montserrat, arial, verdana;
+}
 .content-page{
     margin: 20px 0px;
     min-height: 500px;

@@ -7,6 +7,7 @@ const btnChoseImage = document.getElementById("btn-chose-image");
 const btnDeleteImage = document.getElementById("btn-delete-image");
 const inputImage = document.getElementById("avatar");
 const thumbnailPreview = document.getElementById("thumbnail");
+const listAmenityHotelEl = document.querySelectorAll('.amenity-hotel');
 
 let amenityHotelIds = hotel.amenityHotelList.map(ame => ame.id);
 $('#amenity-hotel').val(amenityHotelIds);
@@ -15,14 +16,18 @@ $('#amenity-hotel').trigger('change');
 btnSave.addEventListener('click', (e) => {
     e.preventDefault();
     if (!$('#myForm').valid()) return;
-    let listId = $('#amenity-hotel').val();
-    listId = listId.map(e => parseInt(e));
-
+    var listId = [];
+    listAmenityHotelEl.forEach(ame =>{
+        if (ame.checked){
+            listId.push(parseInt(ame.value))
+        }
+    })
 
     const data ={
-        description : descriptionEl.value,
+        descriptionHotel : descriptionEl.value,
         amenityHotelList :listId
     }
+
 
 
     axios.put("/api/hotel/update/" + hotel.id, data)

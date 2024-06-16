@@ -88,9 +88,9 @@ const searchBooking = () => {
     console.log(btnSearch.value)
     axios.get("/api/booking/" + btnSearch.value)
         .then((res) => {
+            console.log(res)
             console.log("Thành công")
             renderBooking(res.data)
-
         })
         .catch((err) => {
 
@@ -112,14 +112,12 @@ optionsSort.addEventListener('change',()=>{
             renderBooking(bookingList);
             break;
         case "DATE-CHECKIN":
-
             const sortBookingByCheckIn = listBooking.sort((a,b) =>{
                 return new Date(a.checkIn) - new Date(b.checkIn);
             } )
             renderBooking(sortBookingByCheckIn);
             break;
         case "DATE-CHECKOUT":
-
             const sortBookingByCheckOut = listBooking.sort((a,b) =>{
                 return new Date(a.checkOut) - new Date(b.checkOut);
             } )

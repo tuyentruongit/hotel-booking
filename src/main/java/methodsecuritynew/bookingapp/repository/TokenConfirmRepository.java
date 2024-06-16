@@ -11,4 +11,6 @@ public interface TokenConfirmRepository extends JpaRepository<TokenConfirm,Strin
     TokenConfirm findByNameToken ( String nameToken);
 
     Optional<TokenConfirm> findByNameTokenAndTokenType(String token, TokenType tokenType);
+
+    TokenConfirm findAllByUser_IdAndTokenTypeOrderByCreatedAtDesc(Integer id,TokenType tokenType);
 }

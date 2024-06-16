@@ -1,4 +1,6 @@
-body{
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body {
+    font-family: montserrat, arial, verdana;
     background-color: #F9F9F9;
 }
 
@@ -39,36 +41,40 @@ body{
     letter-spacing: 1px;
     margin: 5px 0;
 }
-.input-box{
-    position: relative;
+.input-password{
+    display: flex;
 }
-.input-box input{
-    padding: 7px 7px;
-    border-radius: 5px;
-    width: 100%;
+.input-password input{
+    width: 90%;
+    border-radius: 5px 0 0 5px;
 }
-.input-box input:focus{
-    border: none;
-    outline-color:#5392F9;
-}
-.input-box .show-password{
-    position: absolute;
-    top: 7px;
-    right: 27px;
-    cursor: pointer;
-    border: none;
-    z-index: 12;
+.input-password button{
+    width: 10%;
     background-color: white;
+    border: 1px solid #E7E7E7 !important;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
 }
-.input-box .show-password:focus{
-    position: absolute;
-    top: 7px;
-    right: 27px;
-    cursor: pointer;
-    border: none;
-    z-index: 12;
-    background-color: white;
-}
+
+
+/*.input-box .show-password{*/
+/*    position: absolute;*/
+/*    top: 7px;*/
+/*    right: 27px;*/
+/*    cursor: pointer;*/
+/*    border: none;*/
+/*    z-index: 12;*/
+/*    background-color: white;*/
+/*}*/
+/*.input-box .show-password:focus{*/
+/*    position: absolute;*/
+/*    top: 7px;*/
+/*    right: 27px;*/
+/*    cursor: pointer;*/
+/*    border: none;*/
+/*    z-index: 12;*/
+/*    background-color: white;*/
+/*}*/
 .invalid-feedback{
     z-index: 100000;
 }
@@ -164,5 +170,4 @@ body{
    font-weight: 400;
     letter-spacing: 1px;
 }
-
 

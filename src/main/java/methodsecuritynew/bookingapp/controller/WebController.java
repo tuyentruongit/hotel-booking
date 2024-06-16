@@ -77,17 +77,20 @@ public class WebController {
 
     @GetMapping("/chi-tiet-khach-san/{id}")
     public String getHotelDetail(@PathVariable Integer id, Model model,
-                                 @RequestParam String nameCity,
+                                 @RequestParam(value = "nameCity") String nameCity,
                                  @RequestParam(required = false) String checkIn,
                                  @RequestParam(required = false) String checkOut,
                                  @RequestParam(required = false, defaultValue = "1") Integer numberGuest,
                                  @RequestParam(required = false, defaultValue = "1") Integer numberRoom) {
+
+        System.out.println("Tới bước 1");
         // lấy hotel theo id
         Hotel hotel = hotelService.getHotelById(id);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate checkInDay = LocalDate.parse(checkIn,dateTimeFormatter);
         LocalDate checkOutDay = LocalDate.parse(checkOut,dateTimeFormatter);
         List<RoomDto> roomList = roomService.getDataRoom(id,checkInDay,checkOutDay,numberGuest,numberRoom);
+        System.out.println("Tới bước 2");
         // danh sách các review của khách sạn
         List<Review> reviewList = reviewsService.findAllReview(id);
         // lấy các tiện sub cac tiên ích của khách sạn
@@ -97,7 +100,7 @@ public class WebController {
         }else {
             listAmenity = hotel.getAmenityHotelList();
         }
-
+        System.out.println("Tới bước 3");
         model.addAttribute("reviewList" , reviewList);
         model.addAttribute("amenityHotels" , listAmenity);
         model.addAttribute("hotel", hotel);
@@ -111,21 +114,20 @@ public class WebController {
             User user = authService.getUserCurrent();
             model.addAttribute("user" , user);
         }
+        System.out.println("Tới bước 4");
         // lấy danh sách các tiện ích của phòng
         List<AmenityRoomType> amenityRoomTypes = List.of(AmenityRoomType.values());
         model.addAttribute("amenityRoomTypes", amenityRoomTypes);
         // lấy tất cả image hotel
         List<ImageHotel>  imageHotelList = imageService.getAllImageByIdHotel(hotel.getId());
         model.addAttribute("imageHotelList", imageHotelList);
+        System.out.println("Tới bước 5");
         return "web/hotel-detail";
-
     }
-
 
     @GetMapping("/support")
     public String getSupport(Model model) {
         List<SupportType> supportTypes = List.of(SupportType.values());
-
         List<Support> supportList = supportService.getAllSupport();
         model.addAttribute("supportTypes", supportTypes);
         model.addAttribute("supportList", supportList);
@@ -178,15 +180,17 @@ public class WebController {
     @GetMapping("/chi-tiet-booking/{id}")
     public String getBookingDetail(Model model, @PathVariable Integer id) {
         Booking booking = bookingService.getBooking(id);
+
+        // thứ ngày tháng việt nam
         Locale locale = new Locale("vi","VN");
         String dayOfWeekStar = booking.getCheckIn().getDayOfWeek().getDisplayName(TextStyle.SHORT,locale);
         String dayOfWeekEnd = booking.getCheckOut().getDayOfWeek().getDisplayName(TextStyle.SHORT,locale);
+        Period period = Period.between(booking.getCheckIn(),booking.getCheckOut());
 
         model.addAttribute("booking" , booking);
-        System.out.println(booking.getIsReviewed() + "Oke chưa ");
+        model.addAttribute("period" , period);
         model.addAttribute("dayOfWeekStar" , dayOfWeekStar);
         model.addAttribute("dayOfWeekEnd" , dayOfWeekEnd);
-
         return "web/booking-detail";
     }
 
@@ -250,7 +254,8 @@ public class WebController {
     }
     @GetMapping("/account/quen-mat-khau")
     public String getForgotPassword(Model model,@RequestParam(required = false) String token) {
-       model.addAttribute("token" ,authService.verifyForgotPassword(token)) ;
+       model.addAttribute("verifyToken" ,authService.verifyForgotPassword(token)) ;
+       model.addAttribute("token" ,token) ;
         return "web/auth/forgot-password";
     }
 
@@ -261,6 +266,7 @@ public class WebController {
         return "web/auth/verify-account";
     }
 
+    @Secured("ROLE_USER")
     @GetMapping("/confirm/rental-registration")
     public String confirmRentalHotel (Model model){
         return "/web/rental-registration";
@@ -270,8 +276,8 @@ public class WebController {
         List<City> cityList = cityService.getAllCity();
         List<AmenityHotel> amenityHotelList = amenityService.getAllAmenityHotel();
         List<AmenityRoom> amenityRoomList = amenityService.getAllAmenityRoom();
-        model.addAttribute("amenityHotelList" , amenityHotelList);
-        model.addAttribute("amenityRoomList" , amenityRoomList);
+        model.addAttribute("amenityHotelList" , amenityHotelList.subList(0,6));
+        model.addAttribute("amenityRoomList" , amenityRoomList.subList(0,6));
         model.addAttribute("rentalTypes" , RentalType.values());
         model.addAttribute("roomTypes" , RoomType.values());
         model.addAttribute("bedTypes" , BedType.values());

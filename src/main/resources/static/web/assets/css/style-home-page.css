@@ -1,3 +1,8 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body {
+    font-family: montserrat, arial, verdana;
+    font-size: 15px;
+}
 :root {
     --primary-color: #2c3855;
     --primary-color-dark: #435681;
@@ -46,12 +51,19 @@
 
 }
 
-.search-city input {
+.search-city, .search-city:focus {
     background-color: white !important;
     font-size: 15px;
-    outline: none;
-    padding-left: 10px;
     border-color: white;
+    outline: none;
+    padding: 5px;
+}
+#input-name-city, #input-name-city:focus {
+    background-color: white !important;
+    font-size: 15px;
+    border-color: white;
+    outline: none !important;
+    padding: 5px;
 }
 .search-date{
     border: none;

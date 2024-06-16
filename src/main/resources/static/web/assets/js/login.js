@@ -36,7 +36,7 @@ formLogin.addEventListener('submit', (e)=>{
 
         })
         .catch((er)=>{
-            toastr.error("Tài khoản hoặc mật khẩu không chính xác")
+            toastr.error(er.response.data.message)
         })
 
 } )

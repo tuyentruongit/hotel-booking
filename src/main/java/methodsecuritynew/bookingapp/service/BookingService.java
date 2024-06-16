@@ -6,10 +6,7 @@ import methodsecuritynew.bookingapp.entity.Booking;
 import methodsecuritynew.bookingapp.entity.Hotel;
 import methodsecuritynew.bookingapp.entity.Room;
 import methodsecuritynew.bookingapp.entity.User;
-import methodsecuritynew.bookingapp.model.dto.RevenueDayDto;
-import methodsecuritynew.bookingapp.model.dto.RevenueMonthDto;
-import methodsecuritynew.bookingapp.model.dto.TotalBookingByRoomTypeDto;
-import methodsecuritynew.bookingapp.model.dto.TotalBookingMonthDto;
+import methodsecuritynew.bookingapp.model.dto.*;
 import methodsecuritynew.bookingapp.model.request.UpsertBookingRequest;
 import methodsecuritynew.bookingapp.model.enums.PaymentMethod;
 import methodsecuritynew.bookingapp.model.enums.StatusBooking;
@@ -33,6 +30,7 @@ public class BookingService {
     private final AuthService authService;
     private final HotelService hotelService;
     private final RoomService roomService;
+    private final UserService userService;
 
     public Page<Booking> getAllBookingByIdUer(Integer id, Integer pageNumber, Integer limit) {
         Pageable pageable = PageRequest.of(pageNumber - 1, limit, Sort.by("createAt").descending());
@@ -74,6 +72,21 @@ public class BookingService {
     }
 
     public List<Booking> getBookingById(Integer id) {
+//        User user = userService.getUserCurrent();
+//        List<Booking> bookingList = bookingRepository.findAllByUser_Id(user.getId());
+//        for (Booking booking : bookingList){
+//            if(booking.getId() == id){
+//                BookingDto bookingDto = new BookingDto();
+//                bookingDto.setId(bookingDto.getId());
+//                bookingDto.setGuests(bookingDto.getGuests());
+//                bookingDto.setCheckIn(bookingDto.getCheckIn());
+//                bookingDto.setCheckOut(bookingDto.getCheckOut());
+//                bookingDto.setNumberRoom(bookingDto.getNumberRoom());
+//                bookingDto.setNameRoom(bookingDto.getNameRoom());
+//                bookingDto.y(bookingDto.getId());
+//                bookingDto.setId(bookingDto.getId());
+//            }
+//        }
         return List.of(bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Không thấy booking nào có id như trên ")));
     }
 
@@ -135,6 +148,10 @@ public class BookingService {
                 if (revenueDto1.getMonth() == localDate.getMonthValue() &&
                         revenueDto1.getDay() == localDate.getDayOfMonth() &&
                         revenueDto1.getYear() == localDate.getYear()) {
+                    // Tính 15% doanh thu
+                    double revenuePercentage = revenueDto1.getTotalPrice() * 0.15;
+                    revenueDto1.setTotalPrice((long) revenuePercentage);
+
                     result.add(revenueDto1);
                     check = true;
                     break;
@@ -181,14 +198,15 @@ public class BookingService {
         return result;
     }
 
+    // lấy tổng doanh thu của năm hiện tại
     public int totalRevenueYear(int year) {
+        // lấy doanh thu của từng tháng rồi ộng vào
         List<RevenueMonthDto> result = getRevenueByMonth(year);
         int sum = 0;
         for (RevenueMonthDto revenueMonthDto : result) {
             sum += (int) revenueMonthDto.getTotalPrice();
         }
-        return sum;
-
+        return (int) (sum * 0.15);
     }
 
     public long totalMonthCurrent(int year, int monthValue) {
@@ -225,6 +243,7 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
+    // doanh thu của từng ngày của tháng được chọn
     public List<RevenueDayDto> getRevenueByMonthAndHotel(Integer idHotel, Integer month, Integer year) {
         List<RevenueDayDto> revenueMonthDtoList =bookingRepository.getTotalRevenueByMonth(idHotel);
 
@@ -238,6 +257,7 @@ public class BookingService {
                 if (revenueDto1.getMonth() == localDate.getMonthValue() &&
                         revenueDto1.getDay() == localDate.getDayOfMonth() &&
                         revenueDto1.getYear() == localDate.getYear()) {
+                    revenueDto1.setTotalPrice((long) (revenueDto1.getTotalPrice()*0.85));
                     result.add(revenueDto1);
                     check = true;
                     break;
@@ -291,6 +311,7 @@ public class BookingService {
             boolean check = false;
             for (RevenueMonthDto revenueDto1 : revenueDtoList) {
                 if (revenueDto1.getMonth() == localDate.getMonthValue()) {
+                    revenueDto1.setTotalPrice((long) (revenueDto1.getTotalPrice()*0.85));
                     result.add(revenueDto1);
                     check = true;
                     break;
@@ -315,19 +336,22 @@ public class BookingService {
         return bookingRepository.findTotalBookingPendingMonthByHotel(idHotel);
     }
 
+    // tổng doanh thu sau triết khấu của năm hiện tại
     public long getTotalRevenueYearCurrent(Integer idHotel,Integer year) {
         List<RevenueMonthDto> revenueMonthDtoList = getRevenueByYearAndHotel(idHotel,year);
         long sum = 0;
         for (RevenueMonthDto revenueMonthDto : revenueMonthDtoList){
             sum += revenueMonthDto.getTotalPrice();
         }
-        return sum;
+        return sum ;
     }
 
+    // tỏng doanh thu tháng hện tịa
     public RevenueMonthDto getTotalRevenueMonth(Integer id, int year, int monthValue) {
         List<RevenueMonthDto> revenueMonthDtoList = bookingRepository.getTotalRevenueByMonthAndHotelId(id,year);
         for (RevenueMonthDto revenueMonthDto : revenueMonthDtoList){
             if (revenueMonthDto.getMonth()==monthValue && revenueMonthDto.getYear()==year){
+                revenueMonthDto.setTotalPrice((long) (revenueMonthDto.getTotalPrice()*0.85));
                 return revenueMonthDto;
             }
         }

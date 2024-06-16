@@ -1,3 +1,7 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body {
+    font-family: montserrat, arial, verdana;
+}
 :root {
     --primary-color: #2c3855;
     --primary-color-dark: #435681;
@@ -53,7 +57,7 @@
 
 .register{
     text-align: center;
-    width: 170px;
+    width: 200px;
     border: 1px solid #5392F9;
     border-radius: 10px;
     margin: 0 5px;
@@ -61,7 +65,7 @@
 
 .login{
     text-align: center;
-    width: 150px;
+    width: 200px;
     border: 1px solid #5392F9;
     border-radius: 10px;
     margin: 0 5px;

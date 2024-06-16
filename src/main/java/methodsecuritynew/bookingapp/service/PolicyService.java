@@ -16,22 +16,27 @@ public class PolicyService {
 
     public void updatePolicyHotel( UpsertPolicyRequest request , Hotel hotel) {
         PolicyHotel policyHotel = hotel.getPolicyHotel();
-        policyHotel.setCheckIn(request.getCheckIn());
-        policyHotel.setCheckOut(request.getCheckOut());
+        policyHotel.setStartCheckIn(request.getStartCheckIn());
+        policyHotel.setStartCheckOut(request.getStartCheckOut());
+        policyHotel.setEndCheckIn(request.getEndCheckIn());
+        policyHotel.setEndCheckOut(request.getEndCheckOut());
         policyHotel.setService(request.getService());
         policyHotel.setNote(request.getOther());
         policyHotel.setCancelPolicy(request.getCancel());
         policyHotel.setAnimal(request.getAnimal());
         policyHotel.setAgeLimit(request.getAge());
         policyHotel.setUpdatedAt(LocalDate.now());
+        
         policyRepository.save(policyHotel);
     }
 
 
     public PolicyHotel createPolicyHotel(UpsertPolicyRequest upsertPolicyRequest) {
         PolicyHotel policyHotel = PolicyHotel.builder()
-                .checkIn(upsertPolicyRequest.getCheckIn())
-                .checkOut(upsertPolicyRequest.getCheckOut())
+                .startCheckIn(upsertPolicyRequest.getStartCheckIn())
+                .startCheckOut(upsertPolicyRequest.getStartCheckOut())
+                .endCheckIn(upsertPolicyRequest.getEndCheckIn())
+                .endCheckOut(upsertPolicyRequest.getEndCheckOut())
                 .service(upsertPolicyRequest.getService())
                 .cancelPolicy(upsertPolicyRequest.getCancel())
                 .note(upsertPolicyRequest.getOther())

@@ -16,6 +16,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     Page<Booking> findAllByUser_IdOrderByCreateAtDesc(Integer id, Pageable pageable);
 
     List<Booking> findAllByHotel_Id(Integer hotelId);
+    List<Booking> findAllByUser_Id(Integer idUser);
 
     // tổng booking theo ngày tháng
     @Query(value = "SELECT new  methodsecuritynew.bookingapp.model.dto.TotalBookingMonthDto(MONTH(o.createAt), YEAR(o.createAt), COUNT(o.id))" +
@@ -24,18 +25,18 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "ORDER BY YEAR(o.createAt) ASC, MONTH(o.createAt) ASC")
     List<TotalBookingMonthDto> finTotalBookingMonth();
 
-    // tổng doanh thu theo ngày
-    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.RevenueDayDto(DAY(o.createAt),MONTH(o.createAt),YEAR(o.createAt), SUM(o.price)) " +
+    // tổng doanh thu từng ngày
+    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.RevenueDayDto(DAY(o.checkOut),MONTH(o.checkOut),YEAR(o.checkOut), SUM(o.price)) " +
             "FROM Booking o WHERE o.statusBooking = 'COMPLETE' " +
-            "GROUP BY YEAR(o.createAt), MONTH(o.createAt), DAY(o.createAt) " +
-            "ORDER BY YEAR(o.createAt) DESC, MONTH(o.createAt) DESC, DAY(o.createAt) DESC")
+            "GROUP BY YEAR(o.checkOut), MONTH(o.checkOut), DAY(o.checkOut) " +
+            "ORDER BY YEAR(o.checkOut) DESC, MONTH(o.checkOut) DESC, DAY(o.checkOut) DESC")
     List<RevenueDayDto> getTotalRevenueDay();
 
-    // tổng daonh thu theo tháng
-    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.RevenueMonthDto(MONTH(o.createAt),YEAR(o.createAt), SUM(o.price)) " +
+    // tổng daonh thu từng tháng tháng
+    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.RevenueMonthDto(MONTH(o.checkOut),YEAR(o.checkOut), SUM(o.price)) " +
             "FROM Booking o WHERE o.statusBooking = 'COMPLETE' " +
-            "GROUP BY YEAR(o.createAt), MONTH(o.createAt) " +
-            "ORDER BY YEAR(o.createAt) DESC, MONTH(o.createAt) DESC")
+            "GROUP BY YEAR(o.checkOut), MONTH(o.checkOut) " +
+            "ORDER BY YEAR(o.checkOut) DESC, MONTH(o.checkOut) DESC")
     List<RevenueMonthDto> getTotalRevenueByMonth();
 
     //  doanh thu từng ngay của  tháng
@@ -74,7 +75,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
 
     // tìm kiếm các booking theo từng phòng và ngày check in
-    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.BookingDto(o.guests, o.checkIn, o.checkOut, o.numberRoom, o.room.name, o.room.roomType) " +
+    @Query(value = "SELECT new methodsecuritynew.bookingapp.model.dto.BookingDto(o.id, o.guests, o.checkIn, o.checkOut, o.numberRoom, o.room.name, o.room.roomType) " +
             "FROM Booking o " +
             "WHERE o.room.id = :id AND o.statusBooking = 'CONFIRM' AND o.checkIn BETWEEN :checkIn AND :checkOut")
     List<BookingDto> findBookingByRoomAndCreateAtBetweenCheckinCheckOut(@Param("id") Integer id, @Param("checkIn") LocalDate checkIn, @Param("checkOut") LocalDate checkOut);

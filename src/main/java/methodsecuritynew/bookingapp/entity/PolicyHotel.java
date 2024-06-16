@@ -21,9 +21,13 @@ public class PolicyHotel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     @Column(columnDefinition = "TEXT")
-    String checkIn;
+    String startCheckIn;
     @Column(columnDefinition = "TEXT")
-    String checkOut;
+    String endCheckIn;
+    @Column(columnDefinition = "TEXT")
+    String startCheckOut;
+    @Column(columnDefinition = "TEXT")
+    String endCheckOut;
     @Column(columnDefinition = "TEXT")
     String service;
     @Column(columnDefinition = "TEXT")

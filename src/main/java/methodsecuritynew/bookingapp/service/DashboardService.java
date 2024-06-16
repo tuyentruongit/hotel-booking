@@ -52,6 +52,7 @@ public class DashboardService {
             for (TotalBookingMonthDto totalBookingMonthDto1 : totalBookingMonthDto){
                 if (totalBookingMonthDto1.getMonth() == localDate.getMonthValue() &&
                         totalBookingMonthDto1.getYear() == localDate.getYear()){
+
                     result.add(totalBookingMonthDto1);
                     check=true;
                     break;

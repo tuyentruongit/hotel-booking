@@ -54,8 +54,8 @@ saveRoom.addEventListener('click', (e) => {
 
     console.log(statusRoomEl.value == "1")
     const data = {
-        name : nameRoomEl.value,
-        description : descriptionRoomEl.value,
+        nameRoom : nameRoomEl.value,
+        descriptionRoom : descriptionRoomEl.value,
         amenityRoom : listId,
         roomType :roomTypeEl.value,
         area :  areaRoomEl.value,
@@ -64,8 +64,10 @@ saveRoom.addEventListener('click', (e) => {
         bedType : bedTypeRoomEl.value,
         bedSize : bedSizeRoomEl.value,
         priceDefault : priceDefaultEl.value,
-        status :status
+        statusRoom :status
     };
+
+    console.log(data)
 
     axios.put('/api/hotel-manager/room/update/'+idRoom , data)
         .then((res) =>{

@@ -7,7 +7,6 @@
     <th:block id="css">
         <link rel="stylesheet" href="/web/lib/OwlCarousel/dist/assets/owl.carousel.min.css">
         <link rel="stylesheet" href="/web/lib/OwlCarousel/dist/assets/owl.theme.default.min.css">
-
         <link rel="stylesheet" href="/web/assets/css/style-home-page.css">
     </th:block>
 </head>
@@ -43,9 +42,9 @@
                                     <div class="col-12">
                                         <form id="name-city">
                                             <div class="form-group">
-                                                <div class=" search-city d-flex align-items-center p-2">
+                                                <div class=" search-city d-flex align-items-center ">
                                                     <i style="font-size: 20px;" class="fa-solid fa-location-dot"></i>
-                                                    <input id="input-name-city" name="nameCity" class="w-100 form-control" type="text" placeholder="Tìm địa điểm mà bạn muốn đến v.v.">
+                                                    <input id="input-name-city" name="nameCity" class="w-100 search-city  " type="text" placeholder="Tìm địa điểm mà bạn muốn đến v.v.">
                                                 </div>
                                             </div>
                                         </form>
@@ -56,7 +55,7 @@
                                     <div class="col-6">
                                         <div class="search-date d-flex align-items-center  border shadow p-2">
                                             <i style="font-size: 20px;" class="fas fa-calendar-alt"></i>
-                                            <input type="text" id="date-range" class=" form-control w-100 ps-3 " placeholder="Ngập ngày đến và đi của bạn">
+                                            <input id="date-range" class="w-100 form-control w-100 ps-3" type="text" name="daterange"  placeholder="Ngập ngày đến và đi của bạn" />
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -177,7 +176,7 @@
             <div class="row">
                 <div class="wrap-pr d-flex">
                     <div class="col-4">
-                        <img class="w-100 image-pr" src="/web/assets/image/uudai.jpg" alt="">
+                        <img class="w-100 image-pr" src="https://static.vinwonders.com/2023/01/cac-loai-hinh-du-lich-4.jpg" alt="">
                     </div>
                     <div class="col-7 px-3">
                         <div class="title-pr mt-2 ">
@@ -226,8 +225,6 @@
                 $(element).removeClass('is-invalid');
             }
         });
-
-
     </script>
     <script src="/web/assets/js/home.js"></script>
 </th:block>

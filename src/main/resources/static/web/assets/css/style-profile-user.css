@@ -1,4 +1,7 @@
-
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body {
+    font-family: montserrat, arial, verdana;
+}
 
 .profile-menu, .registration{
     display: flex;
@@ -264,24 +267,33 @@
 #changePassword .modal-content{
     background-color: #DDE6ED !important;
 }
+.input-account{
+    display: flex;
+
+}
 .input-password {
     display: flex;
-    flex-direction: column;
     font-size: 15px;
     font-weight: 500;
     margin: 5px 5px;
-}
-.input-password input{
-    padding: 10px 10px !important;
-    width: 90% !important;
-    border-radius: 10px !important;
+    width: 80% !important;
     border: none !important;
     background-color: #F5F5F5 !important;
+    border-radius: 10px !important;
 }
-.input-password input:focus{
-   outline: none !important;
+.show-password-current, .show-password-new, .show-password-confirm{
+    padding: 0 10px;
+    border: none !important;
+    background-color: #F5F5F5 !important;
+    border-bottom-right-radius: 10px !important;
+    border-top-right-radius: 10px !important;
 }
-
+.input-password input{
+    background-color: #F5F5F5 !important;
+    border-bottom-right-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border: none !important;
+}
 #reasonDeleteUser{
     padding: 10px;
 

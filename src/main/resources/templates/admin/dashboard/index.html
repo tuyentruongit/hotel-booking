@@ -18,8 +18,11 @@
         <link rel="stylesheet" href="/admin-assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"/>
 
         <style>
-            body{
+            @import url(https://fonts.googleapis.com/css?family=Montserrat);
+            body {
+                font-family: montserrat, arial, verdana;
                 margin-bottom: 100px;
+                font-size: 15px;
             }
         </style>
     </th:block>
@@ -51,15 +54,14 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-4 col-6">
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <h3>
                                     <th:block th:text="${totalBooking}"></th:block>
                                 </h3>
-
-                                <p>Đơn đặt phòng mới trong tháng</p>
+                                <p>Đơn đặt phòng trong tháng</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-bag"></i>
@@ -67,7 +69,7 @@
                             <a href="/admin/bookings" class="small-box-footer">Xem tất cả <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    <div class="col-lg-4 col-6">
                         <!-- small box -->
                         <div class="small-box bg-warning">
                             <div class="inner">
@@ -81,6 +83,22 @@
                                 <i class="ion ion-person-add"></i>
                             </div>
                             <a href="/admin/user" class="small-box-footer">Xem tất cả  <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>
+                                    <th:block th:text="${totalHotel}"></th:block>
+                                </h3>
+
+                                <p>Khách sạn đăng ký mới </p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="/admin/hotels" class="small-box-footer">Xem tất cả  <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -111,7 +129,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-body">
                                 <table class="table table-bordered table-hover dashboard-table" id="table-user">
@@ -143,38 +161,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-body">
                                 <table class="table table-bordered table-hover dashboard-table" id="table-booking">
                                     <div class="d-flex justify-content-between">
-                                        <label>Đơn đặt phòng mới</label>
+                                        <label>Khách sạn mới</label>
                                     </div>
                                     <thead>
                                     <tr>
-                                        <th>Tên khách hàng</th>
-                                        <th>Khách sạn</th>
-                                        <th>Phòng</th>
+                                        <th>Tên khách sạn</th>
+                                        <th>Ngày đăng ký</th>
                                         <th>Trạng thái</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="booking : ${bookingList}">
+                                    <tr th:each="hotel : ${hotelList}">
+
                                         <td>
-                                            <a th:href="@{/admin/bookings/detail/{id} (id = ${booking.id})}"
-                                               th:text="${booking.nameCustomer}"></a>
-                                        </td>
-                                        <td th:text="${booking.hotel.name}"></td>
-                                        <td th:text="${booking.room.name}"></td>
+                                            <a th:href="@{/admin/hotels/{id}/detail (id = ${hotel.id})}"
+                                                                        th:text="${hotel.name}"></a></td>
+                                        <td th:text="${#temporals.format(hotel.createdAt,'dd/MM/yyyy')}"></td>
                                         <td>
                                              <span class="badge bg-success"
-                                                   th:if="${booking.statusBooking.value.equalsIgnoreCase('Hoàn Tất')}">Hoàn Tất</span>
+                                                   th:if="${hotel.status}">Công khai</span>
                                             <span class="badge bg-warning"
-                                                  th:if="${booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận')}">Chờ xác nhận</span>
-                                            <span class="badge bg-danger"
-                                                  th:if="${booking.statusBooking.value.equalsIgnoreCase('Đã Hủy')}">Đã Hủy</span>
-                                            <span class="badge bg-success"
-                                                  th:if="${booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận')}">Đã xác nhận</span>
+                                                  th:if="${!hotel.status}">Chưa duyệt</span>
                                         </td>
                                     </tr>
                                     </tbody>

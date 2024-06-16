@@ -34,7 +34,9 @@ public class HotelManagerApi {
 
     }
     @PostMapping("/update-policy")
-    public ResponseEntity<?> updatePolicyHotel ( UpsertPolicyRequest request){
+    public ResponseEntity<?> updatePolicyHotel (@RequestBody UpsertPolicyRequest request){
+        System.out.println(request.getService()+"dịch vụ");
+        System.out.println(request+" đối tượng gửi lên");
         hotelService.updatePolicyHotel(request);
         return ResponseEntity.noContent().build();
     }

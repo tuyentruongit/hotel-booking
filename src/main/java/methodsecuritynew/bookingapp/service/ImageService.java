@@ -85,7 +85,7 @@ public class ImageService {
         }
     }
 
-
+// người dùng tự cập nhật
     public ImageUser uploadImageForUser(MultipartFile file) {
 
         User user = userRepository.findByEmail(session.getAttribute("MY_SESSION").toString()).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng trên "));
@@ -136,6 +136,7 @@ public class ImageService {
         return imageUserRepository.save(imageUser);
     }
 
+    // admin cập nhật ảnh cho user
     public ImageUser uploadImageForUser(Integer id, MultipartFile file) {
 
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng trên "));
@@ -186,6 +187,7 @@ public class ImageService {
         return imageUserRepository.save(imageUser);
     }
 
+    // xóa avatar cho user
     public void deleteImageUser(String id) {
         User user = userRepository.findByEmail(session.getAttribute("MY_SESSION").toString()).orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy "));
         ImageUser imageUserOld = imageUserRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy image"));
@@ -206,14 +208,18 @@ public class ImageService {
         }
     }
 
+
+    // lấy image của user hiện tại
     public ImageUser getImageCurrentUser(Integer id) {
         return imageUserRepository.findAllByUser_Id(id);
     }
 
+    // lấy tất cả ảnh của khách sạn
     public List<ImageHotel> getAllImageByIdHotel(int i) {
         return imageHotelRepository.findAllByHotel_Id(i);
     }
 
+    // xóa ảnh của khách sạn
     public void deleteImageHotel(String id) {
         ImageHotel imageHotel = imageHotelRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy image"));
         Path filePathDelete = Paths.get(uploadDir).resolve("image_hotel").resolve(id);
@@ -226,6 +232,7 @@ public class ImageService {
 
     }
 
+    // tải ảnh lên cho thành phố
     public City uploadImageCity(MultipartFile file, Integer id) {
 
         City city = cityRepository.findById(id)

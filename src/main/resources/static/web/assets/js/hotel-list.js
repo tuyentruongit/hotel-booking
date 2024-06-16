@@ -1,45 +1,84 @@
-
+// trang hiện tại
 let currentPage = 1 ;
+// danh sách khách sẽ được lưu vào biến này
 let hotels = [];
 let totalPage = null;
 
-$("#date-range").flatpickr({
-    mode: "range",
-    showMonths: 2,
-    dateFormat: "Y-m-d",
-    minuteIncrement: 1,
-    defaultDate: [checkIn, checkOut],
-    minDate: "today",
+// hàm format date theo dạng yyyy/mm/dd
+function formatDate(date) {
+    let year = date.getFullYear(); // Sử dụng getFullYear() để lấy năm đầy đủ
+    let month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng được đánh số từ 0-11, cần +1 và đảm bảo có 2 chữ số
+    let day = String(date.getDate()).padStart(2, '0'); // Đảm bảo ngày có 2 chữ số
+    return `${year}-${month}-${day}`;
+}
+// đăặt ngày bắt đầu và ngày kêt thúc mặc định
+let startDate = formatDate(new Date());
+let endDate =  formatDate(moment().add(4, 'days').toDate());
+//  thư viện chọn ngày
+$(function() {
+    // Khởi tạo daterangepicker và thiết lập ngày mặc định
+    $('#date-range').daterangepicker({
+        opens: 'left',
+        startDate: new Date(),
+        endDate:  moment().add(4, 'days').toDate(),
+        minDate: new Date()
+    }, function(start, end, label) {
+        // Khi người dùng chọn ngày, cập nhật giá trị của các biến bên ngoài
+        startDate = start.format('YYYY-MM-DD');
+        endDate = end.format('YYYY-MM-DD');
+    });
 });
 
-
-// tùy chỉnh giá tiền
+// truy cập vào cac phần tử thay đổi giá
 const rangeInput = document.querySelectorAll(".range-input input"),
     priceInput = document.querySelectorAll(".price-input input"),
     range = document.querySelector(".slider .progress");
-let priceGap = 1000;
+let priceGap = 100000;
+// nếu người dung nhập giá thì chỉnh thanh lider theo giá mà người dùng đã nhâpj
+let minPrice = parseInt(priceInput[0].value),
+    maxPrice = parseInt(priceInput[1].value);
 priceInput.forEach((input) => {
-    input.addEventListener("input", (e) => {
-        let minPrice = parseInt(priceInput[0].value),
-            maxPrice = parseInt(priceInput[1].value);
-
+    var min = 100000;
+    var max = 20000000;
+    input.addEventListener("change", (e) => {
+        // lấy ra gi trị của từng ô input
+         minPrice = parseInt(priceInput[0].value);
+         maxPrice = parseInt(priceInput[1].value);
+        // kiểm tra điều kiện (mã - min phải lơn hơn khoảng đã cho, max ô input phải nhỏ vơn với giá trị max ơt thanh slider)
         if (maxPrice - minPrice >= priceGap && maxPrice <= rangeInput[1].max) {
-            console.log(e.target.className)
+            // kiểm tra xem ngươời dùng nhập gias vào  nào
             if (e.target.className === "input-min") {
                 rangeInput[0].value = minPrice;
+                // chỉnh thanh slider theo giá
                 range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
             } else {
                 rangeInput[1].value = maxPrice;
                 range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
             }
+        }else {
+            if (minPrice < min || minPrice > max || input.value === ''){
+                minPrice = min;
+                input.value = min;
+            }
+            if (maxPrice > max || maxPrice< min || input.value === ''){
+                maxPrice = max;
+                input.value = max
+            }
         }
+
+        // lấy giá người dùng thay đổi để lọc các khách sạn
+        options.minPriceHotel = minPrice;
+        options.maxPriceHotel = maxPrice;
+        functionFilter(options,hotels)
     });
 });
+// giá tiền hiện ô input
 rangeInput.forEach((input) => {
     input.addEventListener("input", (e) => {
+        // lấy giá trị thanh slider
         let minVal = parseInt(rangeInput[0].value),
             maxVal = parseInt(rangeInput[1].value);
-
+        // nếu mex-min mà nhỏ hơn khoảng thất
         if (maxVal - minVal < priceGap) {
             if (e.target.className === "range-min") {
                 rangeInput[0].value = maxVal - priceGap;
@@ -49,15 +88,19 @@ rangeInput.forEach((input) => {
         } else {
             priceInput[0].value = minVal;
             priceInput[1].value = maxVal;
+            // chỉnh thanh slider theo di chuyển
             range.style.left = (minVal / rangeInput[0].max) * 100 + "%";
             range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
         }
+        // lấy giá người dùng thay đổi để lọc các khách sạn
+        options.maxPriceHotel = maxVal;
+        options.minPriceHotel = minVal;
+        functionFilter(options,hotels)
     });
 });
 
 
 // chọn sô lượng người và phòng
-
 let minusGuest = document.querySelector(".minus-guest");
 let numberGuest = document.querySelector(".num-guest")
 let plusGuest = document.querySelector(".plus-guest")
@@ -66,7 +109,6 @@ let numberRoom = document.querySelector(".num-room")
 const plusRoom = document.querySelector(".plus-room")
 let countGuest = valueNumberGuest;
 minusGuest.addEventListener('click', () => {
-    console.log("nhấn được")
     if (countGuest <= 1) {
         return;
     }
@@ -87,7 +129,7 @@ plusGuest.addEventListener('click', () => {
 
 let countRoom = valueNumberRoom;
 minusRoom.addEventListener('click', () => {
-    console.log("Nhấn được")
+
     if (countRoom <= 1) {
         return
     }
@@ -111,26 +153,14 @@ const btnSearch = document.getElementById('btn-search');
 let inputNameCity = document.getElementById('input-name-city');
 
 
+//  xử lý khi người dùng clicj vào ô tìm kiếm
 btnSearch.addEventListener('click', () => {
     if (!$('#form-search').valid()) return;
-
-    const date = document.getElementById('date-range');
-    const dateString = date.value;
-
-    // Tách chuỗi thành hai phần bằng từ "to"
-    const dateParts = dateString.split(" to ");
-
-    // Phần đầu tiên là ngày bắt đầu
-    const dateStartString = dateParts[0];
-
-    // Phần thứ hai là ngày kết thúc
-    const dateEndString = dateParts[1];
-
     window.location.href = "/danh-sach-khach-san?" +
-        "nameCity=" + inputNameCity.value + "&checkIn=" + dateStartString +
-        "&checkOut=" + dateEndString + "&numberGuest=" + numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
+        "nameCity=" + inputNameCity.value + "&checkIn=" + startDate +
+        "&checkOut=" + endDate + "&numberGuest=" + numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
 });
-
+// hiển thị dữu liệu người dùng đã tìm kiếm trước đó
 const renderDataSearch = (nameCity, numGuest, numRoom) => {
     if (numGuest < 10) {
         numberGuest.textContent = "0" + numGuest;
@@ -138,8 +168,6 @@ const renderDataSearch = (nameCity, numGuest, numRoom) => {
         numberGuest.textContent = numGuest;
     }
     if (numRoom < 10) {
-        console.log(numberGuest);
-        console.log(numberRoom);
         numberRoom.textContent = "0" + numRoom;
     } else {
         numberRoom.textContent = numRoom;
@@ -158,8 +186,6 @@ const containerParent = document.querySelector('.container-parent');
 
 const searchByNameHotel = document.querySelector('.input-name-hotel');
 searchByNameHotel.addEventListener('keydown',(event)=>{
-    console.log(event)
-
     if (event.key === 'Enter'){
         let keyWord = searchByNameHotel.value.trim();
         if (keyWord){
@@ -188,7 +214,6 @@ listSort.forEach((btn)=>{
 // sắp xếp khaách sạn theo luwaj chọn của người dùng
 let sortPriceDesc = () => {
     data.sort((hotel1, hotel2) => hotel2.estimatedPrice - hotel1.estimatedPrice);
-
     functionFilter(options,data);
 }
 let sortPriceAsc = () => {
@@ -209,9 +234,8 @@ let dataDefault = () => {
 }
 
 
-// lấy ra hotel theo trang mà người dùng chọn
+// lấy ra trang danh sách khách sạ theo page mà người dùng chọn
 const getHotel = (page) =>{
-    console.log(page);
     axios.get("/api/hotel?pageNumber="+page,)
         .then((response) =>{
             hotels= response.data.content;
@@ -221,14 +245,12 @@ const getHotel = (page) =>{
             renderPagination(totalPage);
         })
         .catch((error)=>{
-            console.log(error)
-            // toastr.error(error.response.data.message);
+            toastr.error(error.response.data.message);
         })
 }
 
 // render các page
 const    renderPagination = (totalPage) =>{
-    console.log(totalPage)
     let html = '';
     for (let i = 1; i <= totalPage; i++) {
         html+=` <li class="page-item ${i === currentPage ? 'active' : ''}">
@@ -275,8 +297,9 @@ let options = {
     amenityHotel: [],
     amenityRoom: [],
     starHotel: [],
-    paymentMethod: [],
-    rating: []
+    rating: [],
+    minPriceHotel : minPrice,
+    maxPriceHotel : maxPrice
 }
 // lọc qua từng ô check box
 const checkBoxList = document.querySelectorAll('.custom-checkbox');
@@ -294,6 +317,8 @@ checkBoxList.forEach(checkBox => {
         functionFilter(options, hotels);
     });
 });
+
+// thêm cac trường lọc vào mảng option để duyệt dữ liệu
 function filterChecked(checkBox) {
     let filterHotel = checkBox.getAttribute('type-check');
     switch (filterHotel) {
@@ -302,14 +327,12 @@ function filterChecked(checkBox) {
             break;
         case 'star':
             options.starHotel.push(checkBox.value);
-            console.log(checkBox.value)
             break;
         case 'rating':
             options.rating.splice(0, 1);
             let ratingNumber = parseInt(checkBox.value)
             options.rating.push(ratingNumber);
             break;
-
     }
 
 }
@@ -317,6 +340,7 @@ function filterChecked(checkBox) {
 
 // xóa filter khi người dùng bỏ check box
 function filterUnChecked(checkBox) {
+    // lấy giá trị được chọn trước đó
     let filterHotel = checkBox.getAttribute('type-check');
     switch (filterHotel) {
         case 'rental-type':
@@ -341,14 +365,18 @@ function filterUnChecked(checkBox) {
 
 // hàm lọc dữ liệu khách sạn
 const functionFilter = (options,hotelList) => {
+    console.log(options)
     const hotelListAfterFiltering = hotelList.filter(hotel => {
+        console.log(hotel.estimatedPrice > options.minPriceHotel)
+        console.log(hotel.estimatedPrice < options.maxPriceHotel)
         return (
             (!options.rentalType.length || options.rentalType.includes(hotel.rentalType))&&
             (!options.starHotel.length || options.starHotel.includes(hotel.star.toString()))&&
-            (!options.rating.length || options.rating.some(num =>num <= hotel.rating))
-
+            (!options.rating.length || options.rating.some(num =>num <= hotel.rating))&&
+            (hotel.estimatedPrice >= options.minPriceHotel && hotel.estimatedPrice <= options.maxPriceHotel)
         );
     });
+    console.log(hotelListAfterFiltering);
 
     // ggọi hàm render dữ liệu khách sạn sau khi đã được lọc
     renderListHotel(hotelListAfterFiltering);
@@ -417,10 +445,10 @@ const renderListHotel = (hotelList) => {
                                         <ul class="price list-unstyled justify-content-center p-0 m-0">
                                             <span class="description-price">Giá ước tính mỗi đêm đã bao gồm thuế & phí</span>
 
-                                            <li class="p-0 wrapper w-100 d-flex justify-content-end">
-                                                <span class="original-price "><del>1.300.500 ₫</del></span>
-                                                <span class="discount px-2"> Giảm 15%</span>
-                                            </li>
+<!--                                            <li class="p-0 wrapper w-100 d-flex justify-content-end">-->
+<!--                                                <span class="original-price "><del>1.300.500 ₫</del></span>-->
+<!--                                                <span class="discount px-2"> Giảm 15%</span>-->
+<!--                                            </li>-->
                                             <h4 class="p-0 current-price w-100 d-flex justify-content-end">${formatCurrency(hotel.estimatedPrice)}</h4>
 
 
@@ -430,10 +458,9 @@ const renderListHotel = (hotelList) => {
 
                                  </a>
                         </div>`
-
-
     })
     containerParent.innerHTML = newContent;
+    // kiểm tra danh sách yêu thích của người dùng nếu khác null
     if (hotelsFavourite!=null){
         listFavouriteHotelUser()
     }
@@ -478,12 +505,10 @@ const  addHotelFavouriteList = (heart , id)=>{
             }
         })
 }
-// gọi api xử lý khi người dùng không muốn thêm khách sạn vào danh sách yêu thích
+// gọi api xử lý khi người dùng xóa khách sạn khỏi danh sách yêu thích
 const   deleteFavourite = (heart,id) =>{
-    console.log(id)
     axios.delete("/api/hotel/delete/favourite/"+id)
         .then((err)=>{
-            console.log(err)
             toastr.success("Đã xóa khách sạn khỏi danh sách yêu thích.")
             heart.classList.remove("style-heart");
             heart.setAttribute("type-button","add")
@@ -523,12 +548,6 @@ $('#form-search').validate({
 
 getHotel(currentPage);
 renderDataSearch(nameCity, valueNumberGuest, valueNumberRoom);
-
-
-
-
-
-
 
 
 

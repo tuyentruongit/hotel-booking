@@ -39,6 +39,15 @@
                 height: 100%;
                 object-fit: cover;
             }
+            .thumbnail-preview-container{
+                width: 300px;
+                height: 150px ;
+                object-fit: cover;
+            }
+            .content-modal-amenity{
+                max-height: 500px;
+                overflow-y: auto;
+            }
         </style>
     </th:block>
 </head>
@@ -115,11 +124,11 @@
 <!--                                        </div>-->
                                         <div class="form-group">
                                             <div  class="thumbnail-preview-container mb-3">
-                                                <img src="" alt="" id="thumbnail" />
+                                                <img th:src="${hotel.getPoster()}" alt="" id="thumbnail" />
                                             </div>
                                             <button name="thumbnail" type="button" class="rounded btn btn-info btn-flat" data-toggle="modal"
                                                     data-target="#modal-image">
-                                                Hình ảnh
+                                                Danh sách hình ảnh
                                             </button>
                                         </div>
 
@@ -133,16 +142,10 @@
                                                 <textarea th:text="${hotel.description}" name="description" id="description" class="form-control" rows="6"></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <label>Tiện ích</label>
-                                                <div class="select2-purple">
-                                                    <select name="genre" class="select2 form-control" multiple="multiple"
-                                                            id="amenity-hotel">
-                                                        <option th:each="amenity : ${amenityHotelListAll}"
-                                                                th:value="${amenity.id}"
-                                                                th:text="${amenity.name}">
-                                                        </option>
-                                                    </select>
-                                                </div>
+                                                <button type="button" class="rounded btn btn-success btn-flat" data-toggle="modal"
+                                                        data-target="#modal-amenityHotel">
+                                                    Danh sách tiện ích
+                                                </button>
                                             </div>
                                             <button type="button" class="btn btn-info px-4" id="btn-save">
                                                 Lưu
@@ -202,6 +205,7 @@
                 </div>
             </div>
         </div>
+
     </section>
     <div class="modal fade" id="modal-image" aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -231,6 +235,26 @@
                     <!-- Hiển thị phần phân trang -->
                     <div id="image-pagination" class="pagination-container d-flex justify-content-center">
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-amenityHotel" aria-hidden="true">
+        <div class="modal-dialog modal-">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Danh sách các tiện ích</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body content-modal-amenity">
+                    <div class="row">
+                        <div class="col-6 py-1" th:each="amenity : ${amenityHotelListAll}">
+                            <input   th:id="'amenity-index-'+${amenity.id}" th:checked="${#lists.contains(hotel.amenityHotelList,amenity)}" class="amenity-hotel" type="checkbox"  th:value="${amenity.id}">
+                            <label style="font-weight: 200" th:for="'amenity-index-'+${amenity.id}" th:text="${amenity.name}"></label>
+                        </div>
                     </div>
                 </div>
             </div>

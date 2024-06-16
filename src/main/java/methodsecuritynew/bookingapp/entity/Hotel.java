@@ -47,7 +47,7 @@ public class Hotel {
     @JoinColumn(name = "policyHotel_id" )
     PolicyHotel policyHotel;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id" )
     User user;
 
@@ -74,10 +74,9 @@ public class Hotel {
     List<AmenityHotel> amenityHotelList ;
 
     public String getRatingText() {
-        if (rating == null) {
+        if (rating  <= 1.0f) {
             return "Chưa có đánh giá";
         }
-
         // switch rating from 1 to 10
         if (rating <= 2.0f) {
             return "Quá Tệ";

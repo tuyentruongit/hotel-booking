@@ -3,6 +3,7 @@ package methodsecuritynew.bookingapp.model.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import methodsecuritynew.bookingapp.entity.AmenityHotel;
+import methodsecuritynew.bookingapp.model.enums.RentalType;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class HotelDto {
     Integer star;
     Float rating ;
     String ratingText;
+    RentalType rentalType;
     Integer estimatedPrice;
     Integer totalReviews;
     List<String> nameAmenity;

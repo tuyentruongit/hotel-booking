@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface RoomPriceRepository extends JpaRepository<RoomPrice ,Integer> {
     List<RoomPrice> findAllByDate (LocalDate date);
+    List<RoomPrice> findAllByDateAfter (LocalDate date);
     RoomPrice findByDateAndRoom_Id (LocalDate date , Integer idRoom);
 }

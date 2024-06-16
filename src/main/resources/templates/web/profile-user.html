@@ -35,11 +35,10 @@
                     <span> <i class="fa-solid fa-angle-right"></i></span>
                 </a>
 
-                <a  class="registration text-reset text-decoration-none">
+                <a  class="registration text-reset text-decoration-none" th:if="${user.userRole.value.equals('USER')}">
                     <span> <i class="fa-solid fa-file-invoice"></i> Đăng ký cho thuê nhà</span>
                     <span> <i class="fa-solid fa-angle-right"></i></span>
                 </a>
-
 
                 <a  class="profile-menu text-reset text-decoration-none " th:onclick="logOut()">
                     <span> <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</span>
@@ -276,23 +275,29 @@
                     </div>
                     <div class="modal-body">
                        <form id="form-change-password">
+
+
+
                           <div class="form-group">
-                              <label class="input-password">
-                                  Mật khẩu hiện tại
+                              <h6>Mật khẩu hiện tại</h6>
+                              <div class="input-password">
                                   <input name="currentPassword" class="old-password form-control" type="password" placeholder=" Mật khẩu hiện tại">
-                              </label>
+                                  <button type="button" class="show-password-current"><i class="fa-regular fa-eye"></i></button>
+                              </div>
                           </div>
-                          <div class="form-group">
-                              <label class="input-password">
-                                  Mật khẩu mới
+                           <div class="form-group">
+                              <h6> Mật khẩu mới</h6>
+                              <div class="input-password">
                                   <input  name="newPassword" class="new-password form-control" type="password" placeholder="Mật khẩu mới">
-                              </label>
+                                  <button type="button" class="show-password-new"><i class="fa-regular fa-eye"></i></button>
+                              </div>
                           </div>
-                          <div class="form-group">
-                              <label class="input-password">
-                                  Xác nhận mật khẩu mới
+                           <div class="form-group">
+                              <h6>Xác nhận mật khẩu mới</h6>
+                              <div class="input-password">
                                   <input  name="confirmNewPassword" class="confirm-password form-control" type="password" placeholder="Nhập lại mật khẩu">
-                              </label>
+                                  <button type="button" class="show-password-confirm"><i class="fa-regular fa-eye"></i></button>
+                              </div>
                           </div>
                        </form>
 
@@ -343,6 +348,44 @@
     <script th:inline="javascript">
         let inforUser = [[${user}]];
         const imageUser = [[${imageUser}]];
+        const showPassword = document.querySelector('.show-password-current');
+        const showPasswordNew = document.querySelector('.show-password-new');
+        const showPasswordConfirm = document.querySelector('.show-password-confirm');
+        const inputPasswordNew = document.querySelector(".new-password");
+        const inputPassword = document.querySelector(".old-password");
+        const inputConfirmPassword = document.querySelector(".confirm-password");
+        // <Hiển thị mật khẩu>
+        showPassword.addEventListener('click',()=>{
+            if (inputPassword.getAttribute('type') === 'password') {
+                inputPassword.setAttribute('type', 'text');
+                showPassword.innerHTML=`<i class="fa-regular fa-eye-slash"></i>`
+
+            } else {
+                inputPassword.setAttribute('type', 'password');
+                showPassword.innerHTML=`<i  class="fa-regular fa-eye"></i>`
+            }
+        })
+        showPasswordConfirm.addEventListener('click',()=>{
+            if (inputConfirmPassword.getAttribute('type') === 'password') {
+                inputConfirmPassword.setAttribute('type', 'text');
+                showPasswordConfirm.innerHTML=`<i class="fa-regular fa-eye-slash"></i>`
+
+            } else {
+                inputConfirmPassword.setAttribute('type', 'password');
+                showPasswordConfirm.innerHTML=`<i  class="fa-regular fa-eye"></i>`
+            }
+        })
+        showPasswordNew.addEventListener('click',()=>{
+            if (inputPasswordNew.getAttribute('type') === 'password') {
+                inputPasswordNew.setAttribute('type', 'text');
+                showPasswordNew.innerHTML=`<i class="fa-regular fa-eye-slash"></i>`
+
+            } else {
+                inputPasswordNew.setAttribute('type', 'password');
+                showPasswordNew.innerHTML=`<i  class="fa-regular fa-eye"></i>`
+            }
+        })
+
         $('#input-info-user').validate({
             rules: {
                 nameUser: {

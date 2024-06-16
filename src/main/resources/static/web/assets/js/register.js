@@ -34,13 +34,13 @@ showPasswordConfirm.addEventListener('click',()=>{
 
 formRegister.addEventListener('submit' ,(e)=>{
     e.preventDefault();
+    if (!$('#form-register').valid()) return;
     const data = {
         name:inputName.value,
         email : inputEmail.value,
         password: inputPassword.value,
         confirmPassword: confirmPassword.value
     }
-    console.log(data)
     axios.post("/api/auth/register",data)
         .then((res) =>{
             console.log(res)
@@ -61,11 +61,12 @@ $('#form-register').validate({
             required: true,
             email:true
         },
-        password: {
+        inputPassword: {
             required: true,
         },
         confirmPassword: {
             required: true,
+            equalTo: "[name='inputPassword']"
         },
     },
     messages: {
@@ -73,14 +74,15 @@ $('#form-register').validate({
             required: "Vui lòng nhập tên của bạn",
         },
         email: {
-            required: "Vui lòng nhập tên của bạn",
+            required: "Vui lòng email của bạn",
             email:"email không đúng định dạng"
         },
-        password: {
+        inputPassword: {
             required: "Vui lòng nhập mật khẩu",
         },
         confirmPassword: {
             required: "Vui lòng nhập tên của bạn",
+            equalTo: "Mật khẩu không trùng khớp",
         },
     },
     errorElement: 'label',

@@ -20,9 +20,9 @@
                      <div class="col-4 ">
                          <form action="" id ="form-search">
                              <div class="form-group">
-                                 <div class="inputdata-search d-flex align-items-center p-1">
+                                 <div class="inputdata-search d-flex align-items-center pt-1 pb-2 px-2">
                                     <i style="font-size: 20px;" class="fa-solid fa-location-dot"></i>
-                                    <input name="nameCity" id="input-name-city" type="text" class=" w-100 p-2 form-control" placeholder="Tìm địa điểm, khách sạn, v.v.">
+                                    <input name="nameCity" id="input-name-city" type="text" class=" w-100 p-1 form-control" placeholder="Tìm địa điểm, khách sạn, v.v.">
                                  </div>
 
                              </div>
@@ -32,8 +32,7 @@
                 <div class="col-3">
                     <div class="inputdata-search d-flex align-items-center p-1">
                         <i style="font-size: 15px;" class="fa-solid fa-calendar-days"></i>
-                        <input id="date-range" type="text" class=" w-100 p-2  " placeholder="Chọn ngày đến và đi của bạn">
-
+                        <input id="date-range" class="w-100 form-control w-100 ps-3" type="text" name="daterange"  placeholder="Ngập ngày đến và đi của bạn" />
                     </div>
                 </div>
                <div class="col-2">
@@ -61,11 +60,14 @@
 
                     </div>
                 </div>
-                <div class="col-1 d-flex align-items-center">
-                    <button type="submit" id="btn-search" class="btn-search w-100  py-2">
-                        <i class="fa-solid fa-magnifying-glass" style="color: #f7f9fc; font-size: 20px;"></i>
-                    </button>
+                <div class="col-1" >
+                    <div class="button-room-number border shadow d-flex justify-content-between align-items-center">
+                        <button type="submit" id="btn-search" class="btn-search w-100">
+                            <i class="fa-solid fa-magnifying-glass" style="color: black; font-size: 20px;"></i>
+                        </button>
+                    </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -100,7 +102,7 @@
                             <div class="field ">
                                 <span class="m-0 p-0">Tối thiểu</span>
                                 <div class="d-flex justify-content-between px-2">
-                                    <input type="number" class="input-min" value="0"/>
+                                    <input type="number" class="input-min" value="100000"/>
                                     <span>đ</span>
                                 </div>
                             </div>
@@ -108,7 +110,7 @@
                             <div class="field">
                                 <span class="mt-4">Tối đa</span>
                                 <div class="d-flex justify-content-between px-2">
-                                    <input type="number" class="input-max" value="1000000"/>
+                                    <input type="number" class="input-max" value="20000000"/>
                                     <span>đ</span>
                                 </div>
                             </div>
@@ -117,9 +119,9 @@
                             <div class="progress"></div>
                         </div>
                         <div class="range-input">
-                            <input type="range" class="range-min" min="0" max="1000000" value="0" step="100">
-                            <input type="range" class="range-max" min="0" max="1000000"
-                                   value="1000000" step="100">
+                            <input type="range" class="range-min" min="100000" max="20000000" value="0" step="10000">
+                            <input type="range" class="range-max" min="100000" max="20000000"
+                                   value="20000000" step="10000">
                         </div>
                     </div>
                     <h4>Lọc theo</h4>
@@ -263,22 +265,6 @@
                         </ul>
 
                     </form>
-                    <form class="sort-by-rental-type">
-                        <h6>Hình thức thanh toán </h6>
-                        <ul class="list-unstyled ps-3">
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Đặt ngay, thanh toán sau</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Thanh toán bằng thẻ ngân hàng</label>
-                            </li>
-
-                        </ul>
-
-                    </form>
-
                     <form class="sort-by-rating">
                         <h6>Đánh giá của khách hàng</h6>
                         <ul class="list-unstyled ps-3">

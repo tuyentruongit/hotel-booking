@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.TokenConfirm;
 import methodsecuritynew.bookingapp.entity.User;
 import methodsecuritynew.bookingapp.exception.BadRequestException;
+import methodsecuritynew.bookingapp.model.enums.TypeVerifyToken;
 import methodsecuritynew.bookingapp.model.request.*;
 
 import methodsecuritynew.bookingapp.model.response.VerifyAccountResponse;
@@ -51,7 +52,6 @@ public class AuthService {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 loginRequest.getEmail(),
                 loginRequest.getPassword());
-
         try {
             // Tiến hành xác tực
             Authentication authentication = authenticationManager.authenticate(token);
@@ -59,13 +59,29 @@ public class AuthService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             // lưu vào session
             httpSession.setAttribute("MY_SESSION",authentication.getName());
-
         }
         catch(DisabledException disabledException){
-            throw new DisabledException("Tài khoản chưa được xác thực");
+            User user = userRepository.findByEmail(loginRequest.getEmail())
+                    .orElseThrow(()-> new UsernameNotFoundException("Không tìm thấy User có email : " + loginRequest.getEmail()));
+            checkExpiredToken(user);
+            throw new DisabledException("Tài khoản chưa được xác thực. Vui lòng kiểm tra email để xác thực tài khoản.");
         }
         catch (AuthenticationException  e){
            throw new RuntimeException ("Tài khoản hoặc mật khẩu không chính xác");
+        }
+    }
+
+    // kiểm tra token của người dùng  đó đã hết hạn hay chưa
+    private void checkExpiredToken(User user) {
+        // tìm token với user tương ứng
+        TokenConfirm tokenConfirm =
+                tokenConfirmRepository.findAllByUser_IdAndTokenTypeOrderByCreatedAtDesc(user.getId(),TokenType.REGISTRATION);
+        // kiểm tra xem token đó đã hết hạn hay chưa
+        if (tokenConfirm.getExpiredAt().isBefore(LocalDateTime.now())){
+            // tạo token mới cho người dùng đó nếu đã hết hạn
+            createTokenConfirmAccount(user);
+            // xóa token cũ đi
+            tokenConfirmRepository.delete(tokenConfirm);
         }
     }
 
@@ -88,10 +104,20 @@ public class AuthService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .email(registerRequest.getEmail())
                 .createdAt(LocalDate.now())
-                .avatar("/web/assets/image/avatar-default.jpg")
+                .avatar("/web/assets/image/avata-default.jpg")
                 .enable(false)
                 .build();
         userRepository.save(user);
+        createTokenConfirmAccount(user);
+        return "Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản";
+    }
+
+    private void createTokenConfirmAccount(User user) {
+        TokenConfirm tokenConfirmOld= tokenConfirmRepository.findAllByUser_IdAndTokenTypeOrderByCreatedAtDesc(user.getId(),TokenType.REGISTRATION);
+        if ( tokenConfirmOld != null && tokenConfirmOld.getConfirmedAt() == null
+                && tokenConfirmOld.getExpiredAt().isBefore(LocalDateTime.now())){
+            tokenConfirmRepository.delete(tokenConfirmOld);
+        }
         // tạo token để xác thực
         TokenConfirm tokenConfirm = TokenConfirm.builder()
                 .nameToken(UUID.randomUUID().toString())
@@ -114,9 +140,7 @@ public class AuthService {
                         link+"\n" +
                         "\n" +
                         "Trân trọng.\n" );
-        return "Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản";
     }
-
 
 
     // xác minh token
@@ -207,6 +231,7 @@ public class AuthService {
     }
     // thay ddooir mật khẩu khi người dùng chọn chức nang quên mật khẩu
     public void changePasswordForForgetPassword(UpsertPasswordRetrieval upsertPasswordRetrieval) {
+        // tìm token quên mật khẩu
         TokenConfirm tokenConfirm = tokenConfirmRepository
                 .findByNameTokenAndTokenType(upsertPasswordRetrieval.getNameToken(), TokenType.FORGOT_PASSWORD).orElseThrow(()-> new BadRequestException("Không tìm thấy token trên "));
         tokenConfirm.getUser().setPassword(passwordEncoder.encode(upsertPasswordRetrieval.getPassword()));
@@ -219,6 +244,13 @@ public class AuthService {
     public void forgotPassword(String email) {
         // lấy user với email người dùng nhập
        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Tài khoản không tồn tại ."));
+       // tìm xem có token lấy lật khẩu cũ không
+       TokenConfirm tokenConfirmOld= tokenConfirmRepository.findAllByUser_IdAndTokenTypeOrderByCreatedAtDesc(user.getId(),TokenType.FORGOT_PASSWORD);
+        if (tokenConfirmOld != null && tokenConfirmOld.getConfirmedAt()==null && tokenConfirmOld.getExpiredAt().isAfter(LocalDateTime.now())) {
+            throw new  RuntimeException("Vui lòng kiểm tra email để xác thực tài khoản");
+        }else if ( tokenConfirmOld != null && tokenConfirmOld.getConfirmedAt() != null ){
+            tokenConfirmRepository.delete(tokenConfirmOld);
+        }
 
        // tạo một token với type ForGot Password
         TokenConfirm tokenConfirm = TokenConfirm.builder()
@@ -246,21 +278,33 @@ public class AuthService {
 
 
     // logic xử lý link với chức năng quên mật khẩu
-    public String verifyForgotPassword(String token) {
+    public VerifyAccountResponse verifyForgotPassword(String token) {
         Optional<TokenConfirm> optionalTokenConfirm = tokenConfirmRepository
                 .findByNameTokenAndTokenType(token, TokenType.FORGOT_PASSWORD);
         if (optionalTokenConfirm.isEmpty()){
-            return "Link lấy lại mật khẩu không tồn tại";
+            return VerifyAccountResponse.builder()
+                    .success(false)
+                    .message("Link lấy lại mật khẩu không tồn tại")
+                    .build();
         }
         TokenConfirm tokenConfirm = optionalTokenConfirm.get();
         if (tokenConfirm.getExpiredAt().isBefore(LocalDateTime.now())){
-            return "Link lấy lại mật khẩu đã hết hạn ";
+            return VerifyAccountResponse.builder()
+                    .success(false)
+                    .message("Link lấy lại mật khẩu đã được sử dụng trước đó ")
+                    .build();
         }
         if (tokenConfirm.getConfirmedAt()!=null){
-            return "Link lấy lại mật khẩu đã được sử dụng trước đó";
+            return VerifyAccountResponse.builder()
+                    .success(false)
+                    .message("Link lấy lại mật khẩu đã hết hạn")
+                    .build();
         }
         tokenConfirmRepository.save(tokenConfirm);
-        return tokenConfirm.getNameToken();
+        return VerifyAccountResponse.builder()
+                .success(true)
+                .message("Link xác thực không tồn tại")
+                .build();
     }
 
 
@@ -270,32 +314,32 @@ public class AuthService {
     }
 
     // TODO:Cần sửa
-    public User createUserHotel(UpsertHotelRequest request) {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()){
-            throw new BadRequestException("Email đã tồn tại");
-        }
-        if (userRepository.findByPhoneNumber(request.getPhoneHotel()).isPresent()){
-            throw new BadRequestException("Số điện thoại đã tồn tại");
-        }
-        String regex = "^0([0-9]{9})";
-        String phone = "";
-        if (request.getPhoneHotel().matches(regex)){
-            phone = request.getPhoneHotel();
-        }else {
-            throw new BadRequestException("Số điện thoại của bạn không hợp lệ ");
-        }
-        User user = User.builder()
-                .name(request.getName())
-                .userRole(UserRole.ROLE_HOTEL)
-                .password(passwordEncoder.encode("12345678"))
-                .email(request.getEmail())
-                .createdAt(LocalDate.now())
-                .avatar("/web/assets/image/avatar-default.jpg")
-                .enable(true)
-                .phoneNumber(phone)
-                .build();
-        return userRepository.save(user);
-    }
+//    public User createUserHotel(UpsertHotelRequest request) {
+//        if (userRepository.findByEmail(request.get()).isPresent()){
+//            throw new BadRequestException("Email đã tồn tại");
+//        }
+//        if (userRepository.findByPhoneNumber(request.getPhoneHotel()).isPresent()){
+//            throw new BadRequestException("Số điện thoại đã tồn tại");
+//        }
+//        String regex = "^0([0-9]{9})";
+//        String phone = "";
+//        if (request.getPhoneHotel().matches(regex)){
+//            phone = request.getPhoneHotel();
+//        }else {
+//            throw new BadRequestException("Số điện thoại của bạn không hợp lệ ");
+//        }
+//        User user = User.builder()
+//                .name(request.getName())
+//                .userRole(UserRole.ROLE_HOTEL)
+//                .password(passwordEncoder.encode("12345678"))
+//                .email(request.getEmail())
+//                .createdAt(LocalDate.now())
+//                .avatar("/web/assets/image/avatar-default.jpg")
+//                .enable(true)
+//                .phoneNumber(phone)
+//                .build();
+//        return userRepository.save(user);
+//    }
 
     public List<User> getAllUserRoleUser() {
         return userRepository.findAllByUserRole(UserRole.ROLE_USER);

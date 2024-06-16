@@ -30,15 +30,15 @@ btnSave.addEventListener('click' ,(e)=>{
     }
     console.log(parseInt(cityEl.value))
     const data = {
-        name : nameHotel.value,
-        description : descriptionEl.value,
+        nameHotel : nameHotel.value,
+        descriptionHotel : descriptionEl.value,
         rentalType : rentalHotelEl.value,
         phoneHotel : phoneHotelEl.value,
         status : status,
-        email : emailHotelEl.value,
+        emailHotel : emailHotelEl.value,
         addressHotel : addressHotelEl.value,
         idCity :  parseInt(cityEl.value),
-        star : parseInt(starEl.value)
+        star : parseInt(starEl.value),
     }
     console.log(data)
     axios.put(`/api/hotel/admin/update/${idHotel}`,data)

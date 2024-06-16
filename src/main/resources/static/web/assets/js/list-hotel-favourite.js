@@ -1,26 +1,30 @@
 
 const wrapList = document.querySelector('.wrap-list');
 let dayStart = new Date();
+let dayEnd = new Date(Date.now() + 4 * 24 * 60 * 60 * 1000);
 function formatDate (date){
     let year = date.getFullYear();
     let month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng được đánh số từ 0-11, cần +1 và đảm bảo có 2 chữ số
     let day = String(date.getDate()).padStart(2, '0'); // Đảm bảo ngày có 2 chữ số
 // Tạo chuỗi định dạng yyyy-MM-dd
-    return `${year}-${month}-${day}`;
+    return year + "-" + month + "-" + day;
 }
 
 const renderData = (list) =>{
     let html = '';
     list.forEach(hotelFavourite =>{
-        console.log(hotelFavourite.city.name)
+        let idHotel = hotelFavourite.id;
+        let name=hotelFavourite.city.name;
+        let checkIn =formatDate(dayStart);
+        let checkout =formatDate(dayEnd);
         let htmlStar = '';
         for (let i = 0; i < hotelFavourite.star ; i++) {
             htmlStar += `<i class="fa-solid fa-star" style="color: #CF2061;"></i>`
         }
         html+=`
-                     <div class="col-3 h-100 conatiner-card">                              
+                     <div class="col-3 h-100 conatiner-card">         
                             <a class="card-hotel text-reset text-decoration-none w-100" 
-                            href="/chi-tiet-khach-san/${hotelFavourite.id}?nameCity=${hotelFavourite.city.name}">
+                           href="/chi-tiet-khach-san/${idHotel}?nameCity=${name}&checkIn=${checkIn}&checkOut=${checkout}">
                                 <img class="image-hotel w-100"  src="${hotelFavourite.poster}" alt="">
                                 <div class="infor-hotel h-100">
                                     <p class="name-hotel w-100">${hotelFavourite.name}</p>
@@ -36,16 +40,6 @@ const renderData = (list) =>{
                                         </div>
                                     </div>
                                     <hr>
-<!--                                    <div class="description-price">-->
-<!--                                        <span class="description-price">Mỗi đêm chỉ từ </span>-->
-<!--                                        <span> <del> 123456 </del> đ</span>-->
-<!--                                    </div>-->
-<!--                                    <div class="price-hotel">-->
-<!--                                        <span class="price">506.000 </span>-->
-<!--                                        <span class="unit">đ</span>-->
-<!--                                    </div>-->
-
-
                                 </div>
                             </a>
                             <div class="delete">
@@ -86,10 +80,4 @@ const deleteHotelFavourite = (id) =>{
             toastr.error(err);
         })
 }
-
-
-
-
-
-
 renderData(hotelList);

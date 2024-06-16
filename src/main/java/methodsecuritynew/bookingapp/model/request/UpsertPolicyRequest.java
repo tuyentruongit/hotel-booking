@@ -11,12 +11,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpsertPolicyRequest {
-    String checkIn;
-    String checkOut;
+    String startCheckIn;
+    String endCheckIn;
+    String startCheckOut;
+    String endCheckOut;
     String service;
     String cancel;
     String animal;
     String age;
     String other;
-
 }

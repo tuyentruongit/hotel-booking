@@ -18,6 +18,11 @@
         <link rel="stylesheet" href="/admin-assets/dist/css/adminlte.min.css">
 
         <style>
+            @import url(https://fonts.googleapis.com/css?family=Montserrat);
+            body {
+                font-family: montserrat, arial, verdana;
+                margin-bottom: 100px;
+            }
             #chart-booking-of-room {
                 max-height: 350px;
             }
@@ -61,10 +66,10 @@
 </head>
 
 <body class="hold-transition sidebar-mini">
-<div class="wrapper" id="main-content">
+<div class="wrapper" id="main-content"  style="font-size: 14px">
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="font-size: 14px">
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
@@ -88,12 +93,12 @@
                         <div class="small-box bg-white">
                             <div class="inner">
                                 <h3 th:text="${totalBookingMonthDto.totalBooking}"></h3>
-                                <p>Đơn đặt phòng trong tháng</p>
+                                <p style="font-size: 14px">Đơn đặt phòng trong tháng</p>
                             </div>
-                            <div class="icon">
-                                <i class="ion ion-bag"></i>
+                            <div class="icon" style="font-size: 14px">
+                                <i style="font-size: 50px"  class="ion ion-bag"></i>
                             </div>
-                            <a href="/hotel-manager/bookings" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+                            <a style="font-size: 12px" href="/hotel-manager/bookings" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <!-- ./col -->
@@ -102,37 +107,37 @@
                         <div class="small-box bg-white">
                             <div class="inner">
                                 <h3 th:text="${totalBookingMonthDtoPending.totalBooking}"> </h3>
-                                <p>Đơn đặt đang chờ xác nhận</p>
+                                <p style="font-size: 14px">Đơn đặt đang chờ xác nhận</p>
                             </div>
                             <div class="icon">
-                                <i class="fa-solid fa-spinner"></i>
+                                <i style="font-size: 50px" class="fa-solid fa-spinner"></i>
                             </div>
-                            <a href="/hotel-manager/bookings" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+                            <a style="font-size: 12px" href="/hotel-manager/bookings" class="small-box-footer">Xem thêm <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-white ">
+                            <div class="inner">
+                                <h3 style="font-size: 27px" th:text="|${#numbers.formatInteger(totalRevenueYear,3,'COMMA')}|"></h3>
+                                <h5 >VND</h5>
+                                <p style="font-size: 14px">Doanh thu năm sau triết khấu <th:block th:text="${ 1900 + #dates.createNow().getYear()}"></th:block></p>
+                            </div>
+                            <div class="icon">
+                                <i style="font-size: 50px"  class="fa-solid fa-dollar-sign"></i>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-6">
                         <!-- small box -->
                         <div class="small-box bg-white">
                             <div class="inner">
-                                <h3 th:text="|${#numbers.formatInteger(totalRevenueYear,3,'COMMA')}|"></h3>
+                                <h3  style="font-size: 27px" th:text="|${#numbers.formatInteger(totalRevenueMonth.totalPrice,3,'COMMA')}|"></h3>
                                 <h5 >VND</h5>
-                                <p>Doanh thu năm <th:block th:text="${ 1900 + #dates.createNow().getYear()}"></th:block></p>
+                                <p style="font-size: 14px">Doanh thu tháng sau triết khấu <th:block th:text="${totalRevenueMonth.getMonth()}"></th:block>/<th:block th:text="${totalRevenueMonth.getYear()}"></th:block></p>
                             </div>
                             <div class="icon">
-                                <i class="fa-solid fa-dollar-sign"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-white">
-                            <div class="inner">
-                                <h3 th:text="|${#numbers.formatInteger(totalRevenueMonth.totalPrice,3,'COMMA')}|"></h3>
-                                <h5 >VND</h5>
-                                <p>Doanh thu tháng <th:block th:text="${totalRevenueMonth.getMonth()}"></th:block>/<th:block th:text="${totalRevenueMonth.getYear()}"></th:block></p>
-                            </div>
-                            <div class="icon">
-                                <i class="fa-solid fa-chart-simple"></i>
+                                <i style="font-size: 50px"  class="fa-solid fa-chart-simple"></i>
                             </div>
                         </div>
                     </div>

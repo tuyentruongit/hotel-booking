@@ -1,11 +1,27 @@
-$("#date-range").flatpickr({
-    mode: "range",
-    showMonths: 2,
-    dateFormat: "Y-m-d",
-    minuteIncrement: 1,
-    defaultDate: [checkIn, checkOut],
-    minDate: "today",
+function formatDate(date) {
+    let year = date.getFullYear(); // Sử dụng getFullYear() để lấy năm đầy đủ
+    let month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng được đánh số từ 0-11, cần +1 và đảm bảo có 2 chữ số
+    let day = String(date.getDate()).padStart(2, '0'); // Đảm bảo ngày có 2 chữ số
+    return `${year}-${month}-${day}`;
+}
+// đăặt ngày bắt đầu và ngày kêt thúc mặc định
+let startDate = formatDate(new Date());
+let endDate =  formatDate(moment().add(4, 'days').toDate());
+//  thư viện chọn ngày
+$(function() {
+    // Khởi tạo daterangepicker và thiết lập ngày mặc định
+    $('#date-range').daterangepicker({
+        opens: 'left',
+        startDate: new Date(),
+        endDate:  moment().add(4, 'days').toDate(),
+        minDate: new Date()
+    }, function(start, end, label) {
+        // Khi người dùng chọn ngày, cập nhật giá trị của các biến bên ngoài
+        startDate = start.format('YYYY-MM-DD');
+        endDate = end.format('YYYY-MM-DD');
+    });
 });
+
 
 // slider
 
@@ -106,24 +122,9 @@ let inputNameCity = document.getElementById('input-name-city');
 btnSearch.addEventListener('click', () => {
     if (!$('#form-search').valid()) return;
 
-
-    const date = document.getElementById('date-range');
-    const dateString = date.value;
-
-    // Tách chuỗi thành hai phần bằng từ "to"
-    const dateParts = dateString.split(" to ");
-
-    // Phần đầu tiên là ngày bắt đầu
-    const dateStartString = dateParts[0];
-    console.log(dateStartString)
-
-    // Phần thứ hai là ngày kết thúc
-    const dateEndString = dateParts[1];
-    console.log(dateEndString)
-
     window.location.href = "/danh-sach-khach-san?" +
-        "nameCity=" + inputNameCity.value + "&checkIn=" + dateStartString +
-        "&checkOut=" + dateEndString + "&numberGuest=" + numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
+        "nameCity=" + inputNameCity.value + "&checkIn=" + startDate +
+        "&checkOut=" + endDate + "&numberGuest=" + numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
 });
 
 const renderDataSearch = (nameCity, numGuest, numRoom) => {
@@ -226,7 +227,7 @@ const deleteReview = id => {
 }
 
 
-const formatDate = (dateString) => {
+const formatDateShow = (dateString) => {
     const date = new Date(dateString);
 
     const day = `0${date.getDate()}`.slice(-2); // `05` -> 05 , '015' -> 15
@@ -239,7 +240,7 @@ const formatDate = (dateString) => {
 
 const reviewListEL = document.querySelector('.container-review-detail')
 
-
+// hiển thị danh sách review theo khách sạn đang xem
 const renderReview = (reviews) => {
     let html = "";
     reviews.forEach(review => {
@@ -248,7 +249,7 @@ const renderReview = (reviews) => {
                                         
                                             <h4 class="age-user-review p-0 m-0" >${review.rating}/10 - ${review.ratingText} </h4>
                                             <div class="creatAt-review">
-                                                ${formatDate(review.createAt)}
+                                                ${formatDateShow(review.createAt)}
                                             </div>
                                         </div>
                          
@@ -266,15 +267,11 @@ const renderReview = (reviews) => {
                                             <button class=" btn-delete-review btn text-danger " onclick="deleteReview(${review.id})" >Xóa</button>
                                                </div>
                                             ` : ''}
-                                        
-                                     
-
-
-                                    </div>`
+                                           </div>`
     });
     reviewListEL.innerHTML = html;
 };
-
+// validate  cho  tìm kiếm
 $('#form-search').validate({
     rules: {
         nameCity: {
@@ -298,18 +295,21 @@ $('#form-search').validate({
         $(element).removeClass('is-invalid');
     }
 });
-// logic hiện trang
+//  hiển thị  modal chi tiết phòng
 const renderImageRoomDetail = async (id) => {
+    // lấy ra phòng được chọn để xem chi tiết
     let room = roomList.find(room => room.id === id);
+    // gọi api lâấy ra danh sách hinh ảnh của   room đó
     try {
         const res = await axios.get('/api/images/get-image-room/' + id);
         const imageRoomList = res.data;
 
+        // render ra html
         let htmlImage = '';
          imageRoomList.forEach(image => {
             htmlImage += `<div class="item"><img src="${image.url}" alt=""></div>`;
         });
-
+         // truy cập vào thẻ chưa owl ddeeer hiển thị ảnh theo dạng slide
         const sliderMain = document.querySelector('.slider-main');
         sliderMain.innerHTML = htmlImage;
         // Phá hủy Owl Carousel nếu nó đã được khởi tạo
@@ -318,6 +318,7 @@ const renderImageRoomDetail = async (id) => {
             $('.owl-carousel').removeClass('owl-loaded');
             $('.owl-carousel').find('.owl-stage-outer').children().unwrap();
         }
+        // khởi tạo owl mới
         $('.owl-carousel').owlCarousel({
             loop: true,
             margin: 10,
@@ -337,12 +338,14 @@ const renderImageRoomDetail = async (id) => {
                 }
             }
         })
+        // gọi hàm render ra thông tin khác của phòng
         renderInfoRoom(room);
     } catch (err) {
         console.error(err);
     }
 };
 
+// hàm render ra thông thi  của phòng
 const renderInfoRoom =(room)=>{
     document.querySelector('.information-room').innerHTML=`
      <h6 class="name-hotel" >${room.name}</h6>
@@ -366,15 +369,17 @@ const renderInfoRoom =(room)=>{
          <span class="name-amenity-modal" > ${room.bedType}</span>
      </div>
     `
+    // render ra các tiện ích
     renderAmenityRoom(room);
 
 }
 
 
-
+//  hiển thị giá ở việt nam,
 const formatPrice = (number ) =>{
    return  number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
 }
+// hiển thị tiện ích phòng
 const renderAmenityRoom = (room)=>{
     let html = '';
     room.amenityRoomList.forEach(amenity =>{
@@ -393,7 +398,7 @@ const renderAmenityRoom = (room)=>{
 }
 
 
-
+// validate review
 $('#form-review').validate({
     rules: {
         content: {

@@ -1,4 +1,7 @@
-
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+body {
+    font-family: montserrat, arial, verdana;
+}
 
 .infor-customer{
     border: 1px solid #E7E7E7;

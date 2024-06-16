@@ -1,14 +1,26 @@
 
-// thư viện để sử dụng trình chọn ngày
-flatpickr("#date-range", {
-    mode: "range",
-    altInput: true,
-    altFormat: "j \\t\\h\\á\\n\\g n", // Custom altFormat
-    dateFormat: "Y-m-d",
-    minDate: "today", // Chỉ hiển thị ngày từ ngày hiện tại
-    defaultDate: [new Date().fp_incr(4), new Date().fp_incr(8)],
-    showMonths: 2,
-    separator: "",
+function formatDate(date) {
+    let year = date.getFullYear(); // Sử dụng getFullYear() để lấy năm đầy đủ
+    let month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng được đánh số từ 0-11, cần +1 và đảm bảo có 2 chữ số
+    let day = String(date.getDate()).padStart(2, '0'); // Đảm bảo ngày có 2 chữ số
+    return `${year}-${month}-${day}`;
+}
+
+let startDate = formatDate(new Date());
+let endDate =  formatDate(moment().add(4, 'days').toDate());
+
+$(function() {
+    // Khởi tạo daterangepicker và thiết lập ngày mặc định
+    $('#date-range').daterangepicker({
+        opens: 'left',
+        startDate: new Date(),
+        endDate:  moment().add(4, 'days').toDate(),
+        minDate: new Date()
+    }, function(start, end, label) {
+        // Khi người dùng chọn ngày, cập nhật giá trị của các biến bên ngoài
+        startDate = start.format('YYYY-MM-DD');
+        endDate = end.format('YYYY-MM-DD');
+    });
 });
 // slider
 $('.owl-carousel').owlCarousel({
@@ -30,11 +42,6 @@ $('.owl-carousel').owlCarousel({
         }
     }
 })
-
-
-
-
-
 
 
 // tùy chọn quantity cho room và  guest
@@ -125,57 +132,29 @@ const  choiceOutstandingCity = () =>{
     let nameCity= showHotelCity.getAttribute('value');
     console.log(nameCity);
     navigation(nameCity);
-
-
 }
 
 
 // chuyển hướng tới trang danh sách
 const navigation = (inputNameCity) =>{
-    const date = document.getElementById('date-range');
-    const dateString = date.value;
-
-    // Tách chuỗi thành hai phần bằng từ "to"
-    const dateParts = dateString.split(" to ");
-
-    // Phần đầu tiên là ngày bắt đầu
-    const dateStartString = dateParts[0];
-
-    // Phần thứ hai là ngày kết thúc
-    const dateEndString = dateParts[1];
-
     window.location.href="/danh-sach-khach-san?" +
-        "nameCity=" + inputNameCity + "&checkIn=" + dateStartString +
-        "&checkOut=" + dateEndString + "&numberGuest=" +
+        "nameCity=" + inputNameCity + "&checkIn=" + startDate +
+        "&checkOut=" + endDate + "&numberGuest=" +
         numberGuest.textContent + "&numberRoom=" + numberRoom.textContent;
 }
 
-
-
 const btnList = document.querySelectorAll('.btn-name-city');
 const listCardHotel = document.getElementById('list-card')
-
-
-
-
 
 // dữ liệu mặc định
 let defaultValue = btnList[0];
 // khi vào trang thì gọi render dữ liệu mặc định cho recommend hotel
 window.addEventListener('load', () => {
     defaultValue.classList.add('active-city')
+    console.log(startDate);
+    console.log(endDate);
     // Gọi API để lấy dữ liệu cho thành phố mặc định và render khách sạn
-    const date = document.getElementById('date-range');
-    const dateString = date.value;
-    // Tách chuỗi thành hai phần bằng từ "to"
-    const dateParts = dateString.split(" to ");
-
-    // Phần đầu tiên là ngày bắt đầu
-    const dateStartString = dateParts[0];
-
-    // Phần thứ hai là ngày kết thúc
-    const dateEndString = dateParts[1];
-    renderCityData(defaultValue.textContent ,dateStartString,dateEndString);
+    renderCityData(defaultValue.textContent ,startDate,endDate);
     showHotelCity.innerHTML = `<span>Xem tất cả khách sạn ${defaultValue.textContent}</span>`
     showHotelCity.setAttribute('value', defaultValue.textContent);
 });
@@ -194,20 +173,7 @@ btnList.forEach((btn)=>{
         let city = btn.textContent;
         // showHotelCity.innerText = 'Xem thêm khách sạn của ' + city;
         showHotelCity.innerHTML = `<span>Xem tất khách sạn ${city}</span>`
-        showHotelCity.setAttribute('value',city);
-        const date = document.getElementById('date-range');
-        const dateString = date.value;
-        // Tách chuỗi thành hai phần bằng từ "to"
-        const dateParts = dateString.split(" to ");
-
-        // Phần đầu tiên là ngày bắt đầu
-        const dateStartString = dateParts[0];
-
-        // Phần thứ hai là ngày kết thúc
-        const dateEndString = dateParts[1];
-        renderCityData(city,dateStartString,dateEndString);
-
-
+        renderCityData(city,startDate,endDate);
     })
 })
 
@@ -215,11 +181,11 @@ btnList.forEach((btn)=>{
 
 // gọi api để render dữ liệu
 const renderCityData = (value,checkIn,checkOut) => {
-    console.log(checkIn.toString());
-    console.log(checkOut.toString());
     axios.get('/api/search/' + value+"?checkIn=" + checkIn +
     "&checkOut=" + checkOut)
         .then((res) => {
+            console.log(res)
+            console.log(res.data)
             let data = res.data;
             renderHotel(data,value);
         })
@@ -235,18 +201,6 @@ const formatCurrency = (number)=> {
 
 const renderHotel = (data,city) =>{
 
-    const date = document.getElementById('date-range');
-    const dateString = date.value;
-
-    // Tách chuỗi thành hai phần bằng từ "to"
-    const dateParts = dateString.split(" to ");
-
-    // Phần đầu tiên là ngày bắt đầu
-    const dateStartString = dateParts[0];
-
-    // Phần thứ hai là ngày kết thúc
-    const dateEndString = dateParts[1];
-
     let html = '';
     let count = 1 ;
     data.forEach((hotel)=> {
@@ -255,19 +209,19 @@ const renderHotel = (data,city) =>{
         }
         html += `
                     <div class="col-3 h-100">
-                        <a class="card mb-5 text-reset text-decoration-none  h-100" href="/chi-tiet-khach-san/${hotel.id}?nameCity=${city}&checkIn=${dateStartString}&checkOut=${dateEndString}">
+                        <a class="card mb-5 text-reset text-decoration-none  h-100" href="/chi-tiet-khach-san/${hotel.id}?nameCity=${city}&checkIn=${startDate}&checkOut=${endDate}">
                             <img class="image-hotel" src="${hotel.poster}" alt="Ảnh Hotel">
                             <div class="p-2 h-100">
                                 <div class="d-flex justify-content-start align-content-center h-100">
                                     <span class="p-1 m-0 score-rating h-100">${hotel.rating.toFixed(1)}</span>
                                     <span class="p-1 m-0 h-100" >${hotel.ratingText}</span>
-                                     <span class="p-1 m-0 h-100" >(${hotel.totalReviews} nhận xét)</span>
+                                    <span  class="p-1 m-0 h-100" >(${hotel.totalReviews} nhận xét)</span>
                                 </div>
-                            
+
                                 <h5 class="p-0 m-0 h-100" >${hotel.name}</h5>
                                 <p class="p-0 m-0 d address-hotel h-100" > <i class="fa-solid fa-location-dot"></i> ${hotel.address}</p>
                                 <div class="price list-unstyledp-0 m-0">
-                                           
+
 
 <!--                                            <div class="p-0 wrapper w-100 d-flex">-->
 <!--                                                <span class="original-price "><del>1.300.500 ₫</del></span>-->
