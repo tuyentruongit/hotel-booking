@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.City;
 import methodsecuritynew.bookingapp.entity.Hotel;
 import methodsecuritynew.bookingapp.exception.BadRequestException;
+import methodsecuritynew.bookingapp.model.dto.CityDto;
 import methodsecuritynew.bookingapp.model.request.UpsertCityRequest;
 import methodsecuritynew.bookingapp.repository.CityRepository;
 import methodsecuritynew.bookingapp.repository.HotelRepository;
@@ -27,12 +28,14 @@ public class CityService {
 
 
     // tìm kiếm thành phố nổi nật Home Page
-    public List<City> findCityFavourite() {
-        return cityRepository.findAll().stream()
-                .filter(city -> city.getId() < 10)
-                .toList();
+    public List<CityDto> findCityFavourite() {
+        if (cityRepository.findAllCitiesOrderByTotalHotelsAsc().size()>10){
+            return cityRepository.findAllCitiesOrderByTotalHotelsAsc().subList(0,10);
+        }
+        return cityRepository.findAllCitiesOrderByTotalHotelsAsc();
     }
 
+    // lấy tất cả các thành được tạo trong trang web
     public List<City> getAllCity() {
         return cityRepository.findAll().stream().sorted(Comparator.comparing(City::getName)).toList();
     }
@@ -82,4 +85,7 @@ public class CityService {
         cityRepository.delete(city);
     }
 
+    public City getCityByName(String nameCity) {
+        return  cityRepository.findCityByName(nameCity);
+    }
 }

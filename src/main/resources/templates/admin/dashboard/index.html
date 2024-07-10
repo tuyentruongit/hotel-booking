@@ -213,6 +213,7 @@
         let totalBookingMonth = [[${totalBookingMonth}]];
 
         $('#table-user').DataTable({
+            "pageLength": 5,
             "paging": true,
             "lengthChange": true,
             "searching": true,
@@ -222,10 +223,23 @@
             "responsive": true,
             "order": [],
             "language": {
-                "emptyTable": "Không có dữ liệu để hiển thị" // Thông báo tùy chỉnh khi không có dữ liệu
+                "emptyTable": "Không có user đăng ký mới", // Thông báo tùy chỉnh khi không có dữ liệu
+                "paginate": {
+                    "next": '<i class="fas fa-chevron-right"></i>',
+                    "previous": '<i class="fas fa-chevron-left"></i>'
+                }
+            },
+            "drawCallback": function () {
+                var api = this.api();
+                if (api.page.info().pages <= 1) {
+                    $('.paginate_button').hide(); // Ẩn tất cả các nút phân trang
+                } else {
+                    $('.paginate_button').show(); // Hiện lại tất cả các nút phân trang
+                }
             }
         });
         $('#table-booking').DataTable({
+            "pageLength": 5,
             "paging": true,
             "lengthChange": true,
             "searching": true,
@@ -235,7 +249,19 @@
             "responsive": true,
             "order": [],
             "language": {
-                "emptyTable": "Không có dữ liệu để hiển thị" // Thông báo tùy chỉnh khi không có dữ liệu
+                "emptyTable": "Không có đơn đặt phòng mới.", // Thông báo tùy chỉnh khi không có dữ liệu
+                "paginate": {
+                    "next": '<i class="fas fa-chevron-right"></i>',
+                    "previous": '<i class="fas fa-chevron-left"></i>'
+                }
+            },
+            "drawCallback": function () {
+                var api = this.api();
+                if (api.page.info().pages <= 1) {
+                    $('.paginate_button').hide(); // Ẩn tất cả các nút phân trang
+                } else {
+                    $('.paginate_button').show(); // Hiện lại tất cả các nút phân trang
+                }
             }
         });
 

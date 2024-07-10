@@ -3,6 +3,7 @@ package methodsecuritynew.bookingapp.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.*;
+import methodsecuritynew.bookingapp.model.dto.CityDto;
 import methodsecuritynew.bookingapp.model.dto.RoomDto;
 import methodsecuritynew.bookingapp.model.response.VerifyAccountResponse;
 import methodsecuritynew.bookingapp.model.enums.*;
@@ -43,12 +44,10 @@ public class WebController {
 
     @GetMapping("/")
     public String getHome(Model model) {
-        List<City> cityList = cityService.findCityFavourite();
+        List<CityDto> cityList = cityService.findCityFavourite();
         model.addAttribute("cityFavourite", cityList);
         return "web/home";
     }
-
-
 
     @GetMapping("/danh-sach-khach-san")
     public String getHotelList(@RequestParam String nameCity,
@@ -63,14 +62,17 @@ public class WebController {
             List<Hotel> hotelFavourite = hotelService.getAllHotelFavourite((String) session.getAttribute("MY_SESSION"));
             model.addAttribute("hotelFavourite", hotelFavourite);
         }
+        City city = cityService.getCityByName(nameCity);
+        model.addAttribute("city", city);
+        model.addAttribute("listAmenityHotel", amenityService.getAllAmenityHotel().subList(0,10));
+        model.addAttribute("listAmenityRoom", amenityService.getAllAmenityRoom().subList(0,10));
+        model.addAttribute("city", city);
         model.addAttribute("nameCity", nameCity);
         model.addAttribute("checkIn", checkIn);
         model.addAttribute("checkOut", checkOut);
         model.addAttribute("numberGuest", numberGuest);
         model.addAttribute("numberRoom", numberRoom);
 //        model.addAttribute("hotelList", hotelList);
-
-
         return "web/hotel-list";
     }
 
@@ -82,15 +84,12 @@ public class WebController {
                                  @RequestParam(required = false) String checkOut,
                                  @RequestParam(required = false, defaultValue = "1") Integer numberGuest,
                                  @RequestParam(required = false, defaultValue = "1") Integer numberRoom) {
-
-        System.out.println("Tới bước 1");
         // lấy hotel theo id
         Hotel hotel = hotelService.getHotelById(id);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate checkInDay = LocalDate.parse(checkIn,dateTimeFormatter);
         LocalDate checkOutDay = LocalDate.parse(checkOut,dateTimeFormatter);
         List<RoomDto> roomList = roomService.getDataRoom(id,checkInDay,checkOutDay,numberGuest,numberRoom);
-        System.out.println("Tới bước 2");
         // danh sách các review của khách sạn
         List<Review> reviewList = reviewsService.findAllReview(id);
         // lấy các tiện sub cac tiên ích của khách sạn
@@ -100,7 +99,6 @@ public class WebController {
         }else {
             listAmenity = hotel.getAmenityHotelList();
         }
-        System.out.println("Tới bước 3");
         model.addAttribute("reviewList" , reviewList);
         model.addAttribute("amenityHotels" , listAmenity);
         model.addAttribute("hotel", hotel);
@@ -114,14 +112,12 @@ public class WebController {
             User user = authService.getUserCurrent();
             model.addAttribute("user" , user);
         }
-        System.out.println("Tới bước 4");
         // lấy danh sách các tiện ích của phòng
         List<AmenityRoomType> amenityRoomTypes = List.of(AmenityRoomType.values());
         model.addAttribute("amenityRoomTypes", amenityRoomTypes);
         // lấy tất cả image hotel
         List<ImageHotel>  imageHotelList = imageService.getAllImageByIdHotel(hotel.getId());
         model.addAttribute("imageHotelList", imageHotelList);
-        System.out.println("Tới bước 5");
         return "web/hotel-detail";
     }
 
@@ -285,7 +281,4 @@ public class WebController {
         model.addAttribute("cityList" ,cityList);
         return "/web/create-hotel";
     }
-
-
-
 }

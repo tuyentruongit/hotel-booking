@@ -8,11 +8,9 @@ import lombok.Getter;
 public enum RoomType {
     SINGLE("Phòng Đơn"),
     DOUBLE("Phòng Đôi"),
-    TRIPLE("Phòng Triple"),
-    QUAD("Phòng Quad"),
     STANDARD("Phòng Tiêu Chuẩn"),
     SUITE("Phòng Suite"),
     DELUXE("Phòng Cao Cấp"),
-    EXECUTIVE("Phòng Hạng Cao Cấp");
+    STUDIO("Studio");
     private final String value;
 }

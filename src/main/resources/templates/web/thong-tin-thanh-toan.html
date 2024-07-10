@@ -24,7 +24,7 @@
                 <div class="col-4">
                     <div class="infor-hotel py-2  px-3  rounded my-3">
                         <div class="image-hotel">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="IMG Hotel">
+                            <img th:src="${hotel.poster}" alt="IMG Hotel">
                         </div>
                         <div class="rental-type-star">
                             <span class="rental-type" th:text="${hotel.rentalType.value}"></span>
@@ -53,12 +53,20 @@
                             <span class="w-50">Trả phòng</span>
                         </div>
                         <div class="d-flex p-0 m-0">
-                            <h6 class="w-50 p-0 m-0"><th:block th:text="${startDayOfWeek}"></th:block>, <th:block th:text="${start.getDayOfMonth()}"></th:block> tháng <th:block th:text="${start.getMonth().value}"></th:block> <th:block th:text="${start.getYear()}"></th:block></h6>
-                            <h6 class="w-50 p-0 m-0"><th:block th:text="${endDayOfWeek}"></th:block>, <th:block th:text="${end.getDayOfMonth()}"></th:block> tháng <th:block th:text="${end.getMonth().value}"></th:block> <th:block th:text="${end.getYear()}"></th:block></h6>
+                            <span class="w-50 p-0 m-0" >
+                                <th:block th:text="${hotel.policyHotel.startCheckIn}"></th:block>
+                                 -
+                                <th:block th:text="${hotel.policyHotel.endCheckIn}"></th:block>
+                            </span>
+                            <span class="w-50 p-0 m-0" >
+                                <th:block th:text="${hotel.policyHotel.startCheckOut}"></th:block>
+                                 -
+                                <th:block th:text="${hotel.policyHotel.endCheckOut}"></th:block>
+                            </span>
                         </div>
                         <div class="d-flex p-0 m-0">
-                            <span class="w-50 p-0 m-0" th:text="${hotel.policyHotel.startCheckIn}"></span>
-                            <span class="w-50 p-0 m-0" th:text="${hotel.policyHotel.startCheckOut}"></span>
+                            <h6 class="w-50 p-0 m-0"><th:block th:text="${startDayOfWeek}"></th:block>, <th:block th:text="${start.getDayOfMonth()}"></th:block> tháng <th:block th:text="${start.getMonth().value}"></th:block> <th:block th:text="${start.getYear()}"></th:block></h6>
+                            <h6 class="w-50 p-0 m-0"><th:block th:text="${endDayOfWeek}"></th:block>, <th:block th:text="${end.getDayOfMonth()}"></th:block> tháng <th:block th:text="${end.getMonth().value}"></th:block> <th:block th:text="${end.getYear()}"></th:block></h6>
                         </div>
                         <div class="d-flex align-items-center mt-3">
                             <h6 class=" w-50  p-0 m-0">Thời gian lưu trú : </h6>
@@ -72,7 +80,7 @@
                         <h5 class="">Phòng bạn đã chọn</h5>
 
                         <div class="image-room overflow-hidden">
-                            <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="IMG Hotel">
+                            <img th:src="${room.thumbnailRoom}" alt="IMG Hotel">
                         </div>
                         <h6 class="name-room" th:text="${room.getName()}">
                         </h6>

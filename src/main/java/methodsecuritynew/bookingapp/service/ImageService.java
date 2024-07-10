@@ -25,7 +25,6 @@ import java.util.UUID;
 @Service
 public class ImageService {
     private String uploadDir = "upload_image";
-
     private final ImageUserRepository imageUserRepository;
 
     private final UserRepository userRepository;
@@ -198,7 +197,7 @@ public class ImageService {
             try {
 
                 Files.deleteIfExists(filePathDelete);
-                user.setAvatar("/web/assets/image/avatar-default.jpg");
+                user.setAvatar("/web/assets/image/avata-default.jpg");
                 imageUserRepository.delete(imageUserOld);
             } catch (IOException ioException) {
                 throw new RuntimeException(ioException);

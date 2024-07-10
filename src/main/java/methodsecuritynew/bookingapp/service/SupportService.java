@@ -18,7 +18,8 @@ public class SupportService {
 
 
     public List<Support> getSupportByType(String typeSupport) {
-        return supportRepository.findAll().stream()
+        List<Support> supportList = supportRepository.findAllByStatusTrue();
+        return supportList.stream()
                 .filter(support -> support.getSupportType().getValue().equalsIgnoreCase(typeSupport))
                 .toList();
     }

@@ -14,21 +14,9 @@
       <img class="img-logo" src="/web/assets/image/logone.png" alt="Ảnh Logo">
     </a>
     <div class="d-flex align-items-center">
-      <a target="_blank" class="nav-link text-decoration-none text-reset " >
-        <i class="fa-solid fa-globe"></i>
-        Tiếng Việt
-      </a>
 
-      <a target="_blank" class="nav-link text-decoration-none text-reset " >
-        Chuyến đi
-      </a>
       <a target="_blank" class="nav-link text-decoration-none text-reset " th:href="@{/support}">
         Hỗ trợ
-      </a>
-
-
-      <a target="_blank" class="nav-link text-decoration-none text-reset " >
-        <i class="fa-solid fa-bell"></i>
       </a>
       <th:block sec:authorize="not isAuthenticated()" >
         <a target="_blank" class="nav-link text-decoration-none text-reset register" th:href="@{/account/dang-ky}">

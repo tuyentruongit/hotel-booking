@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
     Page<Booking> findAllByUser_IdOrderByCreateAtDesc(Integer id, Pageable pageable);
@@ -65,13 +66,13 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     @Query(value = "SELECT new  methodsecuritynew.bookingapp.model.dto.TotalBookingMonthDto(MONTH(o.createAt), YEAR(o.createAt), COUNT(o.id))" +
             " FROM Booking o WHERE o.statusBooking = 'COMPLETE' AND o.hotel.id = :id AND YEAR(o.createAt) = :year AND MONTH(o.createAt) = :month"   +
             " GROUP BY MONTH(o.createAt), YEAR(o.createAt)")
-    TotalBookingMonthDto findTotalBookingMonthByHotel(@Param("id") Integer id , @Param("month") int month , @Param("year") int year);
+    Optional<TotalBookingMonthDto> findTotalBookingMonthByHotel(@Param("id") Integer id , @Param("month") int month , @Param("year") int year);
     // tổng booking đang chờ xác nhận
     @Query(value = "SELECT new  " +
             "methodsecuritynew.bookingapp.model.dto.TotalBookingMonthDto(MONTH(o.createAt), YEAR(o.createAt), COUNT(o.id))" +
             " FROM Booking o WHERE o.statusBooking = 'PENDING' AND o.hotel.id = :id"+
             " GROUP BY MONTH(o.createAt), YEAR(o.createAt)")
-    TotalBookingMonthDto findTotalBookingPendingMonthByHotel(@Param("id") Integer id );
+    Optional<TotalBookingMonthDto> findTotalBookingPendingMonthByHotel(@Param("id") Integer id );
 
 
     // tìm kiếm các booking theo từng phòng và ngày check in

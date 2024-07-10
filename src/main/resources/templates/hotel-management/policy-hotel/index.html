@@ -106,7 +106,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-6">
-                                                            <label> Từ :</label>
+                                                            <label> Đến :</label>
                                                             <select class="end-checkIn">
                                                                 <option th:each="hour : ${#numbers.sequence(0,23)}"
                                                                         th:data-key="${hour}"
@@ -138,7 +138,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-6">
-                                                            <label> Từ :</label>
+                                                            <label> Đến :</label>
                                                             <select class="end-checkOut">
                                                                 <option th:each="hour : ${#numbers.sequence(0,23)}"
                                                                         th:value="${hour < 10 ? '0' + hour +':00' : hour + ':00'}"

@@ -7,6 +7,7 @@
 
     <title>Chi tiết bài viết</title>
     <th:block id="css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"/>
         <link rel="stylesheet" href="/admin-assets/plugins/select2/css/select2.min.css" />
         <link rel="stylesheet" href="/admin-assets/dist/css/style.css">
         <style>
@@ -171,7 +172,7 @@
         const easyMDE = new EasyMDE({
             element: document.getElementById("editor"),
             spellChecker: false,
-            maxHeight: "500px",
+            maxHeight: "400px",
             renderingConfig: {
                 codeSyntaxHighlighting: true,
             },

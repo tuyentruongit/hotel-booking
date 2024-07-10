@@ -12,7 +12,6 @@ public enum AmenityHotelType {
     SWIMMING_POOL("Hồ bơi"), // Hồ bơi
     SPA("Spa"), // Spa
     PLAYGROUND("Sân chơi"), // Sân chơi
-
     OTHER("Khác"); // Khác
 
     public final String value;

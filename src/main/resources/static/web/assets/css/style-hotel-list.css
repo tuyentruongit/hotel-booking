@@ -98,11 +98,13 @@ body {
 
 }
 
-.image-map{
+.image-city{
     object-fit: cover;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     max-height: 200px;
+    width: 100%;
+
 }
 .search-by-name-hotel h3 {
     color:var(--text-dark) ;
@@ -303,6 +305,12 @@ input[type="range"]::-moz-range-thumb {
 .custom-checkbox:checked + label {
     font-family: Helvetica, sans-serif;
     color: #3170E7 ;
+}
+
+.btn-amenityHotel , .btn-amenityRoom{
+    border: none;
+    color: #0d6efd;
+    background-color: #F5F5F5 !important;
 }
 
 

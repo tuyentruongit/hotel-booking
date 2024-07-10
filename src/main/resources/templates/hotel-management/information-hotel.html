@@ -42,7 +42,12 @@
             .thumbnail-preview-container{
                 width: 300px;
                 height: 150px ;
+            }
+            .thumbnail-preview-container img{
+                width: 300px;
+                height: 150px ;
                 object-fit: cover;
+                border-radius: 10px;
             }
             .content-modal-amenity{
                 max-height: 500px;
@@ -126,10 +131,12 @@
                                             <div  class="thumbnail-preview-container mb-3">
                                                 <img th:src="${hotel.getPoster()}" alt="" id="thumbnail" />
                                             </div>
-                                            <button name="thumbnail" type="button" class="rounded btn btn-info btn-flat" data-toggle="modal"
-                                                    data-target="#modal-image">
-                                                Danh sách hình ảnh
-                                            </button>
+                                            <div>
+                                                <button name="thumbnail" type="button" class="rounded btn btn-info btn-flat" data-toggle="modal"
+                                                        data-target="#modal-image">
+                                                    Danh sách hình ảnh
+                                                </button>
+                                            </div>
                                         </div>
 
                                     </div>

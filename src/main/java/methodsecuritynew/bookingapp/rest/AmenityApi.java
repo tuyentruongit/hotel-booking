@@ -10,11 +10,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/amenity/")
 @RequiredArgsConstructor
 public class AmenityApi {
     private final AmenityService amenityService ;
+    @GetMapping("/hotel/get-all")
+    public ResponseEntity<?> getAllAmenityHotel (){
+        List<AmenityHotel> amenityHotelList = amenityService.getAllAmenityHotel();
+        return ResponseEntity.ok(amenityHotelList);
+    }
+    @GetMapping("/room/get-all")
+    public ResponseEntity<?> getAllAmenityRoom (){
+        List<AmenityRoom> amenityRoomList = amenityService.getAllAmenityRoom();
+        return ResponseEntity.ok(amenityRoomList);
+    }
+
 
 
     // admin cập nhật tiện ích khách sạn

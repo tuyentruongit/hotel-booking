@@ -117,10 +117,10 @@
                     <div   class="slider-main owl-carousel owl-theme " >
                         <div class="slider-item outstanding-city text-reset text-decoration-none "   th:each="city : ${cityFavourite}">
 
-                            <div  class="slider-item outstanding-city text-reset text-decoration-none  border-none" th:data-name="${city.name}" th:onclick="navigation(this.getAttribute('data-name'))">
+                            <div  class="slider-item outstanding-city text-reset text-decoration-none  border-none" th:data-name="${city.nameCity}" th:onclick="navigation(this.getAttribute('data-name'))">
                                 <img th:src="${city.imageCity}" alt="">
                                 <div class="country-city p-2 d-flex justify-content-center"  >
-                                    <h5 class="name-city" th:value="${city.name}" th:text="${city.getName()}"></h5>
+                                    <h5 class="name-city" th:value="${city.nameCity}" th:text="${city.nameCity}"></h5>
                                 </div>
                             </div>
 
@@ -180,10 +180,10 @@
                     </div>
                     <div class="col-7 px-3">
                         <div class="title-pr mt-2 ">
-                            <h3>Hưởng nhiều quyền lợi hơn với app WeFindTravel</h3>
+                            <h3>Hưởng nhiều quyền lợi hơn với WebFindTravel</h3>
                         </div>
                         <div class="content-pr pt-2">
-                            <p>Tiết kiệm tại một số khách sạn . Với ưu đãi trên app của chúng tôi, bạn có thể tiết kiệm
+                            <p>Tiết kiệm tại một số khách sạn . Với WebFindTravel bạn có thể tiết kiệm
                                 để đi được nhiều hơn và quản lý mọi thứ trong khi đang di chuyển</p>
                         </div>
 <!--                        <div class="btn-pr">-->

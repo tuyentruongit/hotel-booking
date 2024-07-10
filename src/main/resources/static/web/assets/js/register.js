@@ -32,7 +32,10 @@ showPasswordConfirm.addEventListener('click',()=>{
 })
 
 
+
+// gửi thông tin đăng ký lên server
 formRegister.addEventListener('submit' ,(e)=>{
+    console.log("adbb")
     e.preventDefault();
     if (!$('#form-register').valid()) return;
     const data = {
@@ -41,13 +44,12 @@ formRegister.addEventListener('submit' ,(e)=>{
         password: inputPassword.value,
         confirmPassword: confirmPassword.value
     }
+    console.log("adbb")
     axios.post("/api/auth/register",data)
         .then((res) =>{
-            console.log(res)
             toastr.success("Đăng ký thành công. Vui lòng kiểm tra email xác thực tài khoản ")
         })
         .catch((er)=>{
-            console.log(er)
             toastr.error(er.response.data.message);
         })
 })
@@ -63,9 +65,12 @@ $('#form-register').validate({
         },
         inputPassword: {
             required: true,
+            minlength: 6,
+            // pattern: /^(?=.*[A-Za-z])(?=.*\d).{6,}$/, // ít nhất một chữ cái và một số, ít nhất 6 ký tự
         },
         confirmPassword: {
             required: true,
+            minlength: 6,
             equalTo: "[name='inputPassword']"
         },
     },
@@ -75,13 +80,16 @@ $('#form-register').validate({
         },
         email: {
             required: "Vui lòng email của bạn",
-            email:"email không đúng định dạng"
+            email:"Email không đúng định dạng"
         },
         inputPassword: {
             required: "Vui lòng nhập mật khẩu",
+            minlength: "Mật khẩu phải có ít nhất 6 ký tự.",
+            pattern: "Mật khẩu mới phải chứa ít nhất một chữ cái và một số.",
         },
         confirmPassword: {
             required: "Vui lòng nhập tên của bạn",
+            minlength: "Mật khẩu phải có ít nhất 6 ký tự.",
             equalTo: "Mật khẩu không trùng khớp",
         },
     },

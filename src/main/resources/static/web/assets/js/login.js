@@ -14,7 +14,7 @@ showPassword.addEventListener('click',()=>{
     }
 })
 
-
+// gửi thông tin người đăng nhập serverr
 formLogin.addEventListener('submit', (e)=>{
     if (!$('#form-login').valid()){
 
@@ -41,18 +41,20 @@ formLogin.addEventListener('submit', (e)=>{
 
 } )
 
+// quên mật khẩu
 const btnForgotPassword = document.querySelector('.btn-forgot-password');
 const inputForgotPassword = document.querySelector('.input-email-forgot');
+// gọi api để xác nhận quên mật khẩu
 btnForgotPassword.addEventListener('click',()=>{
     axios.post("/api/auth/forgot-password?email="+inputForgotPassword.value)
         .then((response)=>{
            toastr.success("Vui lòng xác nhận qua email")
         })
-        .catch(()=>{
-            toastr.error("Lỗi")
+        .catch((err)=>{
+            toastr.error(err.response.data.message)
         })
 })
-
+// validate dữ liệu
 $('#form-login').validate({
     rules: {
         email: {
@@ -61,6 +63,7 @@ $('#form-login').validate({
         },
         password: {
             required: true,
+            minlength: 6,
         },
     },
     messages: {
@@ -70,6 +73,7 @@ $('#form-login').validate({
         },
         password: {
             required: "Mật khẩu không được để trống",
+            minlength: "Mật khẩu phải có ít nhất 6 ký tự.",
         },
     },
     errorElement: 'span',

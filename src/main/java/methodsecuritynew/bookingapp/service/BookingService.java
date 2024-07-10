@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,7 @@ public class BookingService {
         return bookingRepository.findAllByUser_IdOrderByCreateAtDesc(id, pageable);
     }
 
+    //
     public Booking bookingHotel(UpsertBookingRequest bookingRequest) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate checkIn = LocalDate.parse(bookingRequest.getCheckIn(), dateTimeFormatter);
@@ -330,10 +332,12 @@ public class BookingService {
     }
 
     public TotalBookingMonthDto getTotalBookingByMonCurrent(int monthValue, int year , int idHotel) {
-        return bookingRepository.findTotalBookingMonthByHotel(idHotel,monthValue,year);
+        Optional<TotalBookingMonthDto> result = bookingRepository.findTotalBookingMonthByHotel(idHotel, monthValue, year);
+        return result.orElse(new TotalBookingMonthDto(monthValue, year, 0)); // Trả về đối tượng mới với giá trị 0
     }
     public TotalBookingMonthDto getTotalBookingPendingMonthByHotel( int idHotel) {
-        return bookingRepository.findTotalBookingPendingMonthByHotel(idHotel);
+        Optional<TotalBookingMonthDto> result = bookingRepository.findTotalBookingPendingMonthByHotel(idHotel);
+        return result.orElse(new TotalBookingMonthDto(LocalDate.now().getMonthValue(),LocalDate.now().getYear(),0)); // Trả về đối tượng mới với giá trị 0
     }
 
     // tổng doanh thu sau triết khấu của năm hiện tại

@@ -79,11 +79,8 @@
                 <div class="col-3">
                     <div class="map border">
                         <a class="link-map w-100 text-reset text-decoration-none" href="#">
-                            <img class="image-map" src="/web/assets/image/bkg-map-entry.svg" alt="">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <div class="d-flex justify-content-center my-2">
-                                Xem vị trí
-                            </div>
+                            <img class="image-city" th:src="${city.imageCity}" alt="">
+                            <div class="d-flex justify-content-center my-2" th:text="${city.name}"></div>
                         </a>
                     </div>
                     <div class="search-by-name-hotel mt-4">
@@ -136,84 +133,29 @@
                                 <input id="check-box2" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="MOTEL">
                                 <label for="check-box2">Nhà Nghỉ tư nhân</label>
                             </li>
-                            <li>
-                                <input id="check-box3" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="RESORT">
-                                <label for="check-box3">Resort</label>
-                            </li>
-                            <li>
-                                <input id="check-box4" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="APARTMENT">
-                                <label for="check-box4">Khách sạn căn hộ</label>
-                            </li>
-                            <li>
-                                <input id="check-box5" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="VILLA">
-                                <label for="check-box5">Villa</label>
-                            </li>
-                            <li>
-                                <input id="check-box6" class=" m-2 custom-checkbox" type="checkbox" type-check="rental-type" value="HOLIDAY_HOME" >
-                                <label for="check-box6">Khu nghỉ dưỡng</label>
-                            </li>
                         </ul>
 
                     </form>
                     <form class="sort-by-amenity-hotel">
                         <h6>Tiện ích khách sạn</h6>
-                        <ul class="list-unstyled ps-3">
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox" >
-                                <label>Wifi</label>
+                        <ul class="list-unstyled ps-3 wrap-amenity-hotel">
+                            <li  class="d-flex align-items-center w-100" th:each="amenityHotel : ${listAmenityHotel}">
+                                <input class=" m-2 custom-checkbox" type="checkbox" type-check="amenityHotel"  th:value="${amenityHotel.name}">
+                                <label style="font-size: 14px" th:text="${amenityHotel.name}"></label>
                             </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label >Spa</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Gym</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Bãi đậu xe</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Nhà hàng</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Trạm sạc xe điện</label>
-                            </li>
-                            <a href="">Xem thêm</a>
+                            <button type-btn="show" type="button" class="btn-amenityHotel" href="">Xem thêm</button>
                         </ul>
 
                     </form>
-                     <form class="sort-by-amenity-room">
+                     <form class="sort-by-amenity-room ">
                         <h6>Tiện ích phòng</h6>
-                        <ul class="list-unstyled ps-3">
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Wifi</label>
+                        <ul class=" w-100 list-unstyled ps-3 wrap-amenity-room">
+                            <li class="d-flex align-items-center" th:each="amenityRoom : ${listAmenityRoom}">
+                                <input class=" m-2 custom-checkbox" type="checkbox"  type-check="amenityRoom"  th:value="${amenityRoom.name}">
+                                <label style="font-size: 14px" th:text="${amenityRoom.name}"></label>
                             </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label >Spa</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Gym</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Bãi đậu xe</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Nhà hàng</label>
-                            </li>
-                            <li>
-                                <input class=" m-2 custom-checkbox" type="checkbox">
-                                <label>Trạm sạc xe điện</label>
-                            </li>
-                            <a href="">Xem thêm</a>
+                            <button type-btn="show" type="button" class="btn-amenityRoom" href="">Xem thêm</button>
+
                         </ul>
 
                     </form>
@@ -357,23 +299,20 @@
             <div class="row">
                 <div class="wrap-pr d-flex">
                     <div class="col-4">
-                        <img class="w-100 image-pr" src="/web/assets/image/uudai.jpg" alt="">
+                        <img class="w-100 image-pr" src="https://static.vinwonders.com/2023/01/cac-loai-hinh-du-lich-4.jpg" alt="">
                     </div>
-                    <div class="col-6 px-3">
-                        <div class="title-pr mt-2 " >
-                            <h3>Hưởng nhiều quyền lợi hơn với app STAYEASE</h3>
+                    <div class="col-7 px-3">
+                        <div class="title-pr mt-2 ">
+                            <h3>Hưởng nhiều quyền lợi hơn với WebFindTravel</h3>
                         </div>
                         <div class="content-pr pt-2">
-                            <p>Tiết kiệm tại một số khách sạn . Với ưu đãi trên app của chúng tôi, bạn có thể tiết kiệm để
-                                đi được nhiều hơn và quản lý mọi thứ trong khi đang di chuyển</p>
+                            <p>Tiết kiệm tại một số khách sạn . Với WebFindTravel bạn có thể tiết kiệm
+                                để đi được nhiều hơn và quản lý mọi thứ trong khi đang di chuyển</p>
                         </div>
-<!--                        <div class="btn-pr">-->
-<!--                            <a href="#">Xem chi tiết</a>-->
-<!--                        </div>-->
-
+                        <!--                        <div class="btn-pr">-->
+                        <!--                            <a href="">Xem chi tiết</a>-->
+                        <!--                        </div>-->
                     </div>
-
-
                 </div>
 
 
@@ -391,6 +330,8 @@
         let valueNumberRoom = [[${numberRoom}]];
         console.log(valueNumberRoom);
         let hotelsFavourite = [[${hotelFavourite}]];
+        let listAmenityRoom = [[${listAmenityRoom}]];
+        let listAmenityHotel = [[${listAmenityHotel}]];
     </script>
 
     <script src="/web/assets/js/hotel-list.js"></script>

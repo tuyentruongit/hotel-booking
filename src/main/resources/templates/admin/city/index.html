@@ -99,8 +99,8 @@
                                     <input type="text" class="form-control" id="input-country" placeholder="tên quốc gia"
                                                                               name="nameCountry">
                                 </div>
-                                <div class="form-group">
-                                    <div class="container-thumbnail">
+                                <div  class="form-group">
+                                    <div class="container-thumbnail d-none">
                                         <img class="preview-thumbnail" src="" alt="">
                                     </div>
                                 </div>
@@ -217,6 +217,7 @@
             // set tiêu đề
             const modalTitle = document.getElementById("modal-city-title")
             modalTitle.innerText = "Tạo thành phố"
+            document.querySelector(".container-thumbnail").classList.add("d-none");
         })
 
         $('#modal-city').on('hidden.bs.modal', function (event) {
@@ -245,7 +246,7 @@
                 return
             }
 
-            axios.post("/api/admin/city/", data)
+            axios.post("/api/admin/city", data)
                 .then(res => {
                     cityList.unshift(res.data)
                     renderPagination(cityList)
@@ -308,10 +309,11 @@
             thumbnailCity.src = city.imageCity;
 
             $('#modal-city').modal('show');
-
             // set title modal
             const modalTitle = document.getElementById("modal-city-title")
             modalTitle.innerText = "Cập nhật thành phố"
+            document.querySelector(".container-thumbnail").classList.remove("d-none");
+
         }
 
         // Handle country

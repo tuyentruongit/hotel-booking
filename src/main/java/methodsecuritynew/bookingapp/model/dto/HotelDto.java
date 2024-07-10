@@ -6,6 +6,7 @@ import methodsecuritynew.bookingapp.entity.AmenityHotel;
 import methodsecuritynew.bookingapp.model.enums.RentalType;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,5 +24,6 @@ public class HotelDto {
     Integer estimatedPrice;
     Integer totalReviews;
     List<String> nameAmenity;
+    Set<String> nameAmenityRoom;
     String poster;
 }

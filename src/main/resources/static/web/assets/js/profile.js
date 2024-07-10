@@ -11,6 +11,11 @@ const inputYear = document.querySelectorAll('.year');
 const date = document.getElementById('date-birth-day');
 const listGender = document.querySelectorAll('.gender-option');
 
+inputAddress.addEventListener('change' , ()=>{
+
+})
+
+
 // lấy ngày tháng năm sinh từ các ô option để update dữ liệu
 const  getBirthday = () =>{
     let dayBirthday = null;
@@ -129,7 +134,6 @@ btnSave.addEventListener('click' ,()=>{
 
     // lấy ngày sinh nhật người dùng đang  chọn
     const birthdayUser = formatDate(getBirthday());
-    console.log(birthdayUser)
     const  dataUser ={
         name : inputName.value,
         phone: inputPhoneNumber.value,
@@ -138,7 +142,7 @@ btnSave.addEventListener('click' ,()=>{
         birthDay : birthdayUser
     }
 
-    // gọi api
+    // gọi api cập nhật thông tin người dùng
     axios.put("/api/auth/update-user/"+inforUser.id , dataUser)
         .then((response)=>{
             toastr.success("Đã cập nhật thông tin của bạn")
@@ -150,16 +154,16 @@ btnSave.addEventListener('click' ,()=>{
 
 })
 
-
+// thay đổi mật khẩu
 const btnChangePassword = document.querySelector('.btn-change');
+
+// thay đổi mật khẩu
 btnChangePassword.addEventListener('click',()=>{
     if ( !$('#form-change-password').valid()) return;
     const password = document.querySelector('.old-password');
     const newPassword = document.querySelector('.new-password');
     const confirmPassword = document.querySelector('.confirm-password');
-    console.log( password.value)
-    console.log( newPassword.value)
-
+    // lấy mật khẩu người dùng đã nhập vào để gửi lên
     const data = {
         oldPassword : password.value,
         newPassword:  newPassword.value,

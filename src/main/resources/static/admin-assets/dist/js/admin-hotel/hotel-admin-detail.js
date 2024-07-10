@@ -104,6 +104,7 @@ $('#form-update-hotel').validate({
     }
 });
 
+// xóa khách sạn
 const deleteHotel = document.getElementById("deleteHotel");
 deleteHotel.addEventListener('click', () => {
     const isConfirm = confirm("Bạn có chắc mình muốn khách sạn này không?");

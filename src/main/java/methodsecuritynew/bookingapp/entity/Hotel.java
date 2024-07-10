@@ -70,7 +70,8 @@ public class Hotel {
             joinColumns = @JoinColumn(name = "id_hotel"),
             inverseJoinColumns = @JoinColumn(name = "id_amenity")
     )
-    @Fetch(FetchMode.SUBSELECT)
+
+//    @Fetch(FetchMode.SUBSELECT)
     List<AmenityHotel> amenityHotelList ;
 
     public String getRatingText() {

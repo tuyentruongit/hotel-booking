@@ -3,6 +3,7 @@ package methodsecuritynew.bookingapp.service;
 import jakarta.persistence.EntityNotFoundException;
 
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import methodsecuritynew.bookingapp.entity.*;
 import methodsecuritynew.bookingapp.exception.BadRequestException;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +49,7 @@ public class HotelService {
     private final ImageHotelRepository imageHotelRepository;
 
     private final MailService mailService;
+    private final HttpSession httpSession;
 
     public List<HotelDto> hotelListSearch = new ArrayList<>();
 
@@ -76,6 +79,16 @@ public class HotelService {
 
     // tạo một HotelDto từ một hotel
     private HotelDto createHotelDto(Hotel hotel, List<RoomDto> dataRoom) {
+        Set<String> nameAmenityRoom = new HashSet<>();
+        for (int i = 0; i < dataRoom.size(); i++) {
+            System.out.println("size" + dataRoom.size());
+           RoomDto room = dataRoom.get(i);
+           for (AmenityRoom amenityRoom : room.getAmenityRoomList()){
+               System.out.println("Name :" +amenityRoom.getName());
+               nameAmenityRoom.add(amenityRoom.getName());
+           }
+        }
+        System.out.println("nè " + nameAmenityRoom);
         // lấy giá thấp nhất của khách sạn để hiện thị cho người dùng
         int price = getMinPrice(dataRoom);
         int totalReview = reviewRepository.findReviewByHotel_Id(hotel.getId()).size();
@@ -91,6 +104,7 @@ public class HotelService {
         hotelDto.setRating(hotel.getRating());
         hotelDto.setRatingText(hotel.getRatingText());
         hotelDto.setEstimatedPrice(price);
+        hotelDto.setNameAmenityRoom(nameAmenityRoom);
         hotelDto.setNameAmenity(hotel.getAmenityHotelList().stream().map(Amenity::getName).toList());
         return hotelDto;
     }
@@ -219,11 +233,11 @@ public class HotelService {
 
 
     public Hotel getHotelByAccountCurrent() {
-//        User user = userRepository.findByEmail(session.getAttribute("MY_SESSION").toString())
-//                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user trên "));
+        User user = userRepository.findByEmail(httpSession.getAttribute("MY_SESSION").toString())
+                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user trên "));
 
-//        return hotelRepository.findHotelByUser_Id(user.getId());
-        return hotelRepository.findById(2).orElseThrow(() -> new RuntimeException("Không tìm thấy hotel trên "));
+        return hotelRepository.findHotelByUser_Id(user.getId());
+//        return hotelRepository.findById(2).orElseThrow(() -> new RuntimeException("Không tìm thấy hotel trên "));
     }
 
 
@@ -299,6 +313,7 @@ public class HotelService {
         Hotel hotelNew = createHotel(upsertHotelRequest, city, user, policyHotel, amenityHotelList);
         // tạo dối tượng image hotel
         ImageHotel imageHotel = imageService.uploadImageHotel(hotelNew.getId(), fileHotel);
+        imageHotelRepository.save(imageHotel);
         // đặt poster cho khách sạn là ảnh đâầu tiên
         hotelNew.setPoster(imageHotel.getUrl());
         // tạo dữ liệu cho phòng

@@ -97,7 +97,7 @@
                     <button class="image-grid w-100 " type="button" data-bs-toggle="modal"
                             data-bs-target="#modal-image">
                        <th:block th:if="${imageHotelList.size()>=5}">
-                           <img class="image-grid-col-2 image-grid-row-2" th:src="${imageHotelList.get(0).url}"
+                           <img class="image-grid-col-2 image-grid-row-2" th:src="${hotel.poster}"
                                 alt="architecture">
                            <img th:src="${imageHotelList.get(1).url}"
                                 alt="architecture">
@@ -109,7 +109,7 @@
                                 alt="architecture">
                        </th:block>
                         <th:block th:if="${imageHotelList.size()<=4}">
-                            <img class="image-grid-col-2 image-grid-row-2" th:src="${imageHotelList.get(0).url}"
+                            <img class="image-grid-col-2 image-grid-row-2" th:src="${hotel.poster}"
                                  alt="architecture">
                         </th:block>
                     </button>
@@ -208,7 +208,6 @@
                                 <i class="fa-solid fa-angle-right ms-2 mt-1"></i>
                             </button>
 
-
                         </div>
 
 
@@ -216,7 +215,7 @@
 
                             <div class="map border">
                                 <a class="link-map w-100 text-reset text-decoration-none" href="">
-                                    <img class="image-map" src="/web/assets/image/bkg-map-entry.svg" alt="">
+                                    <img class="image-map" th:src="${hotel.city.imageCity}" alt="">
                                     <div class="d-flex justify-content-center my-2 align-items-center">
 
                                         <span class="p-1 address-hotel   ">

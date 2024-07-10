@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title th:replace="${title}"></title>
+    <title th:replace="${title}">WebFindTravel.com</title>
+    <link rel="shortcut icon" href="/web/assets/image/logone.png" type="image/x-icon">
+    <link rel="icon"  href="/web/assets/image/logone.png"  type="image/x-icon">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -47,6 +49,18 @@
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const logOut = ()=>{
+        let isConFirm = confirm("Bạn có chắc rằng muốn đăng xuất?")
+        if (isConFirm){
+            toastr.success("Đăng xuất thành công");
+            setTimeout(()=>{
+                window.location.reload();
+                window.location.href = "/logout";
+            },2000)
+        }
+    }
+</script>
 
 
 <th:block th:replace="${js}"></th:block>

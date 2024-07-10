@@ -113,7 +113,7 @@
                                             <div class="form-group edit-phone-number">
                                                 <input th:value="${#authentication.principal.user.getPhoneNumber()}"
                                                        class="input-phone form-control"
-                                                       type="text" placeholder="Số điện thoại" name="phoneUser">
+                                                       type="tel" placeholder="Số điện thoại" name="phoneUser" inputmode="numeric">
                                             </div>
                                         </div>
 
@@ -288,7 +288,7 @@
                            <div class="form-group">
                               <h6> Mật khẩu mới</h6>
                               <div class="input-password">
-                                  <input  name="newPassword" class="new-password form-control" type="password" placeholder="Mật khẩu mới">
+                                  <input id="newPassword"  name="newPassword" class="new-password form-control" type="password" placeholder="Mật khẩu mới">
                                   <button type="button" class="show-password-new"><i class="fa-regular fa-eye"></i></button>
                               </div>
                           </div>
@@ -396,6 +396,7 @@
                 },
                 phoneUser: {
                     required: true,
+                    pattern: /^(0\d{9}|(\+84|84)[1-9]\d{7})$/,
                 },
 
             },
@@ -404,6 +405,8 @@
                     required: "Tên của bạn không được để trống.",
                 }, phoneUser: {
                     required: "Số điện thoại không được để trống.",
+                    pattern : "Số điện thoại không hợp lệ ",
+
                 }, addressUser: {
                     required: "Địa chỉ không được để trống.",
                 },
@@ -425,12 +428,17 @@
             rules: {
                 currentPassword: {
                     required: true,
+                    minlength: 6,
                 }
                 ,newPassword: {
                     required: true,
+                    minlength: 6,
+                    pattern: /^(?=.*[A-Za-z])(?=.*\d).{6,}$/, // ít nhất một chữ cái và một số, ít nhất 6 ký tự
                 }
                 ,confirmNewPassword: {
                     required: true,
+                    minlength: 6,
+                    equalTo: "#newPassword", // ít nhất một chữ cái và một số, ít nhất 6 ký tự
                 },
             },
             messages: {
@@ -439,9 +447,13 @@
                 }
                 ,newPassword: {
                     required: "Mật khẩu mới không được để trống",
+                    minlength: "Mật khẩu phải có ít nhất 6 ký tự.",
+                    pattern: "Mật khẩu mới phải chứa ít nhất một chữ cái và một số.",
                 }
                 ,confirmNewPassword: {
                     required:"Vui lòng nhập lại mật khẩu mới của bạn",
+                    minlength: "Mật khẩu mới phải có ít nhất 6 ký tự.",
+                    equalTo: "Mật khẩu không trùng khớp",
                 },
             },
             errorElement: 'span',
@@ -476,7 +488,6 @@
         const rentalRegistration = document.querySelector('.registration');
         rentalRegistration.addEventListener('click', ()=>{
             if (!$('#input-info-user').valid()) return;
-
             window.location.href = '/create-hotel'
         } )
 

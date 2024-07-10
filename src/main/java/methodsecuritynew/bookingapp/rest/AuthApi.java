@@ -28,8 +28,6 @@ public class AuthApi {
 
     @PutMapping("/update-user/{id}")
     public ResponseEntity<?> updateUser(@RequestBody ChangeInformationUserRequest changeInformationUserRequest, @PathVariable Integer id){
-        System.out.println("id nè" + id  );
-        System.out.println("id nè" + changeInformationUserRequest  );
         authService.updateUser(id,changeInformationUserRequest);
         return ResponseEntity.ok().build();
 

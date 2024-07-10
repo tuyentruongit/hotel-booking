@@ -195,7 +195,7 @@ public class AuthService {
         LocalDate birthday = LocalDate.parse(changeInformationUserRequest.getBirthDay(),dateTimeFormatter);
         user.setAddress(changeInformationUserRequest.getAddress());
         user.setName(changeInformationUserRequest.getName());
-        String regex = "^0([0-9]{8})";
+        String regex = "^(0\\d{9}|(\\+84|84)[1-9]\\d{7})$";
 
         if (changeInformationUserRequest.getPhone().matches(regex)){
             user.setPhoneNumber(changeInformationUserRequest.getPhone());

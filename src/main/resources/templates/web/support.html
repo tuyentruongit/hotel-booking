@@ -97,12 +97,6 @@
             renderSupport(supportList);
         })
 
-
-
-
-
-
-
       const wrapper = document.getElementById('wrapper')
         const  renderSupport = (supportList) =>{
             let html = '';
@@ -114,6 +108,7 @@
                             <span class="ms-3">${support.title}</span>
                         </button>
                         <div class= "content-support ps-3 border " >
+                        <span>${support.description}</span>
                                 <p>${support.content}</p>
                         </div>
                     `
@@ -138,11 +133,7 @@
                     btn.classList.toggle('active-title');
                 })
             });
-
-
         }
-
-
         window.addEventListener('load', () => {
             renderSupport(supportList);
         });

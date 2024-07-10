@@ -119,7 +119,7 @@
                         <!-- small box -->
                         <div class="small-box bg-white ">
                             <div class="inner">
-                                <h3 style="font-size: 27px" th:text="|${#numbers.formatInteger(totalRevenueYear,3,'COMMA')}|"></h3>
+                                <h3 style="font-size: 27px" th:text="${totalRevenueYear == 0 ? 0 : #numbers.formatInteger(totalRevenueYear, 3, 'COMMA')} "></h3>
                                 <h5 >VND</h5>
                                 <p style="font-size: 14px">Doanh thu năm sau triết khấu <th:block th:text="${ 1900 + #dates.createNow().getYear()}"></th:block></p>
                             </div>
@@ -132,7 +132,7 @@
                         <!-- small box -->
                         <div class="small-box bg-white">
                             <div class="inner">
-                                <h3  style="font-size: 27px" th:text="|${#numbers.formatInteger(totalRevenueMonth.totalPrice,3,'COMMA')}|"></h3>
+                                <h3 style="font-size: 27px" th:text="${totalRevenueMonth.totalPrice == 0 ? 0 : #numbers.formatInteger(totalRevenueMonth.totalPrice, 3, 'COMMA')} "></h3>
                                 <h5 >VND</h5>
                                 <p style="font-size: 14px">Doanh thu tháng sau triết khấu <th:block th:text="${totalRevenueMonth.getMonth()}"></th:block>/<th:block th:text="${totalRevenueMonth.getYear()}"></th:block></p>
                             </div>

@@ -292,6 +292,7 @@
     <script th:inline="javascript">
         $(".select2").select2();
 
+
         $('#table-booking-cancel').DataTable({
             "paging": true,
             "lengthChange": true,
@@ -303,7 +304,19 @@
             "order": [],
             "language": {
                 "emptyTable": "Không có đơn đặt phòng đã hủy & từ chối .",
-                "zeroRecords": "Không tìm thấy dữ liệu phù hợp"
+                "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
+                "paginate": {
+                    "next": '<i class="fas fa-chevron-right"></i>',
+                    "previous": '<i class="fas fa-chevron-left"></i>'
+                }
+            },
+            "drawCallback": function () {
+                var api = this.api();
+                if (api.page.info().pages <= 1) {
+                    $('.paginate_button').hide(); // Ẩn tất cả các nút phân trang
+                } else {
+                    $('.paginate_button').show(); // Hiện lại tất cả các nút phân trang
+                }
             }
         });
         $('#table-pending').DataTable({
@@ -317,7 +330,19 @@
             "order": [],
             "language": {
                 "emptyTable": "Không có đơn đặt phòng nào cần xác nhận.",
-                "zeroRecords": "Không tìm thấy dữ liệu phù hợp"
+                "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
+                "paginate": {
+                    "next": '<i class="fas fa-chevron-right"></i>',
+                    "previous": '<i class="fas fa-chevron-left"></i>'
+                }
+            },
+            "drawCallback": function () {
+                var api = this.api();
+                if (api.page.info().pages <= 1) {
+                    $('.paginate_button').hide(); // Ẩn tất cả các nút phân trang
+                } else {
+                    $('.paginate_button').show(); // Hiện lại tất cả các nút phân trang
+                }
             }
         });
         $('#table-complete').DataTable({
@@ -331,7 +356,19 @@
             "order": [],
             "language": {
                 "emptyTable": "Không có đơn đặt phòng nào đã hoàn thành.",
-                "zeroRecords": "Không tìm thấy dữ liệu phù hợp"
+                "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
+                "paginate": {
+                    "next": '<i class="fas fa-chevron-right"></i>',
+                    "previous": '<i class="fas fa-chevron-left"></i>'
+                }
+            },
+            "drawCallback": function () {
+                var api = this.api();
+                if (api.page.info().pages <= 1) {
+                    $('.paginate_button').hide(); // Ẩn tất cả các nút phân trang
+                } else {
+                    $('.paginate_button').show(); // Hiện lại tất cả các nút phân trang
+                }
             }
         });
          $('#table-confirm').DataTable({
@@ -345,8 +382,21 @@
             "order": [],
              "language": {
                  "emptyTable": "Không có đơn đặt phòng nào đã xác nhận."
-                 ,"zeroRecords": "Không tìm thấy dữ liệu phù hợp"
+                 ,"zeroRecords": "Không tìm thấy dữ liệu phù hợp",
+                 "paginate": {
+                     "next": '<i class="fas fa-chevron-right"></i>',
+                     "previous": '<i class="fas fa-chevron-left"></i>'
+                 }
+             },
+             "drawCallback": function () {
+                 var api = this.api();
+                 if (api.page.info().pages <= 1) {
+                     $('.paginate_button').hide(); // Ẩn tất cả các nút phân trang
+                 } else {
+                     $('.paginate_button').show(); // Hiện lại tất cả các nút phân trang
+                 }
              }
+
 
         });
 

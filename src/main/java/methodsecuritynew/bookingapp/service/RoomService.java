@@ -39,9 +39,8 @@ public class RoomService {
     }
 
     public List<Room> getRoomHotelManager() {
-//        User user = userService.getUserCurrent();
-//        Hotel hotel = hotelRepository.findHotelByUser_Id(user.getId());
-        Hotel hotel = hotelRepository.findById(2).orElseThrow(() -> new RuntimeException("Không thấy"));
+        User user = userService.getUserCurrent();
+        Hotel hotel = hotelRepository.findHotelByUser_Id(user.getId());
         return roomRepository.findRoomByHotel_Id(hotel.getId());
     }
 

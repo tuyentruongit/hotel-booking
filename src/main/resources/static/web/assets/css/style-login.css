@@ -127,6 +127,7 @@ body {
     position: relative;
     background-color: transparent;
     margin-top: 30px;
+    margin-bottom: 10px ;
 }
 .line {
     min-width: 1px;
@@ -171,3 +172,6 @@ body {
     letter-spacing: 1px;
 }
 
+ .policy-web{
+     font-size: 15px !important;
+ }

@@ -243,6 +243,7 @@ const getHotel = (page) =>{
             data = hotels.slice();
             renderListHotel(hotels);
             renderPagination(totalPage);
+            functionFilter(options, hotels);
         })
         .catch((error)=>{
             toastr.error(error.response.data.message);
@@ -302,7 +303,7 @@ let options = {
     maxPriceHotel : maxPrice
 }
 // lọc qua từng ô check box
-const checkBoxList = document.querySelectorAll('.custom-checkbox');
+let checkBoxList = document.querySelectorAll('.custom-checkbox');
 checkBoxList.forEach(checkBox => {
     // lắng nghe sự kiện khi người dùng click vào ô
     checkBox.addEventListener('change', () => {
@@ -324,6 +325,13 @@ function filterChecked(checkBox) {
     switch (filterHotel) {
         case 'rental-type':
             options.rentalType.push(checkBox.value);
+            break;
+        case 'amenityHotel':
+            options.amenityHotel.push(checkBox.value);
+            break;
+        case 'amenityRoom':
+            options.amenityRoom.push(checkBox.value);
+            console.log(options)
             break;
         case 'star':
             options.starHotel.push(checkBox.value);
@@ -350,6 +358,22 @@ function filterUnChecked(checkBox) {
                 options.rentalType.splice(indexRentalType, 1);
             }
             break;
+
+        case 'amenityRoom':
+            // lấy ra vị trí của filter đó trong option
+            const indexAmenityRoom = options.amenityRoom.indexOf(checkBox.value);
+            if (indexAmenityRoom !== -1) {
+                options.amenityRoom.splice(indexAmenityRoom, 1);
+            }
+            break;
+
+        case 'amenityHotel':
+            // lấy ra vị trí của filter đó trong option
+            const indexAmenityHotel = options.amenityHotel.indexOf(checkBox.value);
+            if (indexAmenityHotel !== -1) {
+                options.amenityHotel.splice(indexAmenityHotel, 1);
+            }
+            break;
         case 'star':
             // lấy ra vị trí của filter đó trong option
             const indexStar = options.starHotel.indexOf(checkBox.value);
@@ -367,17 +391,17 @@ function filterUnChecked(checkBox) {
 const functionFilter = (options,hotelList) => {
     console.log(options)
     const hotelListAfterFiltering = hotelList.filter(hotel => {
-        console.log(hotel.estimatedPrice > options.minPriceHotel)
-        console.log(hotel.estimatedPrice < options.maxPriceHotel)
+        console.log(hotel.nameAmenityRoom)
         return (
-            (!options.rentalType.length || options.rentalType.includes(hotel.rentalType))&&
-            (!options.starHotel.length || options.starHotel.includes(hotel.star.toString()))&&
-            (!options.rating.length || options.rating.some(num =>num <= hotel.rating))&&
+            (!options.rentalType.length || options.rentalType.includes(hotel.rentalType)) &&
+            (!options.starHotel.length || options.starHotel.includes(hotel.star.toString())) &&
+            (!options.amenityHotel.length ||options.amenityHotel.every(amenity => hotel.nameAmenity.includes(amenity)))&&
+            (!options.amenityRoom.length ||options.amenityRoom.every(amenity => hotel.nameAmenityRoom.includes(amenity)))&&
+            (!options.rating.length || options.rating.some(num => num <= hotel.rating)) &&
             (hotel.estimatedPrice >= options.minPriceHotel && hotel.estimatedPrice <= options.maxPriceHotel)
         );
     });
     console.log(hotelListAfterFiltering);
-
     // ggọi hàm render dữ liệu khách sạn sau khi đã được lọc
     renderListHotel(hotelListAfterFiltering);
 };
@@ -443,7 +467,7 @@ const renderListHotel = (hotelList) => {
                                             </div>
                                         </div>
                                         <ul class="price list-unstyled justify-content-center p-0 m-0">
-                                            <span class="description-price">Giá ước tính mỗi đêm đã bao gồm thuế & phí</span>
+                                            <span style="font-size: 10px" class="description-price">Giá ước tính mỗi đêm đã bao gồm thuế & phí</span>
 
 <!--                                            <li class="p-0 wrapper w-100 d-flex justify-content-end">-->
 <!--                                                <span class="original-price "><del>1.300.500 ₫</del></span>-->
@@ -545,6 +569,130 @@ $('#form-search').validate({
         $(element).removeClass('is-invalid');
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const showAmenityHotel = document.querySelector('.btn-amenityHotel');
+
+    // Sử dụng event delegation để lắng nghe sự kiện click trên .wrap-amenity-hotel
+    document.querySelector('.wrap-amenity-hotel').addEventListener('click', function(event) {
+        if (event.target.classList.contains('btn-amenityHotel')) {
+            event.preventDefault();
+            const typeBtn = event.target.getAttribute('type-btn');
+
+            if (typeBtn === 'show') {
+                axios.get("/api/amenity/hotel/get-all")
+                    .then((response) =>{
+                        console.log(response);
+                        const data = response.data;
+                        renderAmenityHotel(data, 'hide');
+                    })
+                    .catch((err) =>{
+                        console.log(err);
+                    });
+            } else if (typeBtn === 'hide') {
+                renderAmenityHotel(listAmenityHotel, 'show');
+            }
+        }
+    });
+
+    // Hàm renderAmenityHotel với cập nhật DOM
+    const renderAmenityHotel = (data, newTypeBtn) => {
+        let html = '';
+        data.forEach(ame => {
+            html += ` <li  class="d-flex align-items-center w-100" >
+                                <input class=" m-2 custom-checkbox" type="checkbox" type-check="amenityHotel"  value="${ame.name}" >
+                                <label style="font-size: 14px" > ${ame.name}</label>
+                            </li>`;
+        });
+
+        // Thêm nút "Xem thêm" hoặc "Ẩn bớt" vào cuối danh sách
+        if (newTypeBtn === 'show') {
+            html += `<button type-btn="show" type="button" class="btn-amenityHotel">Xem thêm</button>`;
+        } else {
+            html += `<button type-btn="hide" type="button" class="btn-amenityHotel">Ẩn bớt</button>`;
+        }
+
+        // Cập nhật nội dung của .wrap-amenity-hotel
+        document.querySelector(".wrap-amenity-hotel").innerHTML = html;
+        checkBoxList = document.querySelectorAll('.custom-checkbox');
+        checkBoxList.forEach(checkBox => {
+            // lắng nghe sự kiện khi người dùng click vào ô
+            checkBox.addEventListener('change', () => {
+                if (checkBox.checked) {
+                    // gọi hàm xử lý filter
+                    filterChecked(checkBox);
+                } else {
+                    // gọi hàm xử lý khi nguười dùng unchecked
+                    filterUnChecked(checkBox)
+                }
+                // gọi hàm lọc dữ liệu khách sạn
+                functionFilter(options, hotels);
+            });
+        });
+    };
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const showAmenityHotel = document.querySelector('.btn-amenityRoom');
+
+    // Sử dụng event delegation để lắng nghe sự kiện click trên .wrap-amenity-room
+    document.querySelector('.wrap-amenity-room').addEventListener('click', function(event) {
+        if (event.target.classList.contains('btn-amenityRoom')) {
+            event.preventDefault();
+            const typeBtn = event.target.getAttribute('type-btn');
+
+            if (typeBtn === 'show') {
+                axios.get("/api/amenity/room/get-all")
+                    .then((response) =>{
+                        console.log(response);
+                        const data = response.data;
+                        renderAmenityRoom(data, 'hide');
+                    })
+                    .catch((err) =>{
+                        console.log(err);
+                    });
+            } else if (typeBtn === 'hide') {
+                renderAmenityRoom(listAmenityRoom, 'show');
+            }
+        }
+    });
+
+    // Hàm renderAmenityHotel với cập nhật DOM
+    const renderAmenityRoom = (data, newTypeBtn) => {
+        let html = '';
+        data.forEach(ame => {
+            html += `<li  class="d-flex align-items-center w-100"  >
+                                <input class=" m-2 custom-checkbox" type="checkbox" type-check="amenityRoom"  value="${ame.name}" >
+                                <label style="font-size: 14px" > ${ame.name}</label>
+                            </li>`;
+        });
+
+        // Thêm nút "Xem thêm" hoặc "Ẩn bớt" vào cuối danh sách
+        if (newTypeBtn === 'show') {
+            html += `<button type-btn="show" type="button" class="btn-amenityRoom">Xem thêm</button>`;
+        } else {
+            html += `<button type-btn="hide" type="button" class="btn-amenityRoom ">Ẩn bớt</button>`;
+        }
+
+        // Cập nhật nội dung của .wrap-amenity-hotel
+        document.querySelector(".wrap-amenity-room").innerHTML = html;
+        checkBoxList = document.querySelectorAll('.custom-checkbox');
+        checkBoxList.forEach(checkBox => {
+            // lắng nghe sự kiện khi người dùng click vào ô
+            checkBox.addEventListener('change', () => {
+                if (checkBox.checked) {
+                    // gọi hàm xử lý filter
+                    filterChecked(checkBox);
+                } else {
+                    // gọi hàm xử lý khi nguười dùng unchecked
+                    filterUnChecked(checkBox)
+                }
+                // gọi hàm lọc dữ liệu khách sạn
+                functionFilter(options, hotels);
+            });
+        });
+    };
+});
+
 
 getHotel(currentPage);
 renderDataSearch(nameCity, valueNumberGuest, valueNumberRoom);

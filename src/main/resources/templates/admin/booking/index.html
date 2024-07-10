@@ -63,8 +63,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-
-                                    <tr th:each="booking : ${contentPage}">
+                                    <tr th:if="${contentPage!=null}" th:each="booking : ${contentPage}">
                                         <td>
                                             <a th:href="@{/admin/bookings/detail/{id} (id=${booking.id})}"
                                                th:text="${booking.id}"></a>
@@ -72,7 +71,7 @@
                                         <td th:text="${booking.nameCustomer}"></td>
                                         <td th:text="${#temporals.format(booking.createAt,'dd/MM/yyyy')}"></td>
                                         <td>
-                                             <span class="badge bg-success"
+                                            <span class="badge bg-success"
                                                    th:if="${booking.statusBooking.value.equalsIgnoreCase('Hoàn Tất')}">Hoàn Tất</span>
                                             <span class="badge bg-warning"
                                                   th:if="${booking.statusBooking.value.equalsIgnoreCase('Từ chối')}">Từ Chối</span>
@@ -93,7 +92,6 @@
                                         </td>
                                         <td th:text="|${#numbers.formatInteger(booking.price,3,'COMMA')}đ|"></td>
                                     </tr>
-
                                     </tbody>
                                 </table>
                                 <div class="d-flex justify-content-center">

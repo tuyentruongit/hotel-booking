@@ -60,27 +60,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+
+                    <a th:href="@{/admin/hotels}" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>
                             Quản lý khách sạn
-                            <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a th:href="@{/admin/hotels}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách khách sạn</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a th:href="@{/admin/hotels/create}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm khách sạn</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li class="nav-item">
                     <a  th:href="@{/admin/amenity}" class="nav-link">
@@ -112,10 +98,10 @@
                                 <p>Tạo User</p>
                             </a>
                         </li> <li class="nav-item">
-                        <a th:href="@{/admin/user-management}"  class="nav-link">
-                            <i class="nav-icon fa-regular fa-square-minus"></i>
-                            <p>Yêu cầu xóa tài khoản</p>
-                        </a>
+<!--                        <a th:href="@{/admin/user-management}"  class="nav-link">-->
+<!--                            <i class="nav-icon fa-regular fa-square-minus"></i>-->
+<!--                            <p>Yêu cầu xóa tài khoản</p>-->
+<!--                        </a>-->
                     </li>
                     </ul>
                 </li>
