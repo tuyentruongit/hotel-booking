@@ -209,7 +209,9 @@ inputImage.addEventListener('input',(e)=>{
     // lấy ra thông tin file upload
     let file = e.target.files[0];
     showImageForElement(file,imageModal)
+
     // lưu vào đối tượng form data
+    formData.delete('file');
     formData.append('file',file);
     saveImage.disabled=false;
 })

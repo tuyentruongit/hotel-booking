@@ -26,14 +26,27 @@ btnBooking.addEventListener('click', () => {
         paymentMethod : paymentHotel.value
     }
     console.log(data)
-    axios.post("/api/booking/add", data)
-        .then((response) => {
-            toastr.success("Đặt phòng thành công")
-        })
-        .catch((error) => {
-            console.log(error)
-            toastr.error(error.response.data.message)
-        })
+   if (paymentHotel.value === "VN_PAY"){
+       axios.post("/api/payment/vn-pay", data)
+           .then((response) => {
+              console.log(response);
+              window.location.href = response.data.url;
+           })
+           .catch((error) => {
+               console.log(error)
+               toastr.error(error.response.data.message)
+           })
+       console.log(data)
+   }else {
+       axios.post("/api/booking/add", data)
+           .then((response) => {
+               toastr.success("Đặt phòng thành công")
+           })
+           .catch((error) => {
+               console.log(error)
+               toastr.error(error.response.data.message)
+           })
+   }
 })
 
 $('#info-customer').validate({

@@ -12629,7 +12629,6 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 }
 
 .user-panel img {
-  height: auto;
   width: 2.1rem;
 }
 

@@ -4,10 +4,11 @@
       th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-main}, ~{:: #js})}">
 
 <head>
-    <title>Đăng ký tì khoản đối tác</title>
+    <title>Đăng ký đối tác</title>
 
     <th:block id="css">
         <link rel="stylesheet" href="/web/assets/css/style-create-hotel.css"/>
+
     </th:block>
 
 </head>
@@ -42,10 +43,10 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <label class="fieldlabels">Tên nơi lưu trú : </label>
-                                            <input class="name-hotel" type="text" name="nameHotel"
+                                            <input class="form-control name-hotel form-control" type="text" name="nameHotel"
                                                    placeholder="Tên khách sạn"/>
                                             <label class="fieldlabels">Mô tả ngắn :</label>
-                                            <input class="description-hotel" type="text" name="description"
+                                            <input class="form-control description-hotel" type="text" name="description"
                                                    placeholder="Mô tả"/>
                                             <label class="fieldlabels">Thành phố : </label>
                                             <select class="city">
@@ -53,7 +54,7 @@
                                                         th:value="${city.id}"></option>
                                             </select>
                                             <label class="fieldlabels">Địa chỉ cụ thể : </label>
-                                            <input class="address-hotel" type="text" name="address"
+                                            <input class="form-control address-hotel" type="text" name="address"
                                                    placeholder="Địa chỉ"/>
                                         </div>
                                         <div class="col-6">
@@ -61,7 +62,7 @@
                                             <input class="email-hotel" type="email" name="email"
                                                    placeholder="Địa chỉ email"/>
                                             <label class="fieldlabels">Số điện thoại : </label>
-                                            <input class="phone-hotel" type="text" name="uname"
+                                            <input class="phone-hotel" type="number" name="phoneHotel"
                                                    placeholder="Số điện thoại"/>
                                             <label class="fieldlabels">Loại hình cho thuê: </label>
                                             <select class="rental-type">
@@ -90,7 +91,7 @@
                                     <div class="row">
                                         <div class="col-4" th:each="amneityHotel : ${amenityHotelList}">
                                             <input  th:value="${amneityHotel.id}" class="amenity" type="checkbox"
-                                                   name="amenityHotel"/>
+                                                    name="amenityHotel"/>
                                             <span th:text="${amneityHotel.name}"></span>
                                         </div>
                                     </div>
@@ -125,11 +126,11 @@
                                             <div class="d-flex">
                                                 <div class="w-50">
                                                     <label class="fieldlabels">Diện tích : </label>
-                                                    <input class="area-room" type="text" name="fname" placeholder="Mét vuông"/>
+                                                    <input class="area-room" type="number" name="fname" placeholder="Mét vuông"/>
                                                 </div>
                                                 <div class="w-50">
                                                     <label class="fieldlabels">Sức chứa : </label>
-                                                    <input class="capacity" type="text" name="fname" placeholder="Người"/>
+                                                    <input class="capacity" type="number" name="fname" placeholder="Người"/>
                                                 </div>
                                             </div>
                                             <div class="d-flex">
@@ -153,11 +154,11 @@
                                             <div class="d-flex">
                                                 <div class="w-50">
                                                     <label class="fieldlabels">Số lượng phòng: </label>
-                                                    <input class="quantity" type="text" name="fname" placeholder="Số lượng"/>
+                                                    <input class="quantity" type="number" name="fname" placeholder="Số lượng"/>
                                                 </div>
                                                 <div class="w-50">
                                                     <label class="fieldlabels">Giá mặc định : </label>
-                                                    <input class="price-default" type="text" name="fname" placeholder="Giá"/>
+                                                    <input class="price-default" type="number" name="fname" placeholder="Giá"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,7 +170,7 @@
                                         <div class="col-4" th:each="amenityRoom : ${amenityRoomList}">
                                             <input  th:value="${amenityRoom.id}" class="amenity-room" type="checkbox"
                                                     name="amenity-room"/>
-                                            <span th:text="${amenityRoom.name}"></span>
+                                            <span  th:text="${amenityRoom.name}"></span>
                                         </div>
                                     </div>
                                     <div class="w-50 mt-4">
@@ -234,37 +235,39 @@
                                             </div>
 
                                         </div>
-                                        <div class="col-6">
-                                            <label class="fieldlabels">Thêm những dịch vụ của khách sạn : </label>
-                                            <input class="services" type="text" name="fname" placeholder="Dịch vụ"/>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="fieldlabels">Chính sách hủy : </label>
-                                            <input class="cancel-policy" type="text" name="fname" placeholder="Hủy"/>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="fieldlabels">Giới hạn độ tuổi : </label>
-                                            <input class="age-limit" type="text" name="fname" placeholder="Độ tuổi"/>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="fieldlabels">Vật nuôi : </label>
-                                            <input class="animal" type="text" name="fname" placeholder="Vật nuôi"/>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="fieldlabels">Lưu ý : </label>
-                                            <input class="note" type="text" name="fname" placeholder="Chú ý"/>
-                                        </div>
+                                       <form id="form-3" >
+                                           <div class="col-6">
+                                               <label class="fieldlabels">Thêm những dịch vụ của khách sạn : </label>
+                                               <input class="services" type="text" name="fname" placeholder="Dịch vụ"/>
+                                           </div>
+                                           <div class="col-6">
+                                               <label class="fieldlabels">Chính sách hủy : </label>
+                                               <input class="cancel-policy" type="text" name="fname" placeholder="Hủy"/>
+                                           </div>
+                                           <div class="col-6">
+                                               <label class="fieldlabels">Giới hạn độ tuổi : </label>
+                                               <input class="age-limit" type="text" name="fname" placeholder="Độ tuổi"/>
+                                           </div>
+                                           <div class="col-6">
+                                               <label class="fieldlabels">Vật nuôi : </label>
+                                               <input class="animal" type="text" name="fname" placeholder="Vật nuôi"/>
+                                           </div>
+                                           <div class="col-6">
+                                               <label class="fieldlabels">Lưu ý : </label>
+                                               <input class="note" type="text" name="fname" placeholder="Chú ý"/>
+                                           </div>
+                                       </form>
                                     </div>
                                 </div>
                                 <input type="button" name="next" class=" next action-button btn-register-hotel" value="Tiếp tục"/>
                                 <input type="button" name="previous" class="previous action-button-previous"
                                        value="Quay lại"/>
                             </fieldset>
-                            <fieldset>
-                                <div class="form-card">
-                                   <span>Đăng ký thành công !</span>
-                                </div>
-                            </fieldset>
+<!--                            <fieldset>-->
+<!--                                <div class="form-card">-->
+<!--                                   <span>Đăng ký thành công !</span>-->
+<!--                                </div>-->
+<!--                            </fieldset>-->
 
                         </form>
                     </div>
@@ -280,54 +283,54 @@
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script th:inline="javascript">
-
+        let checkValue = false;
         $(document).ready(function () {
             var current_fs, next_fs, previous_fs; //fieldsets
             var opacity;
 
             $(".next").click(function () {
-
                 current_fs = $(this).parent();
                 next_fs = $(this).parent().next();
 
-//Add Class Active
-                $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+                // Validate fields before proceeding
+                if (validateFields(current_fs)) {
+                    // Add Class Active
+                    $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-//show the next fieldset
-                next_fs.show();
-//hide the current fieldset with style
-                current_fs.animate({opacity: 0}, {
-                    step: function (now) {
-// for making fielset appear animation
-                        opacity = 1 - now;
+                    // Show the next fieldset
+                    next_fs.show();
 
-                        current_fs.css({
-                            'display': 'none',
-                            'position': 'relative'
-                        });
-                        next_fs.css({'opacity': opacity});
-                    },
-                    duration: 500
-                });
+                    // Hide the current fieldset with style
+                    current_fs.animate({opacity: 0}, {
+                        step: function (now) {
+                            opacity = 1 - now;
+                            current_fs.css({
+                                'display': 'none',
+                                'position': 'relative'
+                            });
+                            next_fs.css({'opacity': opacity});
+                        },
+                        duration: 500
+                    });
+                } else {
+                    toastr.error("Vui lòng điền đầy đủ thông tin");
+                }
             });
 
             $(".previous").click(function () {
-
                 current_fs = $(this).parent();
                 previous_fs = $(this).parent().prev();
 
-//Remove class active
+                // Remove class active
                 $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
 
-//show the previous fieldset
+                // Show the previous fieldset
                 previous_fs.show();
 
-//hide the current fieldset with style
+                // Hide the current fieldset with style
                 current_fs.animate({opacity: 0}, {
                     step: function (now) {
-// for making fielset appear animation
                         opacity = 1 - now;
-
                         current_fs.css({
                             'display': 'none',
                             'position': 'relative'
@@ -338,7 +341,44 @@
                 });
             });
 
+            // Function to validate fields in a fieldset
+            function validateFields(fieldset) {
+                var isValid = true;
+
+                // Example validation - you can customize this based on your fields
+                fieldset.find('input[type="text"], input[type="file"], input[type="email"]').each(function () {
+                    if ($(this).val() === '') {
+                        isValid = false;
+                        // Add class 'error' to mark the field as invalid
+                        $(this).addClass('error');
+                    } else {
+                        // Remove any existing 'error' class if the field is valid
+                        $(this).removeClass('error');
+                    }
+                });
+
+                // Check checkboxes (custom validation)
+                var checkboxes = fieldset.find('input[type="checkbox"]');
+                var isChecked = false;
+                checkboxes.each(function () {
+                    if ($(this).is(':checked')) {
+                        isChecked = true;
+                    }
+                });
+                if (!isChecked) {
+                    isValid = false;
+                    // Optionally, you can add a class 'error' to highlight checkboxes as well
+                    checkboxes.addClass('error');
+                } else {
+                    checkboxes.removeClass('error');
+                }
+
+                return isValid;
+            }
         });
+
+
+
         const btnRegisterHotelEl = document.querySelector(".btn-register-hotel");
         const nameHotelEl = document.querySelector('.name-hotel');
         const descriptionHotelEl = document.querySelector('.description-hotel');
@@ -375,6 +415,9 @@
         // xử lý khi click vào nút đăng ký cho thuê khách sạn
 
         btnRegisterHotelEl.addEventListener('click', () => {
+            console.log(checkValue)
+            if (!checkValue) return;
+            console.log("đến đây")
 
             console.log(startCheckInEl.value);
             console.log(endCheckInEl.value);

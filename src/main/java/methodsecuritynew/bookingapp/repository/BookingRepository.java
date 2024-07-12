@@ -1,6 +1,7 @@
 package methodsecuritynew.bookingapp.repository;
 
 import methodsecuritynew.bookingapp.entity.Booking;
+import methodsecuritynew.bookingapp.entity.Hotel;
 import methodsecuritynew.bookingapp.model.dto.*;
 import methodsecuritynew.bookingapp.model.enums.StatusBooking;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     Page<Booking> findAllByUser_IdOrderByCreateAtDesc(Integer id, Pageable pageable);
 
     List<Booking> findAllByHotel_Id(Integer hotelId);
+    List<Booking> findByStatusBooking(StatusBooking statusBooking);
+    List<Booking> findByHotel_IdAndStatusBooking(Integer id , StatusBooking statusBooking);
     List<Booking> findAllByUser_Id(Integer idUser);
 
     // tổng booking theo ngày tháng

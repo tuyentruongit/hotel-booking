@@ -1,20 +1,43 @@
 // không sử dụng filter(lấy tât cả booking)
 const getAllBooking = () => {
     renderBooking(bookingList);
+    document.querySelector('[type-filter="ALL"]').classList.add('current-filter');
 }
 
 // lọc tất cả các booking theo trạng thái
 const getBookingConfirm = () => {
-    const lists = bookingList.filter(booking => booking.statusBooking === "CONFIRMED")
+    const lists = bookingList.filter(booking => booking.statusBooking === "CONFIRMED");
     renderBooking(lists);
+    // Xóa lớp current-filter từ tất cả các nút
+    document.querySelectorAll('.btn-filter-booking').forEach(btn => {
+        btn.classList.remove('current-filter');
+    });
+
+    // Thêm lớp current-filter vào button type-filter="CONFIRMED"
+    document.querySelector('[type-filter="CONFIRMED"]').classList.add('current-filter');
 }
 const getBookingComplete = () => {
     const lists = bookingList.filter(booking => booking.statusBooking === "COMPLETE")
     renderBooking(lists);
+
+    // Xóa lớp current-filter từ tất cả các nút
+    document.querySelectorAll('.btn-filter-booking').forEach(btn => {
+        btn.classList.remove('current-filter');
+    });
+
+    // Thêm lớp current-filter vào button type-filter="COMPLETE"
+    document.querySelector('[type-filter="COMPLETE"]').classList.add('current-filter');
 }
 const getAllBookingCancel = () => {
     const lists = bookingList.filter(booking => booking.statusBooking === "CANCELLED")
     renderBooking(lists);
+    // Xóa lớp current-filter từ tất cả các nút
+    document.querySelectorAll('.btn-filter-booking').forEach(btn => {
+        btn.classList.remove('current-filter');
+    });
+
+    // Thêm lớp current-filter vào button type-filter="CANCELLED"
+    document.querySelector('[type-filter="CANCELLED"]').classList.add('current-filter');
 }
 
 
@@ -23,13 +46,6 @@ const renderBooking = (lists) => {
     let html = '';
     const containerBookingList = document.querySelector(".list-booking ul");
 
-    if (lists.length === 0) {
-        html = `
-        <span>Không có booking nào phù hợp </span>
-        `
-        containerBookingList.innerHTML = html;
-        return;
-    }
 
     lists.forEach(booking => {
         const checkIn = booking.checkIn.split('-');
@@ -40,7 +56,7 @@ const renderBooking = (lists) => {
         html += `
              <li class="w-100" >
                                     <a class="card-booking" href="/chi-tiet-booking/${booking.id}">
-                                        <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+                                        <img src="${booking.hotel.city.imageCity}" alt="Image">
                                         <div class="infor-booking">
                                             <h5>${booking.hotel.name}</h5>
                                             <h6 >${booking.hotel.city.name}</h6>

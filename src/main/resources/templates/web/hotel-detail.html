@@ -268,9 +268,7 @@
 
                             <h6 class="title-service">Dịch Vụ</h6>
                             <div class="modal-body show-service-hotel">
-                                <span th:text="${hotel.policyHotel.service}"></span>
-                                <span>Đỗ xe và Wi-Fi luôn miễn phí, vì vậy quý khách có thể giữ liên lạc, đến và đi tùy ý. Nằm ở vị trí trung tâm tại Ba Đình của Hà Nội, chỗ nghỉ này đặt quý khách ở gần các điểm thu hút và tùy chọn ăn uống thú vị. Đừng rời đi trước khi ghé thăm Phố Cổ nổi tiếng. Chỗ nghỉ 5 sao này được trang bị các tiện nghi ngay trong khuôn viên để nâng cao chất lượng và niềm vui cho kỳ nghỉ của quý khách.</span>
-                            </div>
+                                <span th:text="${hotel.policyHotel.service}"></span></div>
 
                             <div class="modal-footer">
                             </div>
@@ -587,11 +585,11 @@
                             <div class="row">
                                 <div class="col-3">
                                     <div class="ratting-hotel-detail py-5 d-flex ">
-                                        <div class="age-rating-detail">
+                                        <div th:if="${hotel.rating>0}" class="age-rating-detail">
                                             <th:block th:text="${hotel.rating}"></th:block>
                                         </div>
                                         <div class="infor-rating-hotel-detail">
-                                            <h4 class="p-0 m-0">
+                                            <h4  class="p-0 m-0">
                                                 <th:block th:text="${hotel.getRatingText()}"></th:block>
                                             </h4>
                                             <span class="quantity-detail"><th:block

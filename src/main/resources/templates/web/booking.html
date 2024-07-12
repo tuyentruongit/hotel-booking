@@ -26,7 +26,7 @@
                     <div class="col-9">
                         <div class="filter-booking d-flex">
                             <div class="col-3 px-2">
-                                <button class="btn-filter-booking" type-filter = "ALL" th:onclick="getAllBooking()">Tất cả</button>
+                                <button class="btn-filter-booking current-filter" type-filter = "ALL" th:onclick="getAllBooking()">Tất cả</button>
                             </div>
                             <div class="col-3 px-2">
                                 <button  class="btn-filter-booking" type-filter = "CONFIRMED" th:onclick="getBookingConfirm()">Đã xác nhận</button>
@@ -66,7 +66,7 @@
                             <ul class="list-unstyled " >
                                 <li class="w-100" th:each="booking : ${page.getContent()}">
                                     <a class="card-booking" th:href="@{/chi-tiet-booking/{id} (id=${booking.id})}">
-                                        <img src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+<!--                                        <img th:src="${booking.getHotel().getCity().getImageCity()}" alt="">-->
                                         <div class="infor-booking">
                                             <h5 th:text="${booking.getHotel().getName()}"></h5>
                                             <h6 th:text="${booking.getHotel().getCity().getName()}"></h6>
@@ -81,7 +81,7 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div class="d-flex justify-content-center " th:classappend="${page.getTotalPages()==1?'d-none':'d-block'}">
+                            <div class="d-flex justify-content-center " th:classappend="${page.getTotalPages() > 1?'d-block':'d-none'}">
                                 <ul class="pagination">
                                     <li class="page-item" th:classappend="${currentPage}==1?'disabled':''">
                                         <a class="page-link" th:href="@{/danh-sach-dat-phong/{id} (id = ${#authentication.principal.getUser().getId()},pageNumber=${currentPage}-1)}"><i class="fa-solid fa-angle-left"></i></a>

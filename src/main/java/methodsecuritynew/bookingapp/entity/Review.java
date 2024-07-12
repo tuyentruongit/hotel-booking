@@ -33,24 +33,20 @@ public class Review {
 
     Integer rating;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_booking" )
+    Booking booking;
+
     @Column(name = "create_at")
     LocalDate createAt;
 
     @Column(name = "update_at")
     LocalDate updateAt;
 
-//    @ManyToMany
-//    @JoinTable(name = "reviews_hotelLikes",
-//            joinColumns = @JoinColumn(name = "id_review"),
-//            inverseJoinColumns = @JoinColumn(name = "id_hotelLike")
-//    )
-//    List<HotelLikes> reviews;
-
     public String getRatingText() {
         if (rating == null) {
             return "Chưa có đánh giá";
         }
-
         // switch rating from 1 to 10
         return switch (rating) {
             case 1 -> "Quá Tệ";

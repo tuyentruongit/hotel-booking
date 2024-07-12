@@ -389,12 +389,17 @@ body {
     margin-left: 10px;
 }
 .name-user-review{
+    font-weight: 700;
   margin-bottom: 0;
     margin-left: 10px;
 }
+.wrap-comment{
+    margin: 10px;
+}
 .content-review{
-    margin-left: 10px;
     margin-top: 5px;
+    line-height: normal; /* Đảm bảo dòng chữ đúng kích thước phổ biến là vào */
+
 
 }
 .warp-button-edit{

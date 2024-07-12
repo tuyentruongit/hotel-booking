@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="col-8 p-0 m-0">
                                         <h6 class="p-0 m-0">Chi tiết đặt phòng</h6>
-                                        <label class="w-100 p-0 m-0">Tên Phòng : <th:block th:text="${booking.hotel.name}"></th:block></label>
+                                        <label class="w-100 p-0 m-0">Tên Phòng : <th:block th:text="${booking.room.name}"></th:block></label>
                                        <div>
                                            <label class="w-50 p-0 m-0">Số lượng phòng : </label>
                                            <span > <th:block th:text="${booking.numberRoom}"></th:block> phòng</span>
@@ -112,14 +112,14 @@
                         <div class="room-detail">
                             <div class="row">
                                 <div class="col-3">
-                                    <img class="image-room" src="/web/assets/image/amanoi-resort-beach-club-1400x600.jpg" alt="">
+                                    <img class="image-room" th:src="${booking.room.thumbnailRoom}" alt="">
                                 </div>
                                 <div class="col-9">
-<!--                                    <h6 th:text="${booking.room.name}"></h6>-->
-                                    <h6>Phòng đôi Superior</h6>
+                                    <h6 th:text="${booking.room.name}"></h6>
+<!--                                    <h6>Phòng đôi Superior</h6>-->
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mt-2">
                                 <div class="col-3">
                                    <h6 class="title-infor">Tên khách hàng</h6>
                                 </div>
@@ -197,8 +197,8 @@
                     <div class="cancel-booking" th:classappend="${booking.statusBooking.value.equalsIgnoreCase('Chờ xác nhận') || booking.statusBooking.value.equalsIgnoreCase('Đã xác nhận') ? 'd-inline-block': 'd-none' }">
                         <h6 class="w-100">Tất cả thông tin có đều chính xác ?</h6>
                         <span>Bạn có thể thay đổi thông tin bất kỳ lúc nào .</span>
-                        <div class="w-100">
-                            <a th:value="${booking.id}"  class="btn-cancel-booking w-100 " th:href="@{/cancel-booking/{idBooking} (idBooking = ${booking.id})}"> <i class="fa-solid fa-xmark"></i> Hủy đặt phòng</a>
+                        <div class="w-100 mt-2 d-flex justify-content-center">
+                            <a th:value="${booking.id}"  class="btn-cancel-booking w-100 d-flex justify-content-center align-items-center" th:href="@{/cancel-booking/{idBooking} (idBooking = ${booking.id})}"> <i class="me-2 fa-solid fa-xmark"></i> Hủy đặt phòng</a>
                         </div>
                     </div>
                     <div class="wrap-btn-reviews">
@@ -305,12 +305,12 @@
                         <h6>Thông tin liên hệ.</h6>
                         <span class="title-contact">Đối với hầu hết câu hỏi, chỗ nghỉ thường là nơi tốt nhất để liên hệ</span>
                        <div class="phone">
-                           <label>Điện thoại : </label>
+                           <label>Điện thoại : <th:block th:text="${booking.hotel.hotline}"></th:block> </label>
                            <span ></span>
                        </div>
                         <div class="email">
                            <label>Email : </label>
-                           <span >darlene.harvey@yahoo.com</span>
+                           <span ><th:block th:text="${booking.hotel.email}"></th:block></span>
                        </div>
                     </div>
 <!--                    <div class="contact">-->

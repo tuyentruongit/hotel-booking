@@ -39,6 +39,7 @@ public class BookingService {
     }
 
     //
+    @Transactional
     public Booking bookingHotel(UpsertBookingRequest bookingRequest) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate checkIn = LocalDate.parse(bookingRequest.getCheckIn(), dateTimeFormatter);
@@ -140,6 +141,7 @@ public class BookingService {
 
     public List<RevenueDayDto> getRevenueByDay(Integer year, Integer month) {
         List<RevenueDayDto> revenueDtoList = bookingRepository.getTotalRevenueDay();
+        System.out.println("Lấy doanh thu"+revenueDtoList);
         List<RevenueDayDto> result = new ArrayList<>();
         LocalDate dateSelect = LocalDate.of(year, month, 1);
 
@@ -174,6 +176,7 @@ public class BookingService {
 
     public List<RevenueMonthDto> getRevenueByMonth(Integer year) {
         List<RevenueMonthDto> revenueDtoList = bookingRepository.getTotalRevenueByMonth();
+        System.out.println("Lấy doanh thu"+revenueDtoList);
         List<RevenueMonthDto> result = new ArrayList<>();
         LocalDate current = LocalDate.of(year, 1, 1);
 
@@ -204,8 +207,11 @@ public class BookingService {
     public int totalRevenueYear(int year) {
         // lấy doanh thu của từng tháng rồi ộng vào
         List<RevenueMonthDto> result = getRevenueByMonth(year);
+        System.out.println("Doanh thu nè năm" +result.toString());
         int sum = 0;
         for (RevenueMonthDto revenueMonthDto : result) {
+            System.out.println("Doanh thu nè tháng"+revenueMonthDto);
+
             sum += (int) revenueMonthDto.getTotalPrice();
         }
         return (int) (sum * 0.15);
@@ -213,8 +219,10 @@ public class BookingService {
 
     public long totalMonthCurrent(int year, int monthValue) {
         List<RevenueDayDto> result = getRevenueByDay(year, monthValue);
+        System.out.println("Doanh thu nè tháng"+result.toString());
         long sum = 0;
         for (RevenueDayDto revenueDayDto : result) {
+            System.out.println("Doanh thu nè tháng"+revenueDayDto);
             sum += revenueDayDto.getTotalPrice();
         }
         return sum;
@@ -366,4 +374,15 @@ public class BookingService {
         return  revenueMonthDtoNew;
     }
 
+    public void deleteBooking(Integer idBooking) {
+        Booking booking = bookingRepository.findById(idBooking).orElseThrow(() -> new RuntimeException("Không tìm thấy id nào booking trên ."));
+        bookingRepository.delete(booking);
+    }
+
+    public void editStatus(Integer id) {
+        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy id nào booking trên ."));
+        booking.setStatusBooking(StatusBooking.CANCELLED);
+        bookingRepository.save(booking);
+
+    }
 }

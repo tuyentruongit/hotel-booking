@@ -26,6 +26,10 @@ body {
     background-color: #27374D;
     color: #F5F5F5;
 }
+.filter-booking button:focus{
+    background-color: #27374D;
+    color: #F5F5F5;
+}
 .sort-booking{
     border: 1px solid #E7E7E7;
     padding: 10px 15px;
@@ -81,4 +85,8 @@ body {
     width: 150px;
     border-radius:20px ;
 
+}
+.current-filter{
+    background-color: #27374D !important;
+    color: #F5F5F5;
 }

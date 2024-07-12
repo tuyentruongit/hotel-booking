@@ -6,11 +6,16 @@ import methodsecuritynew.bookingapp.model.enums.*;
 import methodsecuritynew.bookingapp.repository.*;
 
 import net.datafaker.Faker;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,6 +26,8 @@ import java.util.Random;
 class BookingAppApplicationTests {
     @Autowired
     private ImageHotelRepository imageRepository;
+    @Autowired
+    private ImageRoomRepository imageRoomRepository;
     @Autowired
     private PolicyRepository policyRepository;
     @Autowired
@@ -39,12 +46,14 @@ class BookingAppApplicationTests {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private BookingRepository bookingRepository;
 
     @Test
-    void anem(){
+    void anem() {
 //        Random random = new Random();
 //        List<Room> roomList = roomRepository.findAll();
 //        List<AmenityRoom> amenityRoomList = amenityRoomRepository.findAll();
@@ -62,7 +71,7 @@ class BookingAppApplicationTests {
         List<Hotel> hotelList = hotelRepository.findAll();
         List<PolicyHotel> policyHotels = policyRepository.findAll();
         int i = 0;
-        for (Hotel hotel : hotelList){
+        for (Hotel hotel : hotelList) {
             hotel.setPolicyHotel(policyHotels.get(i));
             i++;
             hotelRepository.save(hotel);
@@ -378,15 +387,13 @@ class BookingAppApplicationTests {
         };
 
 
-
-
         City city = cityRepository.findCityByName("Hồ Chí Minh");
         Random random = new Random();
         Faker faker = new Faker();
 
         List<User> list = userRepository.findAllByUserRole(UserRole.ROLE_HOTEL);
 
-        for (int i = 0; i  < 20 ; i++) {
+        for (int i = 0; i < 20; i++) {
             Hotel hotel = Hotel.builder()
                     .name(hotelNames[i + 120])
                     .email(faker.internet().emailAddress())
@@ -395,9 +402,9 @@ class BookingAppApplicationTests {
                     .city(city)
                     .poster("/web/assets/image/dep.jpg")
 //                    .policyHotel(policyHotels.get(i))
-                    .user(list.get(i +100 ))
+                    .user(list.get(i + 100))
                     .star(faker.number().numberBetween(1, 5))
-                    .hotline(phoneNumbers[i +100])
+                    .hotline(phoneNumbers[i + 100])
                     .rating((float) faker.number().randomDouble(1, 6, 10))
                     .rentalType(RentalType.values()[random.nextInt(RentalType.values().length)])
                     .createdAt(LocalDate.now())
@@ -893,18 +900,573 @@ class BookingAppApplicationTests {
 //        }
         Random ne = new Random();
         List<Room> roomList = roomRepository.findAll();
-        for (Room  ro : roomList){
-            ro.setPriceDefault(ne.nextInt(300000,4000000));
+        for (Room ro : roomList) {
+            ro.setPriceDefault(ne.nextInt(300000, 4000000));
             ro.setThumbnailRoom("https://indec.vn/wp-content/uploads/2022/08/image4-8.jpg");
             roomRepository.save(ro);
         }
 
 
     }
+
+    @Test
+    void createReview() {
+        String[] coment = {"Dịch vụ tuyệt vời. 10 điểm không có nhưng", "Khách sạn sạch sẽ, thoáng mát.", "Rất là sạch sẽ luôn, view đẹp nữa",
+                "Phòng sạch sẽ lắm luôn, view cực xịn xò lúc tụi mình check in còn không tin với giá tiền đó mình được ở căn hộ sang xịn như vậy", "Chỗ nghỉ view đỉnh, thoáng mát tiện nghi. Chị chủ siuuuu nhiệt tình, hỗ trợ checkin sớm"};
+        List<Hotel>hotelList = hotelRepository.findHotelByCity_Id(18);
+        Random random = new Random();
+        for (Hotel hotel : hotelList){
+            List<Booking> list = bookingRepository.findByHotel_IdAndStatusBooking(hotel.getId(),StatusBooking.COMPLETE);
+            for (int i = 0; i < list.size(); i++) {
+                hotel.setRating(0.0f);
+                int count = 0 ;
+                int sum = 0 ;
+                Review review = new Review();
+                review.setCreateAt(LocalDate.now());
+                review.setHotel(hotel);
+                review.setComment(coment[random.nextInt(0,coment.length)]);
+                review.setRating(random.nextInt(6,9));
+                review.setUser(list.get(i).getUser());
+                review.setBooking(list.get(i));
+                sum+=review.getRating();
+                count++;
+                reviewRepository.save(review);
+                hotel.setRating((float) (sum/count));
+                hotelRepository.save(hotel);
+            }
         }
 
+    }
+    @Test
+    void nameUsser() {
+        String[] hoTen = {
+                "Trần Văn Bảo", "Lê Minh Bình", "Phạm Quang Châu", "Hoàng Văn Công",
+                "Vũ Đức Cường", "Đỗ Thành Dũng", "Ngô Quốc Đức", "Bùi Minh Duy", "Đặng Hữu Đạt",
+                "Nguyễn Văn Hưng", "Trần Văn Khánh", "Lê Minh Khoa", "Phạm Văn Long", "Hoàng Văn Mạnh",
+                "Vũ Văn Nam", "Đỗ Quốc Phong", "Ngô Văn Quân", "Bùi Văn Sơn", "Đặng Văn Thắng",
+                "Nguyễn Văn Tài", "Trần Văn Tùng", "Lê Văn Toàn", "Phạm Văn Trung", "Hoàng Văn Tuấn",
+                "Vũ Văn Vinh", "Đỗ Văn Việt", "Ngô Văn Vũ", "Bùi Văn Hiếu", "Đặng Văn Huy",
+                "Nguyễn Thị Ánh", "Trần Thị Bích", "Lê Thị Cẩm", "Phạm Thị Dung", "Hoàng Thị Hạnh",
+                "Vũ Thị Hoa", "Đỗ Thị Huyền", "Ngô Thị Lan", "Bùi Thị Mai", "Đặng Thị Ngọc",
+                "Nguyễn Thị Phương", "Trần Thị Thanh", "Lê Thị Thu", "Phạm Thị Thúy", "Hoàng Thị Trang",
+                "Vũ Thị Xuân", "Đỗ Thị Yến", "Ngô Thị Anh", "Bùi Thị Bảo", "Đặng Thị Châu",
+                "Nguyễn Thị Duyên", "Trần Thị Giang", "Lê Thị Hà", "Phạm Thị Hoài", "Hoàng Thị Hồng",
+                "Vũ Thị Hương", "Đỗ Thị Kim", "Ngô Thị Linh", "Bùi Thị Loan", "Đặng Thị Mai",
+                "Nguyễn Thị Nga", "Trần Thị Ngân", "Lê Thị Ngọc", "Phạm Thị Nhung", "Hoàng Thị Oanh",
+                "Vũ Thị Phúc", "Đỗ Thị Quỳnh", "Ngô Thị Tâm", "Bùi Thị Thảo", "Đặng Thị Thúy",
+                "Nguyễn Thị Thùy", "Trần Thị Thuý", "Lê Thị Tiên", "Phạm Thị Tuyết", "Hoàng Thị Vân",
+                "Vũ Thị Vui", "Đỗ Thị Xuân", "Ngô Thị Yến", "Bùi Thị Ánh", "Đặng Thị Bích",
+                "Nguyễn Thị Cẩm", "Trần Thị Dung", "Lê Thị Hạnh", "Phạm Thị Hoa", "Hoàng Thị Huyền",
+                "Vũ Thị Lan", "Đỗ Thị Mai", "Ngô Thị Ngọc", "Bùi Thị Phương", "Đặng Thị Thanh",
+                "Nguyễn Thị Thu", "Trần Thị Thúy", "Lê Thị Trang", "Phạm Thị Xuân", "Hoàng Thị Yến"
+        };
+        String[] emails = {
+                "tranvanbao@gmail.com", "leminhbinh@gmail.com", "phamquangchau@gmail.com", "hoangvancong@gmail.com",
+                "vuduccuong@gmail.com", "dothanh dung@gmail.com", "ngoquocduc@gmail.com", "buiminhhuy@gmail.com", "danghuudat@gmail.com",
+                "nguyenvanhung@gmail.com", "tranvankhanh@gmail.com", "leminhkhoa@gmail.com", "phamvanlong@gmail.com", "hoangvanmanh@gmail.com",
+                "vuvannam@gmail.com", "doquocphong@gmail.com", "ngovanquan@gmail.com", "buivanson@gmail.com", "dangvanthang@gmail.com",
+                "nguyenvantai@gmail.com", "tranvantung@gmail.com", "levantoan@gmail.com", "phamvantrung@gmail.com", "hoangvantuan@gmail.com",
+                "vuvanvinh@gmail.com", "dovanviet@gmail.com", "ngovanvu@gmail.com", "buivanhieu@gmail.com", "dangvanhuy@gmail.com",
+                "nguyenthianh@gmail.com", "tranthibich@gmail.com", "lethicam@gmail.com", "phamthidung@gmail.com", "hoangthihanh@gmail.com",
+                "vuthihoa@gmail.com", "dothihuyen@gmail.com", "ngothilan@gmail.com", "buithimai@gmail.com", "dangthingoc@gmail.com",
+                "nguyenthiphuong@gmail.com", "tranthithanh@gmail.com", "lethithu@gmail.com", "phamthithuy@gmail.com", "hoangthitrang@gmail.com",
+                "vuthixuan@gmail.com", "dothiyen@gmail.com", "ngothianh@gmail.com", "buithibao@gmail.com", "dangthichau@gmail.com",
+                "nguyenthiduyen@gmail.com", "trangiang@gmail.com", "lethiha@gmail.com", "phamthihoai@gmail.com", "hoangthihong@gmail.com",
+                "vuthihuong@gmail.com", "dothikim@gmail.com", "ngothilinh@gmail.com", "buithiloan@gmail.com", "dangthimai@gmail.com",
+                "nguyenthinga@gmail.com", "tranthingan@gmail.com", "lethinhoc@gmail.com", "phamthinung@gmail.com", "hoangthioanh@gmail.com",
+                "vuthiphuc@gmail.com", "dothiquynh@gmail.com", "ngothitam@gmail.com", "buithithao@gmail.com", "dangthithuy@gmail.com",
+                "nguyenthithuy@gmail.com", "tranthithuy@gmail.com", "lethitrang@gmail.com", "phamthixuan@gmail.com", "hoangthiyen@gmail.com"
+        };
+        String[] soDienThoai = {
+                "0351000001", "0351000002", "0351000003", "0351000004", "0351000005",
+                "0351000006", "0351000007", "0351000008", "0351000009", "0351000010",
+                "0351000011", "0351000012", "0351000013", "0351000014", "0351000015",
+                "0351000016", "0351000017", "0351000018", "0351000019", "0351000020",
+                "0351000021", "0351000022", "0351000023", "0351000024", "0351000025",
+                "0351000026", "0351000027", "0351000028", "0351000029", "0351000030",
+                "0351000031", "0351000032", "0351000033", "0351000034", "0351000035",
+                "0351000036", "0351000037", "0351000038", "0351000039", "0351000040",
+                "0351000041", "0351000042", "0351000043", "0351000044", "0351000045",
+                "0351000046", "0351000047", "0351000048", "0351000049", "0351000050",
+                "0341000001", "0341000002", "0341000003", "0341000004", "0341000005",
+                "0341000006", "0341000007", "0341000008", "0341000009", "0341000010",
+                "0341000011", "0341000012", "0341000013", "0341000014", "0341000015",
+                "0341000016", "0341000017", "0341000018", "0341000019", "0341000020",
+                "0341000021", "0341000022", "0341000023", "0341000024", "0341000025",
+                "0341000026", "0341000027", "0341000028", "0341000029", "0341000030",
+                "0341000031", "0341000032", "0341000033", "0341000034", "0341000035",
+                "0341000036", "0341000037", "0341000038", "0341000039", "0341000040",
+                "0341000041", "0341000042", "0341000043", "0341000044", "0341000045",
+                "0931000001", "0931000002", "0931000003", "0931000004", "0931000005",
+                "0931000006", "0931000007", "0931000008", "0931000009", "0931000010",
+                "0931000011", "0931000012", "0931000013", "0931000014", "0931000015",
+        };
+        String[] diaChi = {
+                "Số 1 Tràng Tiền, Hoàn Kiếm, Hà Nội",
+                "Số 10 Lý Thái Tổ, Hoàn Kiếm, Hà Nội",
+                "Số 20 Nguyễn Chí Thanh, Đống Đa, Hà Nội",
+                "Số 15 Bà Triệu, Hoàn Kiếm, Hà Nội",
+                "Số 30 Phạm Ngọc Thạch, Đống Đa, Hà Nội",
+                "Số 50 Tây Sơn, Đống Đa, Hà Nội",
+                "Số 8 Phạm Hùng, Nam Từ Liêm, Hà Nội",
+                "Số 35 Láng Hạ, Ba Đình, Hà Nội",
+                "Số 2 Kim Mã, Ba Đình, Hà Nội",
+                "Số 5 Lê Duẩn, Ba Đình, Hà Nội",
+                "Số 40 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội",
+                "Số 12 Hai Bà Trưng, Hoàn Kiếm, Hà Nội",
+                "Số 60 Giảng Võ, Ba Đình, Hà Nội",
+                "Số 28 Trần Phú, Ba Đình, Hà Nội",
+                "Số 18 Hàng Bài, Hoàn Kiếm, Hà Nội",
+                "Số 75 Nguyễn Thái Học, Ba Đình, Hà Nội",
+                "Số 22 Cầu Giấy, Cầu Giấy, Hà Nội",
+                "Số 55 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+                "Số 7 Hoàng Quốc Việt, Cầu Giấy, Hà Nội",
+                "Số 90 Nguyễn Văn Cừ, Long Biên, Hà Nội",
+                "Số 45 Nguyễn Văn Linh, Long Biên, Hà Nội",
+                "Số 33 Tô Ngọc Vân, Tây Hồ, Hà Nội",
+                "Số 18 Lạc Long Quân, Tây Hồ, Hà Nội",
+                "Số 27 Âu Cơ, Tây Hồ, Hà Nội",
+                "Số 50 Yên Phụ, Tây Hồ, Hà Nội",
+                "Số 100 Võ Chí Công, Tây Hồ, Hà Nội",
+                "Số 45 Lê Hồng Phong, Ba Đình, Hà Nội",
+                "Số 77 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+                "Số 33 Khuất Duy Tiến, Thanh Xuân, Hà Nội",
+                "Số 10 Nguyễn Xiển, Thanh Xuân, Hà Nội",
+                "Số 5 Lê Văn Lương, Thanh Xuân, Hà Nội",
+                "Số 9 Hoàng Đạo Thúy, Thanh Xuân, Hà Nội",
+                "Số 50 Bạch Mai, Hai Bà Trưng, Hà Nội",
+                "Số 60 Minh Khai, Hai Bà Trưng, Hà Nội",
+                "Số 25 Đại Cồ Việt, Hai Bà Trưng, Hà Nội",
+                "Số 12 Phố Huế, Hai Bà Trưng, Hà Nội",
+                "Số 7 Hàng Chuối, Hai Bà Trưng, Hà Nội",
+                "Số 90 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội",
+                "Số 55 Nguyễn Khoái, Hai Bà Trưng, Hà Nội",
+                "Số 20 Hồng Hà, Hoàn Kiếm, Hà Nội",
+                "Số 5 Tràng Thi, Hoàn Kiếm, Hà Nội",
+                "Số 18 Ngô Quyền, Hoàn Kiếm, Hà Nội",
+                "Số 22 Hai Bà Trưng, Hoàn Kiếm, Hà Nội",
+                "Số 28 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội",
+                "Số 12 Trần Nhật Duật, Hoàn Kiếm, Hà Nội",
+                "Số 15 Lý Thường Kiệt, Hoàn Kiếm, Hà Nội",
+                "Số 20 Hàng Bài, Hoàn Kiếm, Hà Nội",
+                "Số 25 Hàng Gai, Hoàn Kiếm, Hà Nội",
+                "Số 30 Hàng Trống, Hoàn Kiếm, Hà Nội",
+                "Số 35 Hàng Đào, Hoàn Kiếm, Hà Nội",
+                "Số 40 Hàng Bạc, Hoàn Kiếm, Hà Nội",
+                "Số 45 Hàng Buồm, Hoàn Kiếm, Hà Nội",
+                "Số 50 Hàng Đậu, Hoàn Kiếm, Hà Nội",
+                "Số 55 Hàng Giấy, Hoàn Kiếm, Hà Nội",
+                "Số 60 Hàng Gà, Hoàn Kiếm, Hà Nội",
+                "Số 65 Hàng Mã, Hoàn Kiếm, Hà Nội",
+                "Số 70 Hàng Nón, Hoàn Kiếm, Hà Nội",
+                "Số 75 Hàng Cót, Hoàn Kiếm, Hà Nội",
+                "Số 80 Hàng Bồ, Hoàn Kiếm, Hà Nội",
+                "Số 85 Hàng Bông, Hoàn Kiếm, Hà Nội",
+                "Số 90 Hàng Gai, Hoàn Kiếm, Hà Nội",
+                "Số 95 Hàng Mành, Hoàn Kiếm, Hà Nội",
+                "Số 100 Hàng Bè, Hoàn Kiếm, Hà Nội",
+                "Số 105 Hàng Gà, Hoàn Kiếm, Hà Nội",
+                "Số 110 Hàng Đường, Hoàn Kiếm, Hà Nội",
+                "Số 115 Hàng Điếu, Hoàn Kiếm, Hà Nội",
+                "Số 120 Hàng Mành, Hoàn Kiếm, Hà Nội",
+                "Số 125 Hàng Thùng, Hoàn Kiếm, Hà Nội",
+                "Số 130 Hàng Bông, Hoàn Kiếm, Hà Nội",
+                "Số 135 Hàng Quạt, Hoàn Kiếm, Hà Nội",
+                "Số 140 Hàng Tre, Hoàn Kiếm, Hà Nội",
+                "Số 145 Hàng Đào, Hoàn Kiếm, Hà Nội",
+                "Số 150 Hàng Ngang, Hoàn Kiếm, Hà Nội",
+                "Số 155 Hàng Đào, Hoàn Kiếm, Hà Nội",
+                "Số 160 Hàng Bạc, Hoàn Kiếm, Hà Nội",
+                "Số 165 Hàng Buồm, Hoàn Kiếm, Hà Nội",
+                "Số 170 Hàng Đậu, Hoàn Kiếm, Hà Nội",
+                "Số 175 Hàng Giấy, Hoàn Kiếm, Hà Nội",
+                "Số 180 Hàng Gà, Hoàn Kiếm, Hà Nội",
+                "Số 185 Hàng Mã, Hoàn Kiếm, Hà Nội",
+                "Số 190 Hàng Nón, Hoàn Kiếm, Hà Nội",
+                "Số 195 Hàng Cót, Hoàn Kiếm, Hà Nội",
+                "Số 200 Hàng Bồ, Hoàn Kiếm, Hà Nội",
+                "Số 205 Hàng Bông, Hoàn Kiếm, Hà Nội",
+                "Số 210 Hàng Gai, Hoàn Kiếm, Hà Nội",
+                "Số 215 Hàng Mành, Hoàn Kiếm, Hà Nội",
+                "Số 220 Hàng Bè, Hoàn Kiếm, Hà Nội",
+                "Số 225 Hàng Gà, Hoàn Kiếm, Hà Nội",
+                "Số 230 Hàng Đường, Hoàn Kiếm, Hà Nội",
+                "Số 235 Hàng Điếu, Hoàn Kiếm, Hà Nội",
+                "Số 240 Hàng Mành, Hoàn Kiếm, Hà Nội",
+                "Số 245 Hàng Thùng, Hoàn Kiếm, Hà Nội",
+                "Số 250 Hàng Bông, Hoàn Kiếm, Hà Nội"
+        };
+
+
+
+        List<User> userList = userRepository.findAll();
+        Random random = new Random();
+        int i = 0;
+        for (User user : userList){
+//            if (i>=100){
+//                i =0;
+//            }
+
+           if (i==93){
+               i =0;
+           }
+           user.setName(hoTen[i]);
+//           user.setEmail(emails[i]);
+//           user.setPhoneNumber(soDienThoai[i]);
+//            user.setAddress(diaChi[i]);
+           userRepository.save(user);
+           i++;
+        }
+
+    }
+    @Test
+    void data (){
+        String[] tenPhong = {
+                "Phòng Đơn Nghỉ Dưỡng",
+                "Phòng Đôi Thanh Lịch",
+                "Phòng Tiêu Chuẩn Biển Xanh",
+                "Phòng Suite Hạng Sang",
+                "Phòng Cao Cấp View Sông",
+                "Studio Nghỉ Dưỡng",
+                "Phòng Đơn Biển",
+                "Phòng Đôi Lãng Mạn",
+                "Phòng Tiêu Chuẩn Thành Phố",
+                "Phòng Suite Thư Giãn",
+                "Phòng Cao Cấp Núi",
+                "Studio Sáng Tạo",
+                "Phòng Đơn Ven Sông",
+                "Phòng Đôi Phố Cổ",
+                "Phòng Tiêu Chuẩn Phong Cách",
+                "Phòng Suite Đẳng Cấp",
+                "Phòng Cao Cấp Biển Đảo",
+                "Studio Tối Giản",
+                "Phòng Đơn Sơn Cùng",
+                "Phòng Đôi Hòa Nhã",
+                "Phòng Tiêu Chuẩn Thanh Bình",
+                "Phòng Suite Quý Phái",
+                "Phòng Cao Cấp Hướng Sông",
+                "Studio Hiện Đại",
+                "Phòng Đơn Bình Minh",
+                "Phòng Đôi Hoàng Gia",
+                "Phòng Tiêu Chuẩn Lãng Mạn",
+                "Phòng Suite Sang Trọng",
+                "Phòng Cao Cấp Mặt Biển",
+                "Studio Tinh Tế",
+                "Phòng Đơn Tĩnh Lặng",
+                "Phòng Đôi Thanh Xuân",
+                "Phòng Tiêu Chuẩn Yên Bình",
+                "Phòng Suite Nhẹ Nhàng",
+                "Phòng Cao Cấp Sông Nước",
+                "Studio Phóng Khoáng",
+                "Phòng Đơn Đồng Quê",
+                "Phòng Đôi Thời Thượng",
+                "Phòng Tiêu Chuẩn Ngọt Ngào",
+                "Phòng Suite Lý Tưởng",
+                "Phòng Cao Cấp Trải Nghiệm",
+                "Studio Cổ Điển",
+                "Phòng Đơn Thành Đô",
+                "Phòng Đôi Vương Giả",
+                "Phòng Tiêu Chuẩn Phồn Hoa",
+                "Phòng Suite Hòa Mình",
+                "Phòng Cao Cấp Nghỉ Dưỡng",
+                "Studio Năng Động"
+        };
+
+        String[] moTaPhong = {
+                "Phòng nghỉ sang trọng với view biển tuyệt đẹp, đầy đủ tiện nghi và không gian rộng rãi.",
+                "Biệt thự riêng tư giữa khu vườn xanh mát, cung cấp sự riêng tư và yên tĩnh.",
+                "Phòng suite lý tưởng cho những ai tìm kiếm không gian sống rộng rãi và tiện nghi.",
+                "Biệt thự ven sông, mang đến cho khách hàng trải nghiệm gần gũi với thiên nhiên.",
+                "Phòng gia đình tiện nghi, phù hợp cho cả gia đình nghỉ ngơi và thư giãn.",
+                "Suite view biển độc đáo, tận hưởng cảm giác thư thái dưới ánh nắng vàng của bãi biển.",
+                "Biệt thự có hồ bơi riêng, dành cho những ai muốn tận hưởng không gian riêng biệt và thư giãn.",
+                "Biệt thự bãi biển, mang đến cho du khách trải nghiệm thư thái và tận hưởng bãi biển ngay trước mắt.",
+                "Suite Junior, lựa chọn phù hợp cho các cặp đôi mong muốn không gian ấm cúng và sang trọng.",
+                "Phòng nghỉ với view núi, khách sạn phù hợp cho những ai yêu thích không gian yên tĩnh và thiên nhiên.",
+                "Cottage ấm cúng, là nơi lý tưởng để thư giãn và tận hưởng không gian riêng tư.",
+                "Penthouse sang trọng, đầy đủ tiện nghi và view đẹp, phục vụ cho các du khách cao cấp.",
+                "Nơi trốn tìm nhiệt đới, với thiết kế nội thất mang đậm phong cách và sắc màu nhiệt đới.",
+                "Suite view thành phố, lựa chọn hoàn hảo cho các du khách công tác muốn tiện lợi di chuyển và thư giãn.",
+                "Phòng nghỉ tại spa, phục vụ cho những ai muốn tận hưởng dịch vụ chăm sóc sức khỏe và làm đẹp.",
+                "Biệt thự view sông, cho phép du khách tận hưởng cảm giác thư thái bên bờ sông êm đềm.",
+                "Kỳ nghỉ lãng mạn, với thiết kế nội thất sang trọng và không gian riêng biệt dành cho các cặp đôi.",
+                "Cabin bên biển, là nơi lý tưởng để tận hưởng không gian gần gũi với biển cả và thiên nhiên.",
+                "Loft tinh tế, với thiết kế hiện đại và không gian mở, phù hợp cho du khách yêu thích phong cách hiện đại.",
+                "Studio dễ thương, là nơi lý tưởng cho những ai muốn có không gian sống nhỏ gọn và thoải mái.",
+                "Phòng hạng cao cấp, với đầy đủ tiện nghi và dịch vụ sang trọng, phục vụ cho những du khách khó tính.",
+                "Nơi nghỉ tại bên hồ, với view hồ trong xanh và không gian yên bình, lý tưởng cho những người yêu thiên nhiên.",
+                "Chalet riêng tư, là nơi lý tưởng để gia đình hoặc nhóm bạn tận hưởng không gian sống riêng tư và thoải mái.",
+                "Căn hộ cao cấp tầng trên, với view tuyệt đẹp và không gian sống tiện nghi, phù hợp cho những ai muốn không gian rộng rãi.",
+                "Phòng view rừng, mang đến cho khách hàng cảm giác gần gũi với thiên nhiên và không khí trong lành của rừng.",
+                "Nhà khách cổ điển, với kiến trúc và nội thất mang phong cách cổ điển, phục vụ cho những du khách yêu thích sự lịch lãm và sang trọng.",
+                "Suite thanh bình, với không gian yên tĩnh và thiết kế nội thất đẳng cấp, phù hợp cho các cặp đôi hoặc du khách yêu thích sự riêng tư.",
+                "Oasis đô thị, là nơi lý tưởng để khách hàng thư giãn và tận hưởng cuộc sống trong thành phố tấp nập.",
+                "Loft view biển, với view biển tuyệt đẹp và không gian sống hiện đại, phục vụ cho những du khách yêu thích sự tinh tế và thoải mái.",
+                "Biệt thự view núi, là nơi lý tưởng để tận hưởng không gian sống gần gũi với núi non và thiên nhiên.",
+                "Phòng garden zen, với không gian thiền và sự thư giãn, phù hợp cho những du khách muốn tìm kiếm sự thanh tịnh.",
+                "Villa thanh bình, với view thiên nhiên và không gian sống tiện nghi, là nơi lý tưởng để khách hàng nghỉ ngơi và thư giãn.",
+                "Biệt thự thuộc kiến trúc thuộc địa, với kiến trúc mang đậm bản sắc vùng miền, phục vụ cho những du khách yêu thích sự độc đáo và riêng biệt.",
+                "Nhà bungalow bên bờ biển, là nơi lý tưởng để tận hưởng không gian gần gũi với biển cả và thiên nhiên.",
+                "Cottage cổ điển, với thiết kế nội thất mang phong cách cổ điển và không gian sống thoải mái, phục vụ cho những du khách yêu thích sự lãng mạn và sang trọng.",
+                "Suite view cảng biển, với view cảng biển sôi động và không gian sống hiện đại, phục vụ cho những du khách yêu thích sự năng động và sôi động.",
+                "Biệt thự view hồ, với view hồ trong xanh và không gian sống tiện nghi, là nơi lý tưởng để nghỉ ngơi và thư giãn.",
+                "Phòng view rừng nghỉ dưỡng, với không gian yên bình và thiết kế nội thất tiện nghi, phục vụ cho những du khách yêu thích sự gần gũi với thiên nhiên.",
+                "Ngôi nhà thư giãn tại biển, với không gian sống tinh tế"};
+
+                List<Room> list = roomRepository.findAll();
+        Random random = new Random();
+
+        for (Room room : list){
+            room.setName(tenPhong[random.nextInt(0,tenPhong.length)]);
+            room.setDescription(moTaPhong[random.nextInt(0,moTaPhong.length)]);
+            roomRepository.save(room);
+        }
+
+    }
+    @Test
+    void tshhs(){
+        Random random = new Random();
+
+        Faker faker = new Faker();
+        String[] soDienThoai = {
+                "0351000001", "0351000002", "0351000003", "0351000004", "0351000005",
+                "0351000006", "0351000007", "0351000008", "0351000009", "0351000010",
+                "0351000011", "0351000012", "0351000013", "0351000014", "0351000015",
+                "0351000016", "0351000017", "0351000018", "0351000019", "0351000020",
+                "0351000021", "0351000022", "0351000023", "0351000024", "0351000025",
+                "0351000026", "0351000027", "0351000028", "0351000029", "0351000030",
+                "0351000031", "0351000032", "0351000033", "0351000034", "0351000035",
+                "0351000036", "0351000037", "0351000038", "0351000039", "0351000040",
+                "0351000041", "0351000042", "0351000043", "0351000044", "0351000045",
+                "0351000046", "0351000047", "0351000048", "0351000049", "0351000050",
+                "0341000001", "0341000002", "0341000003", "0341000004", "0341000005",
+                "0341000006", "0341000007", "0341000008", "0341000009", "0341000010",
+                "0341000011", "0341000012", "0341000013", "0341000014", "0341000015",
+                "0341000016", "0341000017", "0341000018", "0341000019", "0341000020",
+                "0341000021", "0341000022", "0341000023", "0341000024", "0341000025",
+                "0341000026", "0341000027", "0341000028", "0341000029", "0341000030",
+                "0341000031", "0341000032", "0341000033", "0341000034", "0341000035",
+                "0341000036", "0341000037", "0341000038", "0341000039", "0341000040",
+                "0341000041", "0341000042", "0341000043", "0341000044", "0341000045",
+                "0931000001", "0931000002", "0931000003", "0931000004", "0931000005",
+                "0931000006", "0931000007", "0931000008", "0931000009", "0931000010",
+                "0931000011", "0931000012", "0931000013", "0931000014", "0931000015",
+        };
+        String[] hoTen = {
+                "Trần Văn Bảo", "Lê Minh Bình", "Phạm Quang Châu", "Hoàng Văn Công",
+                "Vũ Đức Cường", "Đỗ Thành Dũng", "Ngô Quốc Đức", "Bùi Minh Duy", "Đặng Hữu Đạt",
+                "Nguyễn Văn Hưng", "Trần Văn Khánh", "Lê Minh Khoa", "Phạm Văn Long", "Hoàng Văn Mạnh",
+                "Vũ Văn Nam", "Đỗ Quốc Phong", "Ngô Văn Quân", "Bùi Văn Sơn", "Đặng Văn Thắng",
+                "Nguyễn Văn Tài", "Trần Văn Tùng", "Lê Văn Toàn", "Phạm Văn Trung", "Hoàng Văn Tuấn",
+                "Vũ Văn Vinh", "Đỗ Văn Việt", "Ngô Văn Vũ", "Bùi Văn Hiếu", "Đặng Văn Huy",
+                "Nguyễn Thị Ánh", "Trần Thị Bích", "Lê Thị Cẩm", "Phạm Thị Dung", "Hoàng Thị Hạnh",
+                "Vũ Thị Hoa", "Đỗ Thị Huyền", "Ngô Thị Lan", "Bùi Thị Mai", "Đặng Thị Ngọc",
+                "Nguyễn Thị Phương", "Trần Thị Thanh", "Lê Thị Thu", "Phạm Thị Thúy", "Hoàng Thị Trang",
+                "Vũ Thị Xuân", "Đỗ Thị Yến", "Ngô Thị Anh", "Bùi Thị Bảo", "Đặng Thị Châu",
+                "Nguyễn Thị Duyên", "Trần Thị Giang", "Lê Thị Hà", "Phạm Thị Hoài", "Hoàng Thị Hồng",
+                "Vũ Thị Hương", "Đỗ Thị Kim", "Ngô Thị Linh", "Bùi Thị Loan", "Đặng Thị Mai",
+                "Nguyễn Thị Nga", "Trần Thị Ngân", "Lê Thị Ngọc", "Phạm Thị Nhung", "Hoàng Thị Oanh",
+                "Vũ Thị Phúc", "Đỗ Thị Quỳnh", "Ngô Thị Tâm", "Bùi Thị Thảo", "Đặng Thị Thúy",
+                "Nguyễn Thị Thùy", "Trần Thị Thuý", "Lê Thị Tiên", "Phạm Thị Tuyết", "Hoàng Thị Vân",
+                "Vũ Thị Vui", "Đỗ Thị Xuân", "Ngô Thị Yến", "Bùi Thị Ánh", "Đặng Thị Bích",
+                "Nguyễn Thị Cẩm", "Trần Thị Dung", "Lê Thị Hạnh", "Phạm Thị Hoa", "Hoàng Thị Huyền",
+                "Vũ Thị Lan", "Đỗ Thị Mai", "Ngô Thị Ngọc", "Bùi Thị Phương", "Đặng Thị Thanh",
+                "Nguyễn Thị Thu", "Trần Thị Thúy", "Lê Thị Trang", "Phạm Thị Xuân", "Hoàng Thị Yến"
+        };
+        String[] emails = {
+                "tranvanbao@gmail.com", "leminhbinh@gmail.com", "phamquangchau@gmail.com", "hoangvancong@gmail.com",
+                "vuduccuong@gmail.com", "dothanh dung@gmail.com", "ngoquocduc@gmail.com", "buiminhhuy@gmail.com", "danghuudat@gmail.com",
+                "nguyenvanhung@gmail.com", "tranvankhanh@gmail.com", "leminhkhoa@gmail.com", "phamvanlong@gmail.com", "hoangvanmanh@gmail.com",
+                "vuvannam@gmail.com", "doquocphong@gmail.com", "ngovanquan@gmail.com", "buivanson@gmail.com", "dangvanthang@gmail.com",
+                "nguyenvantai@gmail.com", "tranvantung@gmail.com", "levantoan@gmail.com", "phamvantrung@gmail.com", "hoangvantuan@gmail.com",
+                "vuvanvinh@gmail.com", "dovanviet@gmail.com", "ngovanvu@gmail.com", "buivanhieu@gmail.com", "dangvanhuy@gmail.com",
+                "nguyenthianh@gmail.com", "tranthibich@gmail.com", "lethicam@gmail.com", "phamthidung@gmail.com", "hoangthihanh@gmail.com",
+                "vuthihoa@gmail.com", "dothihuyen@gmail.com", "ngothilan@gmail.com", "buithimai@gmail.com", "dangthingoc@gmail.com",
+                "nguyenthiphuong@gmail.com", "tranthithanh@gmail.com", "lethithu@gmail.com", "phamthithuy@gmail.com", "hoangthitrang@gmail.com",
+                "vuthixuan@gmail.com", "dothiyen@gmail.com", "ngothianh@gmail.com", "buithibao@gmail.com", "dangthichau@gmail.com",
+                "nguyenthiduyen@gmail.com", "trangiang@gmail.com", "lethiha@gmail.com", "phamthihoai@gmail.com", "hoangthihong@gmail.com",
+                "vuthihuong@gmail.com", "dothikim@gmail.com", "ngothilinh@gmail.com", "buithiloan@gmail.com", "dangthimai@gmail.com",
+                "nguyenthinga@gmail.com", "tranthingan@gmail.com", "lethinhoc@gmail.com", "phamthinung@gmail.com", "hoangthioanh@gmail.com",
+                "vuthiphuc@gmail.com", "dothiquynh@gmail.com", "ngothitam@gmail.com", "buithithao@gmail.com", "dangthithuy@gmail.com",
+                "nguyenthithuy@gmail.com", "tranthithuy@gmail.com", "lethitrang@gmail.com", "phamthixuan@gmail.com", "hoangthiyen@gmail.com"
+        };
+
+
+
+//        List<PolicyHotel> policyHotels = policyRepository.findAll();
 //
-    // đã taaoj
+//        for (PolicyHotel policyHotel : policyHotels){
+//            policyHotel.setAnimal("Không được mang theo thú cưng lẫn vật nuôi hỗ trợ người khuyết tật");
+//            policyHotel.setNote("Chỗ nghỉ này không nhận tổ chức tiệc chia tay cuộc đời độc thân hay các bữa tiệc tương tự như vậy.\n" +
+//                    "\n" +
+//                    "Thời gian yên lặng bắt đầu từ 22:00:00 đến 08:00:00.");
+//            policyHotel.setAgeLimit("Trẻ em được chào đón\n" +
+//                    "1 trẻ em, từ 5 tuổi trở xuống, có thể lưu trú miễn phí nếu sử dụng giường có sẵn tại phòng của cha mẹ hoặc người giám hộ");
+//            policyHotel.setCancelPolicy("Các chính sách hủy và thanh toán trước sẽ khác nhau tùy vào từng loại chỗ nghỉ. Vui lòng nhập ngày lưu trú và xem điều kiện áp dụng cho lựa chọn chỗ nghỉ của bạn.");
+//            policyHotel.setService("Phí dịch vụ xe đưa đón sân bay: 450000 VND mỗi xe (số khách tối đa: 4)\n" +
+//                    "Phí đưa đón sân bay / 1 trẻ: 299000 VND (tối đa 5 tuổi)\n" +
+//                    "Phí bãi xe tự phục vụ: 10 VND mỗi ngày\n" +
+//                    "Phí giường gấp: 699000.0 VND mỗi ngày");
+//            policyRepository.save(policyHotel);
+//        }
+
+        List<Hotel> hotelList = hotelRepository.findHotelByCity_Id(18);
+//
+        List<Review> reviewList = reviewRepository .findAll();
+        for (Hotel hotel : hotelList){
+//            List<ImageHotel> imageHotelList = imageRepository.findAllByHotel_Id(hotel.getId());
+//            if (imageHotelList.size()==0 ){
+//                continue;
+//            }
+//            List<Booking> list = bookingRepository.findByHotel_IdAndStatusBooking(Review.getHotel().getId(),StatusBooking.COMPLETE);
+
+
+
+//            if (list.isEmpty()){
+//                reviewRepository.delete(Review);
+//            }
+//            else {
+//                Review.setBooking(list.get(1));
+//                reviewRepository.save(Review);
+//            }
+//            hotel.setPoster(imageHotelList.get(random.nextInt(0,imageHotelList.size())).getUrl());
+//            Hotel hotel = hotelRepository.findById(review.getHotel().getId()).orElseThrow(()-> new RuntimeException("Khoon timf thaats"));
+//            List<Room> roomList = roomRepository.findRoomByHotel_Id(hotel.getId());
+//            User user = userRepository.findById(review.getUser().getId()).orElseThrow(()-> new RuntimeException("sdsd"));
+
+//            Boolean iss = random.nextBoolean();
+//            if (iss){
+//                booking.setStatusBooking(StatusBooking.COMPLETE);
+//            }
+            List<User> userList = userRepository.findAllByUserRole(UserRole.ROLE_USER);
+            List<Room> roomList = roomRepository.findRoomByHotel_Id(hotel.getId());
+            for (Room room : roomList){
+//                List<ImageRoom> imageRoomList = imageRoomRepository.findAllByRoom_Id(room.getId());
+//                if (imageRoomList.size()==0){
+//                    continue;
+//                }
+//                room.setThumbnailRoom(imageRoomList.get(random.nextInt(0,imageRoomList.size())).getUrl());
+//                roomRepository.save(room);
+                for (int i = 0; i < random.nextInt(1,3); i++) {
+                    LocalDate checkIn = LocalDate.now().minusDays(random.nextInt(0,80));
+                    Booking booking = Booking.builder()
+                            .checkIn(checkIn)
+                            .checkOut(checkIn.plusDays(random.nextInt(2,5)))
+                            .createAt(checkIn.minusDays(random.nextInt(5,10)))
+                            .emailCustomer(emails[random.nextInt(0, emails.length)])
+                            .guests(random.nextInt(1,4))
+                            .user(userList.get(random.nextInt(0, userList.size())))
+                            .nameCustomer(hoTen[random.nextInt(0, hoTen.length)])
+                            .phoneCustomer(soDienThoai[random.nextInt(0, soDienThoai.length)])
+                            .paymentMethod(PaymentMethod.PAY_AT_ACCOMMODATION)
+                            .hotel(hotel)
+                            .room(room)
+                            .numberRoom(random.nextInt(1,3))
+                            .build();
+                    booking.setStatusBooking(StatusBooking.COMPLETE);
+                    booking.setPrice(random.nextInt(400000,10000000));
+                    bookingRepository.save(booking);
+                }
+
+            }
+        }
+    }
+    @Test
+    void delere (){
+        Random random = new Random();
+
+        List<Booking> bookingList = bookingRepository.findByStatusBooking(StatusBooking.CONFIRMED);
+        for (int i = 0; i < bookingList.size(); i++) {
+//            LocalDate localDate = LocalDate.now().plusDays(random.nextInt(3,10));
+//            bookingList.get(i).setCheckIn(localDate);
+//            bookingList.get(i).setCheckOut(localDate.plusDays(random.nextInt(1,10)));
+            bookingList.get(i).setIsReviewed(false);
+            bookingRepository.save(bookingList.get(i));
+        }
+
+//        User user = userRepository.findById(221).orElseThrow(() -> new RuntimeException("Không thấy"));
+//        Hotel hotel = hotelRepository.findHotelByUser_Id(user.getId());
+//
+//        // Xóa tất cả các review liên quan đến hotel
+//        List<Review> reviewList = reviewRepository.findReviewByHotel_Id(hotel.getId());
+//        reviewRepository.deleteAll(reviewList);
+//
+//        // Xóa tất cả các booking liên quan đến hotel
+//        List<Booking> bookingList = bookingRepository.findAllByHotel_Id(hotel.getId());
+//        bookingRepository.deleteAll(bookingList);
+//
+//        // Tìm và xóa tất cả các image liên quan đến các room
+//        List<Room> roomList = roomRepository.findRoomByHotel_Id(hotel.getId());
+//        for (Room room : roomList) {
+//            List<ImageRoom> imageRoomList = imageRoomRepository.findAllByRoom_Id(room.getId());
+//            imageRoomRepository.deleteAll(imageRoomList);
+//        }
+//
+//        // Xóa tất cả các room liên quan đến hotel
+//        roomRepository.deleteAll(roomList);
+//
+//        // Xóa hotel
+//        hotelRepository.delete(hotel);
+
+        // Xóa user
+//        userRepository.delete(user);
+
+
+
+    }
+    @Test
+    void test(){
+        List<City> list = cityRepository.findAll();
+
+        for (City city :list){
+            city.setImageCity(null);
+            cityRepository.save(city);
+        }
+    }
+
+
+    }
+
+//    void imageRoomvsHotel(){
+//        try {
+//            Random random = new Random();
+//            Document doc = Jsoup.connect("https://www.booking.com/hotel/vn/the-song-vt-khang-aparment.vi.html?label=vi-vn-booking-desktop-QdMBcjDXmpsKa1W2aLERdwS652804042052%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-33467740%3Alp9047174%3Ali%3Adec%3Adm&gclid=Cj0KCQjwiMmwBhDmARIsABeQ7xS0f6bm-xD5dCuTjstOn8V3TmEZphHTMZgiJAc3XdPPPf5ll-ck6WwaAqfREALw_wcB&aid=2336990&ucfs=1&arphpl=1&activeTab=main").get();
+//            Elements elementsRating = doc.getElementsByClass("bh-photo-modal-grid-image");
+//            List<String> imageHotelList = new ArrayList<>();
+//            for (Element element : elementsRating){
+//                imageHotelList.add(element.attr("src"));
+//            }
+//            List<Hotel> hotelList = hotelRepository.findAll();
+//            for (Hotel hotel : hotelList){
+//                for (int i = 0; i < random.nextInt(0,7) ; i++) {
+//                    String idImage = String.valueOf(System.currentTimeMillis());
+//                  ImageHotel imageHotel = new ImageHotel();
+//
+//                  imageHotel.setHotel(hotel);
+//                  imageHotel.setUrl(imageHotelList.get(random.nextInt(0,imageHotelList.size())));
+//                  imageHotel.setUrl(imageHotelList.get(random.nextInt(0,imageHotelList.size())));
+//                  imageHotel.setUrl(imageHotelList.get(random.nextInt(0,imageHotelList.size())));
+//                  imageHotel.setUrl(imageHotelList.get(random.nextInt(0,imageHotelList.size())));
+//                    imageHotel.setId(idImage);
+//                    // set tên của file được upload
+//                    imageHotel.setName(multipartFile.getOriginalFilename());
+//                    imageHotel.setType(multipartFile.getContentType());
+//                    imageHotel.setSize(multipartFile.getSize() / 1048576.0);
+//                    imageHotel.setUrl("/" + uploadDir + "/image_hotel/" + idImage);
+//                    imageHotel.setHotel(hotel);
+//                }
+//            }
+//        } catch (IOException e) {
+//            System.out.println("Lỗi");
+//        }
+//
+//
+//    }
+//
+//}
+
+//
+// đã taaoj
 //    @Test
 //    void createDataSupport() {
 //        Faker faker = new Faker();
@@ -935,31 +1497,6 @@ class BookingAppApplicationTests {
 //    }
 
 
-    // đã taạo
-//    @Test
-//    void createDataUser() {
-//        Faker faker = new Faker();
-//        Random random = new Random();
-//        for (int i = 0; i < 200; i++) {
-//            User user = User.builder()
-//                    .name(faker.lorem().word())
-//                    .email(faker.internet().emailAddress())
-//                    .password(passwordEncoder.encode("123"))
-//                    .userRole(UserRole.values()[random.nextInt(UserRole.values().length)])
-//                    .birthDay(faker.date().birthdayLocalDate())
-//                    .phoneNumber(faker.phoneNumber().phoneNumber())
-//                    .gender(Gender.values()[random.nextInt(Gender.values().length)])
-//                    .enable(true)
-//                    .address(faker.address().fullAddress())
-//                    .avatar("/web/assets/image/avata-default.jpg")
-//                    .createdAt(LocalDate.now())
-//                    .updateAt(LocalDate.now())
-//                    .build();
-//
-//            userRepository.save(user);
-//        }
-//
-//    }
-//
+
 
 

@@ -166,6 +166,7 @@ body {
     border: none;
     padding: 5px 5px;
     border-radius: 10px;
+    width:350px;
 }
 .edit-gender-number select{
     border: none;

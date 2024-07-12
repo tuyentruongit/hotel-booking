@@ -15,9 +15,14 @@
     </a>
     <div class="d-flex align-items-center">
 
-      <a target="_blank" class="nav-link text-decoration-none text-reset " th:href="@{/support}">
+      <a target="_blank" class="support nav-link text-decoration-none text-reset mx-2" th:href="@{/support}">
         Hỗ trợ
       </a>
+      <th:block  sec:authorize="isAuthenticated()" th:if="${#authentication.principal.getUser().getUserRole().getValue == 'USER'}">
+        <a href="/create-hotel"  class="nav-link registration text-reset text-decoration-none mx-2" th:if="${#authentication.principal.getUser().getUserRole().getValue() == 'USER'}">
+          <span> <i class="fa-solid fa-file-invoice"></i> Đăng ký cho thuê nhà</span>
+        </a>
+      </th:block>
       <th:block sec:authorize="not isAuthenticated()" >
         <a target="_blank" class="nav-link text-decoration-none text-reset register" th:href="@{/account/dang-ky}">
           <i class="fa-solid fa-user-plus"></i>

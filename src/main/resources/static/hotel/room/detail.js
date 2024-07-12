@@ -29,7 +29,7 @@ imageRoom.addEventListener('change', (e)=>{
         })
         .catch((err) =>{
             console.log(err);
-            toastr.error("Upload thành công ");
+            toastr.error("Upload thất bại ");
         })
 })
 

@@ -257,7 +257,7 @@ const renderReview = (reviews) => {
                                             ${review.user.name}
                                         </h6>
                                        
-                                        <span class="content-review">${review.comment}</span>
+                                      <div class="wrap-comment">  <span class="content-review">${review.comment}</span></div>
                                         
                                           ${infoUser && infoUser.id === review.user.id ? `
                                              <div class="warp-button-edit" >

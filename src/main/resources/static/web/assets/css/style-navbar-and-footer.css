@@ -51,8 +51,8 @@ body {
 }
 
 .profile-dropdown-btn:hover {
-    background-color: var(--secondary-light-2);
-    box-shadow: var(--shadow);
+    background-color: #5C768A;
+    color: #F5F5F5 !important;
 }
 
 .register{
@@ -150,4 +150,28 @@ body {
 .infor-web {
     background-color: var(--primary-color-dark);
     color: var(--extra-light);
+} .registration{
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    border-radius: 10px;
+    padding: 10px 10px;
+    margin: 15px 0;
+    cursor: pointer;
+    background-color: #DDE6ED;
+
+} .registration span{
+    font-size: 16px ;
+    padding: 0 0;
+    font-weight: 350;
+} .registration i{
+    padding: 0 0;
+    margin-right: 10px;
+    margin-left: 5px;
+    font-size: 18px ;
 }
+  .registration:hover,.support:hover{
+      border-radius: 10px;
+      background-color: #5C768A;
+      color: #F5F5F5 !important;
+  }

@@ -187,7 +187,7 @@
                                             <td th:text="${#temporals.format(booking.checkOut,'dd/MM/yyyy')}"></td>
                                             <td th:text="${booking.numberRoom}"></td>
                                             <td th:text="${booking.checkOut.dayOfMonth - booking.checkIn.dayOfMonth}"></td>
-                                            <td th:text="${booking.paymentMethod.value}"></td>
+                                            <td class="badge bg-info" th:text="${booking.paymentMethod.value}"></td>
                                             <td>
                                                 <span class="badge bg-success"
                                                       th:if="${booking.statusBooking.value.equalsIgnoreCase('Hoàn Tất')}">Hoàn Tất</span>

@@ -92,12 +92,12 @@
                                 <div class="form-group ">
                                     <label for="input-name">Tên thành phố</label>
                                     <input type="text" class="form-control" id="input-name" placeholder="tên thành phố"
-                                                                           name="name">
+                                           name="name">
                                 </div>
                                 <div class="form-group ">
                                     <label for="input-country">Quốc Gia</label>
                                     <input type="text" class="form-control" id="input-country" placeholder="tên quốc gia"
-                                                                              name="nameCountry">
+                                           name="nameCountry">
                                 </div>
                                 <div  class="form-group">
                                     <div class="container-thumbnail d-none">
@@ -344,6 +344,7 @@
             }
         }
         const uploadImageCity  = (e,idCity)=>{
+            e.preventDefault()
             const file = e.target.files[0];
             console.log(file);
 
@@ -360,7 +361,7 @@
                 })
                 .catch((err)=> {
                     console.log(err)
-                    toastr.error('Cập nhật ảnh thất bại');
+                    toastr.error(err.response.data.messages);
                 });
         }
 

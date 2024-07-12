@@ -27,6 +27,7 @@ public class ImageApi {
     @PostMapping("/upload-hotel/{idHotel}")
     public ResponseEntity<?> uploadImageHotel (@RequestParam("file") MultipartFile file, @PathVariable Integer idHotel){
         ImageHotel imageHotel = imageService.uploadImageHotel(idHotel,file);
+        System.out.println("Id khách sạn nè" + idHotel);
         return new ResponseEntity<>(imageHotel, HttpStatus.CREATED);
     }
     @DeleteMapping("/delete/user/{id}")

@@ -30,7 +30,7 @@ public class InformationHotelController {
     @GetMapping("/information")
     public String informationHotelDetail(Model model){
         Hotel hotel  = hotelService.getHotelByAccountCurrent();
-        List<ImageHotel> imageHotelList = imageService.getAllImageByIdHotel(2);
+        List<ImageHotel> imageHotelList = imageService.getAllImageByIdHotel(hotel.getId());
         List<Room> roomList  = roomService.getRoomByIdHotel(hotel.getId());
         List<AmenityHotel> amenityHotelListAll = amenityService.getAllAmenityHotel();
         model.addAttribute("amenityHotelListAll" , amenityHotelListAll);

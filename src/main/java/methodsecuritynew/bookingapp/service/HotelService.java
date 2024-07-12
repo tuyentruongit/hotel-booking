@@ -47,6 +47,8 @@ public class HotelService {
     private final RoomService roomService;
     private final ImageService imageService;
     private final ImageHotelRepository imageHotelRepository;
+    private final ImageRoomRepository imageRoomRepository;
+    private final BookingRepository bookingRepository;
 
     private final MailService mailService;
     private final HttpSession httpSession;
@@ -62,6 +64,8 @@ public class HotelService {
 
         // lấy danh sách khách sạn theo city
         List<Hotel> hotelList = hotelRepository.findHotelByCity_NameIgnoreCaseAndStatusTrue(nameCity);
+        System.out.println("danh sách nè "+ hotelList);
+        System.out.println("kick sách nè "+ hotelList.size());
         List<HotelDto> availableHotels = new ArrayList<>();
 
         // duyệt từng khách sạn để kiểm tra các điều kiện
@@ -74,6 +78,8 @@ public class HotelService {
                 availableHotels.add(hotelDto);
             }
         }
+        System.out.println("danh sách nè "+ availableHotels );
+        System.out.println("kích sách nè "+ availableHotels.size() );
         hotelListSearch = availableHotels;
     }
 
@@ -141,8 +147,19 @@ public class HotelService {
 
     public List<HotelDto> getHotelHomPage(String city, String checkIn, String checkOut, Integer numberGuest, Integer numberRoom) {
         getHotelBySearch(city, checkIn, checkOut, numberGuest, numberRoom);
-        if (hotelListSearch.size() > 8) {
-            return hotelListSearch.subList(0, 8);
+
+        List<HotelDto> hotelDtos =hotelListSearch ;
+
+        // Sắp xếp danh sách theo rating giảm dần
+        Collections.sort(hotelDtos, new Comparator<HotelDto>() {
+            @Override
+            public int compare(HotelDto o1, HotelDto o2) {
+                return Double.compare(o2.getRating(), o1.getRating());
+            }
+        });
+
+        if (hotelDtos.size() > 8) {
+            return hotelDtos.subList(0, 8);
         }
         return hotelListSearch;
     }
@@ -220,14 +237,21 @@ public class HotelService {
     public void deleteHotel(Integer id) {
         Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khách sạn nào có id : " + id));
-        roomService.deleteAllRoom(id);
         List<Review> reviewList = reviewRepository.findReviewByHotel_Id(id);
+        List<Room> listRoom = roomRepository.findRoomByHotel_Id(id);
         List<ImageHotel> imageHotelList = imageService.getAllImageByIdHotel(hotel.getId());
+        for (Room room : listRoom){
+            List<ImageRoom> imageRoomList = imageService.getAllImageRoomByIdRoom(room.getId());
+            imageRoomRepository.deleteAll(imageRoomList);
+        }
+        List<Booking> bookingList = bookingRepository.findAllByHotel_Id(hotel.getId());
         User user = hotel.getUser();
         user.setUserRole(UserRole.ROLE_USER);
         userRepository.save(user);
-        imageHotelRepository.deleteAll(imageHotelList);
         reviewRepository.deleteAll(reviewList);
+        imageHotelRepository.deleteAll(imageHotelList);
+        bookingRepository.deleteAll(bookingList);
+        roomRepository.deleteAll(listRoom);
         hotelRepository.delete(hotel);
     }
 
@@ -235,9 +259,8 @@ public class HotelService {
     public Hotel getHotelByAccountCurrent() {
         User user = userRepository.findByEmail(httpSession.getAttribute("MY_SESSION").toString())
                 .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy user trên "));
-
+        System.out.println("Id của khách snaj nè " +hotelRepository.findHotelByUser_Id(user.getId()).getId() );
         return hotelRepository.findHotelByUser_Id(user.getId());
-//        return hotelRepository.findById(2).orElseThrow(() -> new RuntimeException("Không tìm thấy hotel trên "));
     }
 
 
@@ -261,7 +284,8 @@ public class HotelService {
     }
 
     // tạo khách sạn dựa trên thông tin đã có
-    private Hotel createHotel(UpsertHotelRequest upsertHotelRequest, City city, User user, PolicyHotel policyHotel, List<AmenityHotel> amenityHotelList) {
+    @Transactional
+    public Hotel createHotel(UpsertHotelRequest upsertHotelRequest, City city, User user, PolicyHotel policyHotel, List<AmenityHotel> amenityHotelList) {
         Hotel hotelNew = Hotel.builder()
                 .name(upsertHotelRequest.getNameHotel())
                 .email(upsertHotelRequest.getEmailHotel())
@@ -340,5 +364,12 @@ public class HotelService {
         LocalDate star = LocalDate.now().withDayOfMonth(1);
         LocalDate end = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
         return hotelRepository.findAllByCreatedAtBetweenOrderByCreatedAtDesc(star, end);
+    }
+
+    public void updateHotelPoster(Integer id , String url) {
+
+        Hotel hotel = hotelRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy khacsnj sạn trên "));
+        hotel.setPoster(url);
+        hotelRepository.save(hotel);
     }
 }

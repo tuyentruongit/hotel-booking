@@ -82,5 +82,10 @@ public class HotelApi {
         hotelService.deleteHotel(id);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/update-poster/{id}")
+    public ResponseEntity<?> updatePost( @RequestBody String urlImage, @PathVariable Integer id){
+        hotelService.updateHotelPoster(id,urlImage);
+        return ResponseEntity.noContent().build();
+    }
 
 }

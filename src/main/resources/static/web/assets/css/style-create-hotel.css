@@ -132,3 +132,7 @@ body {
 option{
     text-align: center;
 }
+
+.error{
+    border: 1.5px #DC3545 solid !important;
+}

@@ -233,7 +233,6 @@ public class ImageService {
 
     // tải ảnh lên cho thành phố
     public City uploadImageCity(MultipartFile file, Integer id) {
-
         City city = cityRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy thành phố nào có id " + id));
         String idImage = String.valueOf(System.currentTimeMillis());

@@ -80,7 +80,7 @@ inputImage.addEventListener('change' ,(e)=>{
     // tạo đối tượng
     const formData = new FormData();
     formData.append("file",file);
-    axios.post("/api/images/upload-hotel/"+2,formData)
+    axios.post("/api/images/upload-hotel/"+hotel.id,formData)
         .then((res)=>{
             imageList.unshift(res.data);
             renderPagination(imageList);
@@ -114,6 +114,21 @@ btnChoseImage.addEventListener('click',()=>{
     const urlImage= selectedEl.querySelector("img").getAttribute("src");
     thumbnailPreview.setAttribute("src",urlImage);
     thumbnailPreview.src = urlImage;
+    const data = {
+        urlImage: urlImage
+    };
+    axios.put("/api/hotel/update-poster/"+hotel.id ,urlImage, {
+        headers: {
+            'Content-Type': 'text/plain'
+        }
+        })
+        .then((res)=>{
+            toastr.success("Thành công")
+        })
+        .catch((er)=>{
+            console.log(er)
+            toastr.error("Thất bại");
+        })
     $('#modal-image').modal('hide');
 
 })
@@ -134,7 +149,7 @@ btnDeleteImage.addEventListener('click',()=>{
 
         })
         .catch((err)=>{
-            console.log(err);
+            toastr.error("Upload thất bại ");
         })
 
 })

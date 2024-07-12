@@ -118,6 +118,7 @@ deleteHotel.addEventListener('click', () => {
             }, 1500);
         })
         .catch((err) => {
+            console.log(err)
             toastr.error(err.response.data.message);
         })
 
