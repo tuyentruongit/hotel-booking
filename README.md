@@ -36,7 +36,7 @@ Dự án này là một ứng dụng web đặt phòng khách sạn trực tuy�
 
 ## Mô tả cơ sở dữ liệu
 ### Biểu Đồ Class Diagram
-![Hình ảnh](ManagementCenimaDiagram.drawio.png)
+![Hình ảnh](https://github.com/tuyentruongit/hotel-booking/blob/9371b93795a544b0aa12b44f2eaca608cabdfee3/image-markdown/class%20diagram.png)
 
 ## Công nghệ sử dụng
 - Frontend: HTML, CSS, JavaScript, Thymeleaf, Bootstrap
