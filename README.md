@@ -31,64 +31,12 @@ Dự án này là một ứng dụng web đặt phòng khách sạn trực tuy�
 - Quản lý các đơn đặt phòng (xem, xác nhận, từ chối)
 - Quản lý các phòng trong khách sạn (thêm, sửa, xóa)
 - Quản lý các đơn đặt phòng (xem, xác nhận, hủy)
+- Thay đổi giá phòng theo ngày cụ thể
+- Chỉnh sửa các quy định chung của khách sạn
 
 ## Mô tả cơ sở dữ liệu
-
-### Bảng Người dùng (Users)
-- `id`: Khóa chính
-- `username`: Tên đăng nhập
-- `password`: Mật khẩu (đã mã hóa)
-- `email`: Địa chỉ email
-- `role`: Vai trò (user, hotel, admin)
-
-### Bảng Khách sạn (Hotels)
-- `id`: Khóa chính
-- `name`: Tên khách sạn
-- `description`: Mô tả khách sạn
-- `location`: Địa chỉ khách sạn
-- `price`: Giá phòng mỗi đêm
-- `amenities`: Tiện nghi (WiFi, điều hòa, bể bơi, v.v.)
-- `owner_id`: Khóa ngoại đến bảng Người dùng (chủ sở hữu khách sạn)
-
-### Bảng Đơn đặt phòng (Bookings)
-- `id`: Khóa chính
-- `user_id`: Khóa ngoại đến bảng Người dùng (người đặt phòng)
-- `hotel_id`: Khóa ngoại đến bảng Khách sạn
-- `check_in`: Ngày nhận phòng
-- `check_out`: Ngày trả phòng
-- `status`: Trạng thái đơn đặt phòng (đang chờ, xác nhận, hủy)
-
-### Bảng Đánh giá (Reviews)
-- `id`: Khóa chính
-- `hotel_id`: Khóa ngoại đến bảng Khách sạn
-- `user_id`: Khóa ngoại đến bảng Người dùng
-- `rating`: Đánh giá (số sao)
-- `comment`: Nhận xét
-
-## API Endpoints
-
-### Người dùng (User)
-- `POST /api/register`: Đăng ký tài khoản
-- `POST /api/login`: Đăng nhập
-- `GET /api/hotels`: Xem danh sách khách sạn
-- `GET /api/hotels/:id`: Xem chi tiết khách sạn
-- `POST /api/bookings`: Đặt phòng
-- `GET /api/bookings`: Xem đơn đặt phòng của mình
-- `PUT /api/bookings/:id`: Sửa đơn đặt phòng
-- `DELETE /api/bookings/:id`: Hủy đơn đặt phòng
-
-### Quản trị viên (Admin)
-- `POST /api/hotels`: Thêm khách sạn
-- `PUT /api/hotels/:id`: Sửa thông tin khách sạn
-- `DELETE /api/hotels/:id`: Xóa khách sạn
-- `GET /api/users`: Xem danh sách người dùng
-- `GET /api/bookings`: Xem danh sách đơn đặt phòng
-
-### Khách sạn (Hotel)
-- `PUT /api/hotels/:id`: Cập nhật thông tin khách sạn của mình
-- `GET /api/bookings`: Xem danh sách đơn đặt phòng của khách sạn
-- `PUT /api/bookings/:id`: Xác nhận hoặc hủy đơn đặt phòng
-- `GET /api/reviews`: Xem đánh giá của người dùng
+### Biểu Đồ Class Diagram
+![Hình ảnh](ManagementCenimaDiagram.drawio.png)
 
 ## Công nghệ sử dụng
 - Frontend: HTML, CSS, JavaScript, Thymeleaf, Bootstrap
